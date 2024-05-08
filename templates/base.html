@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'sass\custom.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+
+</head>
+<body>
+    {% include 'include/_navbar.html' %}
+    
+    <div class="container mx-auto">
+        {% block content %}{% endblock %}
+    </div>
+    
+    
+    
+    {% if messages %}
+    {% endif %}
+    
+    
+    {% include 'include/_footer.html' %}
+
+    <script src="{% static 'node_modules\bootstrap\dist\js\bootstrap.js' %}"></script>
+</body>
+</html>
