@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render
 from django.views.generic import ListView
 
@@ -13,3 +14,8 @@ class QuestionsListView(ListView):
     template_name = "questionHub/index.html"
     context_object_name = 'questions'
     paginate_by = 7
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['latest_questions'] = Question.objects.order_by('-created_at')[:2]  # Отримати 5 останніх питань
+        return context

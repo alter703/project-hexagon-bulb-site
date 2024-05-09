@@ -14,6 +14,8 @@ $theme-colors: map-merge($map1: $alt-theme-colors, $map2: $theme-colors);
 
 $body-bg-dark : #020621;
 $body-bg: #e6e8f0;
-
+$pagination-bg: #1f1f1f;
+$pagination-active-bg: #2c2c2c;
+$pagination-border-color: #5c0999;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
