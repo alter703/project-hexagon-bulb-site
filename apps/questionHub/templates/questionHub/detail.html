@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}The question is {{question.title}}{% endblock %}
+
+{% block content %}
+ <div class="container mx-auto text-center">
+    <p class="fw-normal fs-1">{{question.title}}</p>
+    <hr class="border border-altgrey border-2">
+        <div class="row row-cols-5 row-cols-lg-6">
+          <div class="col">
+            <div class="p-3"><p class="italic">Asked: {{ question.created_at|timesince}} ago </p></div>
+          </div>
+          <div class="col">
+            <div class="p-3"><p class="italic">Modified: {{ question.updated_at|timesince}} ago </p></div>
+          </div>
+          <div class="col">
+            <div class="p-3"><p class="italic">Author: {{ question.author}} </p></div>
+          </div>
+          <div class="col">
+            <div class="p-3">Relates to category: {{question.category}}</div>
+          </div>
+        </div>
+        <hr class="border border-altgrey border-2">
+        <div class="container mx-auto bg-altinfo border-2">
+          <p class="fs-5">{{question.content}}</p>
+        </div>
+</div>
+{% endblock %}

@@ -11,9 +11,9 @@
 
 </head>
 <body>
+    {% include 'include/_navbar.html' %}
     
     <div class="container mx-auto">
-        {% include 'include/_navbar.html' %}
         {% block content %}{% endblock %}
     </div>
     

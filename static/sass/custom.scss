@@ -3,19 +3,50 @@
 @import '../node_modules/bootstrap/scss/_variables-dark';
 
 $alt-theme-colors: (
-    "altdark": #08104a,
-    "altprimary": #8596f8,
-    "altsecondary": #5c0999,
-    "altsuccess": #169273,
-    "altgrey": #1f1f1f,
+    "altdark": #2c2e33,
+    "altgrey": #60676e,
+    "altlightgrey": #CAD4DF,
+    "altlight": #DDDBDE,
+    "altdarkgrey":#3B373B,
 );
 
 $theme-colors: map-merge($map1: $alt-theme-colors, $map2: $theme-colors);
 
-$body-bg-dark : #020621;
+$body-bg-dark : #2c2e33;
 $body-bg: #e6e8f0;
 $pagination-bg: #1f1f1f;
 $pagination-active-bg: #2c2c2c;
-$pagination-border-color: #5c0999;
+
+.card {
+    transition: box-shadow 0.3s ease, transform 0.3s ease; // Плавний перехід для тіні та перетворення
+
+    &:hover {
+        box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2); // Збільшуємо розмір тіні при наведенні
+        transform: translateY(-3px); // Піднімаємо карточку на 5px при наведенні
+    }
+}
+
+.pagination {
+    background-color: #656E77; // Колір фону пагінації
+
+    .page-item {
+        &.active .page-link {
+            color: #fff; // Колір тексту посилання, коли воно обране
+            background-color: $body-bg-dark; // Колір фону посилання, коли воно обране
+            border-color: #000000;
+
+        }
+    }
+
+    .page-link {
+        color: #fff; // Колір тексту посилання
+        background-color: $body-bg-dark; // Колір фону посилання
+        border-color: #2c2c2c;
+
+        &:hover {
+            background-color: darken($body-bg-dark, 10%); // Темніший колір фону посилання при наведенні
+        }
+    }
+}
 
 @import '../node_modules/bootstrap/scss/bootstrap';
