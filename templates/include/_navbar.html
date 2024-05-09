@@ -2,17 +2,17 @@
 
 <nav class="navbar navbar-expand-lg mx-auto">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#"><img src="{% static 'svg/pexels-pixabay-36717.jpg' %}" alt="" width="43px"> Hexagon Bulb</a>
+    <a class="navbar-brand" href="{% url 'main:index' %}"><img src="{% static 'svg/pexels-pixabay-36717.jpg' %}" alt="" width="43px"> Hexagon Bulb</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">Questions Hub</a>
+          <a class="nav-link" href="{% url 'questionHub:index' %}">Question Hub</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Polls Feed</a>
+          <a class="nav-link" href="#">Poll Feed</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="#">About</a>
