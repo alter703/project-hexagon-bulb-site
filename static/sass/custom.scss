@@ -1,15 +1,19 @@
-$text: #e9e9ec;
-$primary: #959fd5;
-$secondary: #1f2d7f;
-
-
 @import '../node_modules/bootstrap/scss/_functions';
 @import "../node_modules/bootstrap/scss/variables";
 @import '../node_modules/bootstrap/scss/_variables-dark';
 
-$body-bg-dark : #0f1119;
+$alt-theme-colors: (
+    "altdark": #08104a,
+    "altprimary": #8596f8,
+    "altsecondary": #5c0999,
+    "altsuccess": #169273,
+    "altgrey": #1f1f1f,
+);
+
+$theme-colors: map-merge($map1: $alt-theme-colors, $map2: $theme-colors);
+
+$body-bg-dark : #020621;
 $body-bg: #e6e8f0;
-$dropdown-border-color: #1f2d7f;
 
 
 @import '../node_modules/bootstrap/scss/bootstrap';

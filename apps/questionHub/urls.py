@@ -5,5 +5,5 @@ from . import views
 app_name = 'questionHub'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.QuestionsListView.as_view(), name='index'),
 ]
