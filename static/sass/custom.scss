@@ -1,8 +1,15 @@
-$text: #e7eaea;
-$background: #011506;
-$primary: #84faa2;
-$secondary: #0794a7;
-$accent: #3aa1f7;
+$text: #e9e9ec;
+$primary: #959fd5;
+$secondary: #1f2d7f;
+
+
+@import '../node_modules/bootstrap/scss/_functions';
+@import "../node_modules/bootstrap/scss/variables";
+@import '../node_modules/bootstrap/scss/_variables-dark';
+
+$body-bg-dark : #0f1119;
+$body-bg: #e6e8f0;
+$dropdown-border-color: #1f2d7f;
 
 
 @import '../node_modules/bootstrap/scss/bootstrap';
