@@ -2,24 +2,58 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import '../node_modules/bootstrap/scss/_variables-dark';
 
-$primary: #17159c;
-$font-family-base: 'Lobster', cursive;
+$primary: #1512ca;
+$secondary: #000000;
+
+// $font-family-base: 'Arial';
+
 
 nav {
-    background-color: #dddddd; // Білий колір фону
+    background-color: #f7f7f7; // Білий колір фону
     box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1); // Тінь
-
     // Додаткові стилізації можна додати тут, якщо потрібно
 }
 
+// footer {
+//     background-color: #f9f9f9; // Білий колір фону
+// }
+
+.btn.btn-primary {
+    border-radius: 40px;
+}
+
+.btn.btn-primary:hover {
+    box-shadow: 0 2px 6px lighten($primary, 10%);
+
+}
+
+.btn.btn-secondary {
+    border-radius: 40px;
+
+}
+
+.btn.btn-secondary:hover {
+    box-shadow: 0 2px 6px lighten($secondary, 10%);
+}
+
+.dropdown-menu.show {
+    transition: box-shadow 0.3s ease,
+
+}
 
 .card {
     .card-header {
-        background-color: #ececec;
+        background-color: #d1d1d1;
+        /* Колір фону тіла карточки */
+        color: #000000;
+        /* Колір тексту тіла карточки */
     }
 
     .card-body {
-        background-color: #ececec;
+        background-color: #d7d7d7;
+        /* Колір фону тіла карточки */
+        color: #000000;
+        /* Колір тексту тіла карточки */
     }
 
     transition: box-shadow 0.3s ease,
@@ -31,33 +65,45 @@ nav {
     }
 }
 
+
+
 .pagination {
-    // background-color: #656E77; // Колір фону пагінації
 
     .page-item {
         &.active .page-link {
-            color: #fff; // Колір тексту посилання, коли воно обране
-            background-color: #000000; // Колір фону посилання, коли воно обране
-            border-color: #000000;
+            // color: #fff; // Колір тексту посилання, коли воно обране
+            background-color: #122c6f; // Колір фону посилання, коли воно обране
+            border-color: #122c6f;
 
         }
     }
 
     .page-link {
-        color: #fff; // Колір тексту посилання
-        background-color: #000000; // Колір фону посилання
-        border-color: #2c2c2c;
+        color: #fff;
+        /* Колір тексту посилання */
+        background-color: #122c6f;
+        /* Колір фону посилання */
+        border-color: #122c6f;
+        transition: background-color 0.3s;
+        /* Плавний перехід для зміни кольору фону */
 
         &:hover {
-            color: #000000;
-            background-color: mix(#000000, #052b9e, 10%); // Темніший колір фону посилання при наведенні
+            color: #ffffff;
+            background-color: #0f265d;
+            border-color: #0f265d;
+            /* Темніший колір фону посилання при наведенні */
+        }
+
+        &:active {
+            background-color: #0c204b;
+            /* Колір фону посилання при активному стані */
+            border-color: #0c204b;
+            /* Колір рамки при активному стані */
         }
     }
 }
 
 
-footer {
-    background-color: #dddddd; // Білий колір фону
-}
+$theme-colors: map-merge($theme-colors, ("primary": $primary, "secondary": $secondary));
 
 @import '../node_modules/bootstrap/scss/bootstrap';

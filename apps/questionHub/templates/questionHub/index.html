@@ -13,9 +13,9 @@
               {% for new_question in latest_questions %}
               <div class="card my-2">
                 <div class="card-header rounded-top text-black">
-                  {{ new_question.category.name }}
+                  <span class="badge text-bg-light">{{ new_question.category.name }}</span>
                 </div>
-                <div class="card-body rounded-bottom ">
+                <div class="card-body rounded-bottom">
                   <a href="{% url 'questionHub:detail' new_question.id %}" class="link-offset-2 link-underline link-underline-opacity-0">
                     <h5 class="card-title fs-5 text-black">{{ new_question.title }}</h5>
                     <hr class="dropdown-divider">
@@ -25,7 +25,7 @@
               </div>
             {% endfor %}
             </div>
-            <div class="container bg-altdarkgrey rounded-2 py-1 my-2">
+            <div class="container rounded-2 py-1 my-2">
               <p class="fw-bolder mb-4">The popular categories!</p>
 
             </div>
@@ -37,28 +37,27 @@
                  <div class="p-3"><p class="fs-4 fw-normal">Questions that waits for an answer!</div>
                 </div>
                 <div class="col">
-                  <div class="p-3 d-flex justify-content-end"><a href="{% url 'questionHub:ask' %}"><div class="btn bg-primary fw-bold fs-6">Ask Question</div></a></div>
+                  <div class="p-3 d-flex justify-content-end"><a href="{% url 'questionHub:ask' %}"><div class="btn btn-primary text-white fw-bold fs-6">Ask Question</div></a></div>
                 </div>
               </div>
             </div>
-
             {% for question in questions %}
             <div class="card my-2">
                 <div class="card-header rounded-top text-black">
-                  {{ question.category.name }}
+                  <span class="badge text-bg-light">{{ question.category.name }}</span>
                 </div>
                 <div class="card-body rounded-bottom">
                   <div class="row gx-5">
-                    <div class="col">
+                    <div class="col-8">
                      <div class="p-3">
                       <a href="{% url 'questionHub:detail' question.id %}" class="link-offset-2 link-underline link-underline-opacity-0">
-                        <h5 class="card-title fs-5 text-black">{{ question.title }}</h5>
+                        <h5 class="card-title fs-5 text-black">{{ question.title|truncatewords:"10" }}</h5>
                         <hr class="dropdown-divider">
-                        <p class="card-text fs-6 text-black">{{ question.content }}</p>
+                        <p class="card-text fs-6 text-black">{{ question.content|truncatewords:"15" }}</p>
                       </a>
                      </div>
                     </div>
-                    <div class="col ">
+                    <div class="col-4">
                       <div class="p-3">{{ question.author }}
                          <hr class="border-1">
                         {{ question.created_at }}</div>
@@ -70,38 +69,38 @@
               {% endfor %} 
 
 
-          {% if is_paginated %}
-          <div class="d-flex justify-content-center">
-          <nav aria-label="Page navigation" class="bg-white">
-            <ul class="pagination">
-              {% if page_obj.has_previous %}
-                <li class="page-item">
-                  <a class="page-link" href="?page=1" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-                </li>
+              {% if is_paginated %}
+              <div class="d-flex justify-content-center">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination pt-3 px-2">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page=1" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active">
+                      <span class="page-link">{{ page_obj.number }} <span class="sr-only">(current)</span></span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              </div>
               {% endif %}
-              <li class="page-item active">
-                <span class="page-link">{{ page_obj.number }} <span class="sr-only">(current)</span></span>
-              </li>
-              {% if page_obj.has_next %}
-                <li class="page-item">
-                  <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              {% endif %}
-            </ul>
-          </nav>
 
-          </div>
-          {% endif %}
         </div>
       </div>
     </div>

@@ -3,6 +3,24 @@
 {% block title %}Ask your question!{% endblock %}
 
 {% block content %}
-{{ create_form }}
-csdck
+<div class="container mx-auto">
+    <form action="{% url 'questionHub:ask' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <!-- <div class="form-group m-5">
+        {% for field in form %}
+        {% if field.name == 'title' %}
+        <label class="form-label h5 fw-bold">Title</label>
+        <input type="text" class="form-control" name="title" maxlength="100" required id="id_title">
+        {% elif field.name == 'content' %}
+        <label class="form-label h5 fw-bold">Content</label>
+        <textarea name="content" class="form-control" cols="40" rows="10" required
+            id="id_content"></textarea>
+        {% endif %}
+        {% endfor %}
+    </div> -->
+    <button class="btn btn-primary" type="submit">Publish</button>
+    </form>
+</div>
+
 {% endblock %}
