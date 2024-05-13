@@ -2,23 +2,28 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import '../node_modules/bootstrap/scss/_variables-dark';
 
-$alt-theme-colors: (
-    "altdark": #2c2e33,
-    "altgrey": #60676e,
-    "altlightgrey": #CAD4DF,
-    "altlight": #DDDBDE,
-    "altdarkgrey":#3B373B,
-);
+$primary: #17159c;
+$font-family-base: 'Lobster', cursive;
 
-$theme-colors: map-merge($map1: $alt-theme-colors, $map2: $theme-colors);
+nav {
+    background-color: #dddddd; // Білий колір фону
+    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1); // Тінь
 
-$body-bg-dark : #2c2e33;
-$body-bg: #e6e8f0;
-$pagination-bg: #1f1f1f;
-$pagination-active-bg: #2c2c2c;
+    // Додаткові стилізації можна додати тут, якщо потрібно
+}
+
 
 .card {
-    transition: box-shadow 0.3s ease, transform 0.3s ease; // Плавний перехід для тіні та перетворення
+    .card-header {
+        background-color: #ececec;
+    }
+
+    .card-body {
+        background-color: #ececec;
+    }
+
+    transition: box-shadow 0.3s ease,
+    transform 0.3s ease; // Плавний перехід для тіні та перетворення
 
     &:hover {
         box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2); // Збільшуємо розмір тіні при наведенні
@@ -27,12 +32,12 @@ $pagination-active-bg: #2c2c2c;
 }
 
 .pagination {
-    background-color: #656E77; // Колір фону пагінації
+    // background-color: #656E77; // Колір фону пагінації
 
     .page-item {
         &.active .page-link {
             color: #fff; // Колір тексту посилання, коли воно обране
-            background-color: $body-bg-dark; // Колір фону посилання, коли воно обране
+            background-color: #000000; // Колір фону посилання, коли воно обране
             border-color: #000000;
 
         }
@@ -40,13 +45,19 @@ $pagination-active-bg: #2c2c2c;
 
     .page-link {
         color: #fff; // Колір тексту посилання
-        background-color: $body-bg-dark; // Колір фону посилання
+        background-color: #000000; // Колір фону посилання
         border-color: #2c2c2c;
 
         &:hover {
-            background-color: darken($body-bg-dark, 10%); // Темніший колір фону посилання при наведенні
+            color: #000000;
+            background-color: mix(#000000, #052b9e, 10%); // Темніший колір фону посилання при наведенні
         }
     }
+}
+
+
+footer {
+    background-color: #dddddd; // Білий колір фону
 }
 
 @import '../node_modules/bootstrap/scss/bootstrap';

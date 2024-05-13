@@ -3,9 +3,16 @@
 {% block title %}The question is {{question.title}}{% endblock %}
 
 {% block content %}
- <div class="container mx-auto text-center">
-    <p class="fw-normal fs-1">{{question.title}}</p>
-    <hr class="border border-altgrey border-2">
+ <div class="container mx-auto my-3 text-center border border-dark rounded-2">
+  <div class="row">
+    <div class="col-1">
+      <div class="p-3"><p class="italic">{{ question.author }}</div>
+    </div>
+    <div class="col-4">
+      <div class="p-3 d-flex justify-content-end"><p class="fw-normal fs-3">{{question.title}}</p></div>
+    </div>
+  </div>
+    <hr class="border border-dark border-2">
         <div class="row row-cols-5 row-cols-lg-6">
           <div class="col">
             <div class="p-3"><p class="italic">Asked: {{ question.created_at|timesince}} ago </p></div>
@@ -20,7 +27,7 @@
             <div class="p-3">Relates to category: {{question.category}}</div>
           </div>
         </div>
-        <hr class="border border-altgrey border-2">
+        <hr class="border border-dark border-2">
         <div class="container mx-auto bg-altinfo border-2">
           <p class="fs-5">{{question.content}}</p>
         </div>

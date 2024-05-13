@@ -8,17 +8,20 @@
     <div class="container-fluid px-4">
         <div class="row gx-5">
           <div class="col-12 col-md-4 rounded-2 my-2">
-            <div class="container bg-altdarkgrey rounded-2 py-1">
+            <div class="container rounded-2 py-1 text-black">
               <p class="fw-bolder mb-4">The latest questions!</p>
               {% for new_question in latest_questions %}
-              <div class="card my-2 bg-altgrey">
-               <div class="card-body">
-                
-                <a href="{% url 'questionHub:detail' new_question.id %}" class="link-light">
-                  <h5 class="card-title">{{ new_question.title }}</h5>                
-                  <p class="card-text">{{ new_question.content }}</p>
-                </a>
-              </div>
+              <div class="card my-2">
+                <div class="card-header rounded-top text-black">
+                  {{ new_question.category.name }}
+                </div>
+                <div class="card-body rounded-bottom ">
+                  <a href="{% url 'questionHub:detail' new_question.id %}" class="link-offset-2 link-underline link-underline-opacity-0">
+                    <h5 class="card-title fs-5 text-black">{{ new_question.title }}</h5>
+                    <hr class="dropdown-divider">
+                    <p class="card-text fs-6 text-black">{{ new_question.content }}</p>
+                  </a>
+                </div>
               </div>
             {% endfor %}
             </div>
@@ -28,28 +31,40 @@
             </div>
           </div>
           <div class="col-12 col-md-8">
-            <div class="container px-4 text-center">
+            <div class="container px-4 text-center text-black">
               <div class="row gx-5">
                 <div class="col-7">
                  <div class="p-3"><p class="fs-4 fw-normal">Questions that waits for an answer!</div>
                 </div>
                 <div class="col">
-                  <div class="p-3 d-flex justify-content-end"><div class="btn btn-altlightgrey fw-bold fs-6">Ask Question</div></div>
+                  <div class="p-3 d-flex justify-content-end"><a href="{% url 'questionHub:ask' %}"><div class="btn bg-primary fw-bold fs-6">Ask Question</div></a></div>
                 </div>
               </div>
             </div>
 
             {% for question in questions %}
-            <div class="card bg-altgrey my-2">
-                <div class="card-header">
+            <div class="card my-2">
+                <div class="card-header rounded-top text-black">
                   {{ question.category.name }}
                 </div>
-                <div class="card-body">
-                  <a href="{% url 'questionHub:detail' question.id %}" class="link-light">
-                    <h5 class="card-title fs-5">{{ question.title }}</h5>
-                    <hr class="dropdown-divider">
-                    <p class="card-text fs-6">{{ question.content }}</p>
-                  </a>
+                <div class="card-body rounded-bottom">
+                  <div class="row gx-5">
+                    <div class="col">
+                     <div class="p-3">
+                      <a href="{% url 'questionHub:detail' question.id %}" class="link-offset-2 link-underline link-underline-opacity-0">
+                        <h5 class="card-title fs-5 text-black">{{ question.title }}</h5>
+                        <hr class="dropdown-divider">
+                        <p class="card-text fs-6 text-black">{{ question.content }}</p>
+                      </a>
+                     </div>
+                    </div>
+                    <div class="col ">
+                      <div class="p-3">{{ question.author }}
+                         <hr class="border-1">
+                        {{ question.created_at }}</div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
               {% endfor %} 
@@ -57,8 +72,8 @@
 
           {% if is_paginated %}
           <div class="d-flex justify-content-center">
-          <nav aria-label="Page navigation">
-            <ul class="pagination p-1 rounded-2">
+          <nav aria-label="Page navigation" class="bg-white">
+            <ul class="pagination">
               {% if page_obj.has_previous %}
                 <li class="page-item">
                   <a class="page-link" href="?page=1" aria-label="Previous">

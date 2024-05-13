@@ -6,5 +6,6 @@ app_name = 'questionHub'
 
 urlpatterns = [
     path('', views.QuestionsListView.as_view(), name='index'),
-    path('question/<int:pk>', views.QuestionDetailView.as_view(), name='detail')
+    path('question/<int:pk>', views.QuestionDetailView.as_view(), name='detail'),
+    path('question/ask/', views.AskQuestionFormView.as_view(), name='ask'),
 ]
