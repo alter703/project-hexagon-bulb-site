@@ -3,24 +3,32 @@
 {% block title %}Ask your question!{% endblock %}
 
 {% block content %}
-<div class="container mx-auto">
+<div class="container mx-auto border-primary border-2">
     <form action="{% url 'questionHub:ask' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <!-- <div class="form-group m-5">
-        {% for field in form %}
-        {% if field.name == 'title' %}
-        <label class="form-label h5 fw-bold">Title</label>
-        <input type="text" class="form-control" name="title" maxlength="100" required id="id_title">
-        {% elif field.name == 'content' %}
-        <label class="form-label h5 fw-bold">Content</label>
-        <textarea name="content" class="form-control" cols="40" rows="10" required
-            id="id_content"></textarea>
-        {% endif %}
-        {% endfor %}
-    </div> -->
-    <button class="btn btn-primary" type="submit">Publish</button>
+        {% csrf_token %}
+        <div class="form-group m-5">
+            {% for field in form %}
+                {% if field.name == 'title' %}
+                    <label class="form-label h5 fw-bold">Title</label>
+                    {{ field }}
+                {% elif field.name == 'category' %}
+                    <div id="id_category" class="container bg-base-200 rounded">
+                        {% for category in categories %}
+                            <label class="cursor-pointer label mx-5" for="id_category_{{ forloop.counter0 }}">
+                                <span class="label-text italic font-medium">{{ category.name }}</span>
+                                <input type="radio" name="category" class="radio radio-primary" value="{{ category.id }}">
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% elif field.name == 'content' %}
+                    <label class="form-label h5 fw-bold">Content</label>
+                    {{ field }}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <button class="btn btn-primary" type="submit">Publish</button>
     </form>
 </div>
+
 
 {% endblock %}

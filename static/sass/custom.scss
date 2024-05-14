@@ -98,6 +98,19 @@ $font-family-base: 'Arial';
     }
 }
 
+.form-check {
+
+    .form-check-input[type="checkbox"],
+    .form-check-input[type="radio"] {
+        background-color: $secondary; // Замініть це на бажаний колір
+
+        &:checked {
+            background-color: $primary;
+            border-color: $primary;
+        }
+    }
+}
+
 
 $theme-colors: map-merge($theme-colors, ("primary": $primary, "secondary": $secondary));
 

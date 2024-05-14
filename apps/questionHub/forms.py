@@ -1,8 +1,11 @@
-from django.forms import ModelForm
-from .models import Question 
+from django import forms
+from .models import Question, Category
 
 
-class AskQuestionForm(ModelForm):
+class AskQuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('title', 'content', 'category')
+        fields = ('title', 'category', 'content',)
+        widgets = {
+            'category': forms.RadioSelect,
+        }

@@ -17,7 +17,7 @@ class QuestionsListView(ListView):
     model = Question
     template_name = "questionHub/index.html"
     context_object_name = 'questions'
-    paginate_by = 8
+    paginate_by = 9
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -39,10 +39,9 @@ class QuestionDetailView(DetailView):
 
 
 class AskQuestionCreateView(CreateView):
+    form_class = AskQuestionForm
     model = Question
-    slug_url_kwarg = 'slug'
     context_object_name = 'create_form'
-    fields = ['title', 'category', 'content']
     template_name = 'questionHub/ask_question.html'
 
     def get_success_url(self):
@@ -50,7 +49,13 @@ class AskQuestionCreateView(CreateView):
 
         return reverse('questionHub:detail', kwargs={'slug': self.object.slug})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
     def form_valid(self, form):
+        print(form)
         form.instance.author = self.request.user
-        form.instance.slug = slugify(form.instance.title)  # Генерація слагу з заголовка
+        form.instance.slug = slugify(form.instance.title)
         return super().form_valid(form)
