@@ -1,1 +1,22 @@
 {% extends 'base.html' %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+
+<div class="card text-center m-4">
+    <div class="card-header fw-semibold">
+      Your Profile Card
+    </div>
+    <div class="card-body">
+        <img src="{{ profile.get_avatar }}" alt="" width="30%" class="rounded-circle">
+      <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
+      <p class="card-text">{{ profile.biography }}</p>
+      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    </div>
+    <div class="card-footer text-body-secondary">
+      Joined: {{ profile.joined_at|date:"M d Y" }}
+    </div>
+  </div>
+
+{% endblock %}

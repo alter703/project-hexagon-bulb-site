@@ -11,7 +11,7 @@ class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='profile')
-    biography = models.TextField(null=True, blank=True)
+    biography = models.TextField(null=True, blank=True, max_length=255)
     avatar = ProcessedImageField(
         upload_to='avatars/',
         processors=[ResizeToFill(550, 550)],
@@ -25,6 +25,8 @@ class Profile(models.Model):
         format='WEBP',
         options={'quality': 60},
     )
+
+    joined_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username
