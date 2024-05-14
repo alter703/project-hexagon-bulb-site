@@ -28,11 +28,22 @@
               </a>
               <ul class="dropdown-menu shadow-lg">
                   <li><a class="dropdown-item" href="{% url 'members:profile-detail' user.profile.id %}">Profile</a></li>
-                  <li><a class="dropdown-item" href="#">Log out</a></li>
+                  <li><a class="dropdown-item" href="{% url 'members:logout' %}">Log out</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">What's new?</a></li>
               </ul>
           </div>
+          {% else %}
+            <div class="mx-1">
+                <a href="{% url 'members:login' %}">
+                    <div type="button" class="btn btn-secondary">Sign in</div>
+                </a>
+            </div>
+            <div class="mx-1">
+                <a href="{% url 'members:signup' %}">
+                    <div type="button" class="btn btn-secondary">Sign up</div>
+                </a>
+            </div>
           {% endif %}
       </div>
   </div>
