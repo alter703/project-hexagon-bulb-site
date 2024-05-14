@@ -5,6 +5,7 @@
 {% block content %}
 
 <div class="container-fluid mx-3">
+  {{user.profile.get_avatar_thumbnail}}
     <div class="container-fluid px-4">
         <div class="row gx-5">
           <div class="col-12 col-md-4 rounded-2 my-2">
@@ -62,7 +63,7 @@
                     <div class="col-4">
                       <div class="p-3">{{ question.author }}
                          <hr class="border-1">
-                        {{ question.created_at }}</div>
+                        {{ question.created_at|timesince }} ago</div>
                     </div>
                   </div>
 

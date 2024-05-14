@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
 
     'apps.main',
+    'apps.members',
     'apps.questionHub',
     'apps.pollFeed',
 ]

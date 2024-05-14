@@ -35,7 +35,7 @@ class QuestionDetailView(DetailView):
     context_object_name = 'question'
 
     def get_object(self, queryset=None) -> Model:
-        return get_object_or_404(Question, slug=self.kwargs[self.slug_url_kwarg])
+        return get_object_or_404(Question.objects.select_related('author'), slug=self.kwargs[self.slug_url_kwarg])
 
 
 class AskQuestionCreateView(CreateView):
@@ -46,7 +46,6 @@ class AskQuestionCreateView(CreateView):
 
     def get_success_url(self):
         # print(self.object)
-
         return reverse('questionHub:detail', kwargs={'slug': self.object.slug})
 
     def get_context_data(self, **kwargs):
@@ -55,7 +54,6 @@ class AskQuestionCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        print(form)
         form.instance.author = self.request.user
         form.instance.slug = slugify(form.instance.title)
         return super().form_valid(form)

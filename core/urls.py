@@ -26,8 +26,9 @@ urlpatterns = [
     path('', include('apps.main.urls')),
     path('question-hub/', include('apps.questionHub.urls')),
     path('poll-feed/', include('apps.pollFeed.urls')),
+    path('profile/', include('apps.members.urls')),
 ]
 
 
 if settings.DEBUG:
-    urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

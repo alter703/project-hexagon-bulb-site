@@ -21,17 +21,19 @@
                   <a class="nav-link" href="#">About</a>
               </li>
           </ul>
+          {% if user.is_authenticated %}
           <div class="dropstart">
               <a class="btn btn-ghost rounded-circle border-0 ms-2" data-bs-toggle="dropdown">
-                  <img src="{% static 'svg/image.png' %}" alt="" width="46px" class="rounded-circle">
+                  <img src="{{ user.profile.get_avatar_thumbnail }}" alt="Avatar" width="46px" class="rounded-circle">
               </a>
               <ul class="dropdown-menu shadow-lg">
-                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" href="{% url 'members:profile_detail' user.profile.id %}">Profile</a></li>
                   <li><a class="dropdown-item" href="#">Log out</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">What's new?</a></li>
               </ul>
           </div>
+          {% endif %}
       </div>
   </div>
 </nav>
