@@ -52,4 +52,4 @@ class Answer(models.Model):
     class Meta:
         ordering = ('-created_at',)
         verbose_name = 'Відповідь'
-        verbose_name_plural = 'Відповіді'
+        verbose_name_plural = 'Відповіді' 

@@ -83,10 +83,11 @@ $font-family-base: 'Arial';
 .dropdown-menu {
 
     .dropdown-item {
+        transition: background-color 0.3s ease;
+
         &:hover {
             color: $light;
             background-color: darken($primary, 10%);
-            transition: background-color 0.3s ease;
         }
 
         &:active {

@@ -58,10 +58,12 @@
   border-color: #100e9b;
 }
 
+.dropdown-menu .dropdown-item {
+  transition: background-color 0.3s ease;
+}
 .dropdown-menu .dropdown-item:hover {
   color: #f8f9fa;
   background-color: #100e9b;
-  transition: background-color 0.3s ease;
 }
 .dropdown-menu .dropdown-item:active {
   background-color: #000000;

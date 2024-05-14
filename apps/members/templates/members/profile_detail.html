@@ -1,17 +1,25 @@
 {% extends 'base.html' %}
 
-{% block title %}Your Profile{% endblock %}
+{% block title %}{% if user == profile.user %}Your Profile{% else %}Profile{% endif %}{% endblock %}
 
 {% block content %}
 
-<div class="card text-center m-4">
+<div class="card text-center mx-2 mt-4">
     <div class="card-header fw-semibold">
-      Your Profile Card
+      {% if user == profile.user %}Your Profile Card{% else %}Profile Card of {{profile.user.username }}{% endif %}
     </div>
     <div class="card-body">
+      {% if user == profile.user %}
         <div class="row row-cols-5 mx-3">
-            <div class="btn btn-ghost d-flex text-danger">Edit profile</div>
+          <div class="col-2">
+            <div class="btn btn-ghost text-danger"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div>
+          </div>
+          <div class="col-2">
+            <a href="{% url 'members:logout' %}"><div class="btn btn-ghost text-danger"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div></a>
+            
+          </div>
         </div>
+        {% endif %}
         <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
         <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
         <p class="card-text">{{ profile.biography }}</p>
