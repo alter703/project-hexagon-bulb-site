@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
     'apps.main',
     'apps.questionHub',
+    'apps.pollFeed',
 ]
 
 MIDDLEWARE = [

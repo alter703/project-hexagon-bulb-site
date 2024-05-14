@@ -1,40 +1,37 @@
 {% load static %}
 
-
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid mx-auto rounded-1">
-      <a class="navbar-brand fw-bold" href="{% url 'main:index' %}"><img src="{% static 'svg/bulb.svg' %}" alt="" width="70px"> Hexagon Bulb</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid mx-auto rounded-1">
+      <a class="navbar-brand fw-bold" href="{% url 'main:index' %}">
+          <img src="{% static 'svg/bulb.svg' %}" alt="" width="70px"> Hexagon Bulb
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'questionHub:index' %}">Question Hub</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Poll Feed</a>
-          </li>
-          <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-          </li>
-        </ul>
-  
-  
-  
-      <div class="d-flex collapse navbar-collapse justify-content-end" id="navbarNav">
-        <div class="dropstart">
-          <a class="btn btn-ghost rounded-4 border-0 ms-2" data-bs-toggle="dropdown">
-          <img src="{% static 'svg/image.png' %}" alt="" width="50px" class="rounded-4"></a>
-        <ul class="dropdown-menu shadow-lg">
-          <li><a class="dropdown-item" href="#">Profile</a></li>
-          <li><a class="dropdown-item" href="#">Log out</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">What's new?</a></li>
-        </ul>
-    </div>
-
+          <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'questionHub:index' %}">Question Hub</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'pollFeed:index' %}">Poll Feed</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+              </li>
+          </ul>
+          <div class="dropstart">
+              <a class="btn btn-ghost rounded-circle border-0 ms-2" data-bs-toggle="dropdown">
+                  <img src="{% static 'svg/image.png' %}" alt="" width="46px" class="rounded-circle">
+              </a>
+              <ul class="dropdown-menu shadow-lg">
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" href="#">Log out</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">What's new?</a></li>
+              </ul>
+          </div>
+      </div>
   </div>
-
 </nav>
-

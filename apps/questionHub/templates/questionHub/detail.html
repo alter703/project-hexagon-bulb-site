@@ -14,32 +14,31 @@
       </div>
     </div>
   </div>
-    <hr class="border border-dark border-2">
+    <hr class="border border-dark border-1">
         <div class="row row-cols-5 row-cols-lg-6">
           <div class="col">
-            <div class="p-3"><p class="italic">Asked: {{ question.created_at|timesince}} ago </p></div>
+            <div class="p-1 text-wrap"><p class="italic">Asked: {{ question.created_at|timesince}} ago </p></div>
           </div>
           <div class="col">
-            <div class="p-3"><p class="italic">Modified: {{ question.updated_at|timesince}} ago </p></div>
+            <div class="p-1 text-wrap"><p class="italic">Modified: {{ question.updated_at|timesince}} ago </p></div>
           </div>
           <div class="col">
-            <div class="p-3"><p class="italic">Author: {{ question.author}} </p></div>
+            <div class="p-1 text-wrap"><p class="italic">Author: {{ question.author}} </p></div>
           </div>
           <div class="col">
-            <div class="p-3">Relates to category: {{question.category}}</div>
+            <div class="p-1 text-wrap">Relates to category: {{question.category}}</div>
           </div>
         </div>
-        <hr class="border border-dark border-2">
+        <hr class="border border-dark border-1">
         <div class="container mx-auto border-2">
           <p class="fs-5">{{question.content}}</p>
         </div>
 
         <div class="btn btn-secondary" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
-        
         <div class="container" id="toggleForm" style="display: none;">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <span class="input-group-text" id="basic-addon2">@example.com</span>
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+            <label for="floatingTextarea">Your Answer</label>
           </div>
         </div>
 
@@ -50,7 +49,7 @@
         function toggleForm() {
             var button = document.getElementById("toggleButton");
             var form = document.getElementById("toggleForm");
-    
+
             if (button.style.display === "none") {
                 button.style.display = "block"; // Показуємо кнопку
                 form.style.display = "none"; // Ховаємо поле вводу

@@ -1,8 +1,8 @@
-from typing import Any
 from django.db.models.base import Model as Model
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, FormView, CreateView
+from django.utils.text import slugify
 
 from django.urls import reverse, reverse_lazy
 
@@ -31,24 +31,26 @@ class QuestionsListView(ListView):
 
 
 class QuestionDetailView(DetailView):
-    pk_url_kwarg = 'pk'
     template_name = 'questionHub/detail.html'
     context_object_name = 'question'
 
     def get_object(self, queryset=None) -> Model:
-        return get_object_or_404(Question, pk=self.kwargs[self.pk_url_kwarg])
+        return get_object_or_404(Question, slug=self.kwargs[self.slug_url_kwarg])
 
 
 class AskQuestionCreateView(CreateView):
     model = Question
+    slug_url_kwarg = 'slug'
     context_object_name = 'create_form'
     fields = ['title', 'category', 'content']
     template_name = 'questionHub/ask_question.html'
 
     def get_success_url(self):
-        return reverse_lazy('questionHub:index')
+        # print(self.object)
+
+        return reverse('questionHub:detail', kwargs={'slug': self.object.slug})
 
     def form_valid(self, form):
-        # Задаємо автора перед збереженням форми
         form.instance.author = self.request.user
+        form.instance.slug = slugify(form.instance.title)  # Генерація слагу з заголовка
         return super().form_valid(form)

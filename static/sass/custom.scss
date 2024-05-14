@@ -5,18 +5,14 @@
 $primary: #1512ca;
 $secondary: #000000;
 
-// $font-family-base: 'Arial';
+$font-family-base: 'Arial';
 
 
-nav {
+.navbar {
     background-color: #f7f7f7; // Білий колір фону
     box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1); // Тінь
     // Додаткові стилізації можна додати тут, якщо потрібно
 }
-
-// footer {
-//     background-color: #f9f9f9; // Білий колір фону
-// }
 
 .btn.btn-primary {
     border-radius: 40px;
@@ -26,6 +22,7 @@ nav {
     box-shadow: 0 2px 6px lighten($primary, 10%);
 
 }
+
 
 .btn.btn-secondary {
     border-radius: 40px;
@@ -72,8 +69,8 @@ nav {
     .page-item {
         &.active .page-link {
             // color: #fff; // Колір тексту посилання, коли воно обране
-            background-color: #122c6f; // Колір фону посилання, коли воно обране
-            border-color: #122c6f;
+            background-color: $primary; // Колір фону посилання, коли воно обране
+            border-color: $primary;
 
         }
     }
@@ -81,24 +78,22 @@ nav {
     .page-link {
         color: #fff;
         /* Колір тексту посилання */
-        background-color: #122c6f;
+        background-color: $primary;
         /* Колір фону посилання */
-        border-color: #122c6f;
+        border-color: $primary;
         transition: background-color 0.3s;
         /* Плавний перехід для зміни кольору фону */
 
         &:hover {
             color: #ffffff;
-            background-color: #0f265d;
-            border-color: #0f265d;
+            background-color: darken($primary, 10%);
+            border-color: darken($primary, 10%);
             /* Темніший колір фону посилання при наведенні */
         }
 
         &:active {
-            background-color: #0c204b;
-            /* Колір фону посилання при активному стані */
-            border-color: #0c204b;
-            /* Колір рамки при активному стані */
+            background-color: darken($primary, 10%);
+            border-color: darken($primary, 10%);
         }
     }
 }

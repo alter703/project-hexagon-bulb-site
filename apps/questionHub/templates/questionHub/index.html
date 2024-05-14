@@ -16,7 +16,7 @@
                   <span class="badge text-bg-light">{{ new_question.category.name }}</span>
                 </div>
                 <div class="card-body rounded-bottom">
-                  <a href="{% url 'questionHub:detail' new_question.id %}" class="link-offset-2 link-underline link-underline-opacity-0">
+                  <a href="{{ new_question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
                     <h5 class="card-title fs-5 text-black">{{ new_question.title }}</h5>
                     <hr class="dropdown-divider">
                     <p class="card-text fs-6 text-black">{{ new_question.content }}</p>
@@ -26,7 +26,7 @@
             {% endfor %}
             </div>
             <div class="container rounded-2 py-1 my-2">
-              <p class="fw-bolder mb-4">The popular categories!</p>
+              <p class="fw-bolder mb-4">Here's your ad!</p>
 
             </div>
           </div>
@@ -34,7 +34,7 @@
             <div class="container px-4 text-center text-black">
               <div class="row gx-5">
                 <div class="col-7">
-                 <div class="p-3"><p class="fs-4 fw-normal">Questions that waits for an answer!</div>
+                 <div class="p-3"><p class="fs-4 fw-normal">Questions that were waiting for answers. And those that have already been answered!</div>
                 </div>
                 <div class="col">
                   <div class="p-3 d-flex justify-content-end"><a href="{% url 'questionHub:ask' %}"><div class="btn btn-primary text-white fw-bold fs-6">Ask Question</div></a></div>
@@ -42,6 +42,7 @@
               </div>
             </div>
             {% for question in questions %}
+            {{question.slug}}
             <div class="card my-2">
                 <div class="card-header rounded-top text-black">
                   <span class="badge text-bg-light">{{ question.category.name }}</span>
@@ -50,7 +51,7 @@
                   <div class="row gx-5">
                     <div class="col-8">
                      <div class="p-3">
-                      <a href="{% url 'questionHub:detail' question.id %}" class="link-offset-2 link-underline link-underline-opacity-0">
+                      <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
                         <h5 class="card-title fs-5 text-black">{{ question.title|truncatewords:"10" }}</h5>
                         <hr class="dropdown-divider">
                         <p class="card-text fs-6 text-black">{{ question.content|truncatewords:"15" }}</p>
@@ -70,9 +71,9 @@
 
 
               {% if is_paginated %}
-              <div class="d-flex justify-content-center">
+              <div class="container d-flex justify-content-center">
                 <nav aria-label="Page navigation">
-                  <ul class="pagination pt-3 px-2">
+                  <ul class="pagination">
                     {% if page_obj.has_previous %}
                     <li class="page-item">
                       <a class="page-link" href="?page=1" aria-label="Previous">
@@ -100,6 +101,7 @@
                 </nav>
               </div>
               {% endif %}
+              
 
         </div>
       </div>
