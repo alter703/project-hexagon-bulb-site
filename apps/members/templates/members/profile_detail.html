@@ -9,9 +9,12 @@
       Your Profile Card
     </div>
     <div class="card-body">
-        <img src="{{ profile.get_avatar }}" alt="" width="30%" class="rounded-circle">
-      <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
-      <p class="card-text">{{ profile.biography }}</p>
+        <div class="row row-cols-5 mx-3">
+            <div class="btn btn-ghost d-flex text-danger">Edit profile</div>
+        </div>
+        <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
+        <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
+        <p class="card-text">{{ profile.biography }}</p>
       <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
     </div>
     <div class="card-footer text-body-secondary">

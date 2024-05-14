@@ -4,7 +4,8 @@
   box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
 }
 
-.btn.btn-primary {
+.btn.btn-primary,
+.btn.btn-secondary {
   border-radius: 40px;
 }
 
@@ -12,16 +13,8 @@
   box-shadow: 0 2px 6px #2724eb;
 }
 
-.btn.btn-secondary {
-  border-radius: 40px;
-}
-
 .btn.btn-secondary:hover {
   box-shadow: 0 2px 6px #1a1a1a;
-}
-
-.dropdown-menu.show {
-  transition: box-shadow 0.3s ease;
 }
 
 .card {
@@ -29,16 +22,13 @@
 }
 .card .card-header {
   background-color: #d1d1d1;
-  /* Колір фону тіла карточки */
   color: #000000;
-  /* Колір тексту тіла карточки */
 }
 .card .card-body {
   background-color: #d7d7d7;
-  /* Колір фону тіла карточки */
   color: #000000;
-  /* Колір тексту тіла карточки */
 }
+
 .card:hover {
   box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);
   transform: translateY(-3px);
@@ -66,6 +56,16 @@
 .pagination .page-link:active {
   background-color: #100e9b;
   border-color: #100e9b;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  color: #f8f9fa;
+  background-color: #100e9b;
+  transition: background-color 0.3s ease;
+}
+.dropdown-menu .dropdown-item:active {
+  background-color: #000000;
+  /* Додайте інші стилі, які вам потрібні */
 }
 
 .form-check .form-check-input[type=checkbox],

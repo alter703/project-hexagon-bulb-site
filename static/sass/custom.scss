@@ -9,60 +9,42 @@ $font-family-base: 'Arial';
 
 
 .navbar {
-    background-color: #f7f7f7; // Білий колір фону
-    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1); // Тінь
-    // Додаткові стилізації можна додати тут, якщо потрібно
+    background-color: #f7f7f7;
+    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
 }
 
-.btn.btn-primary {
+.btn.btn-primary,
+.btn.btn-secondary {
     border-radius: 40px;
 }
 
 .btn.btn-primary:hover {
     box-shadow: 0 2px 6px lighten($primary, 10%);
-
-}
-
-
-.btn.btn-secondary {
-    border-radius: 40px;
-
 }
 
 .btn.btn-secondary:hover {
     box-shadow: 0 2px 6px lighten($secondary, 10%);
 }
 
-.dropdown-menu.show {
-    transition: box-shadow 0.3s ease,
-
-}
-
 .card {
     .card-header {
         background-color: #d1d1d1;
-        /* Колір фону тіла карточки */
         color: #000000;
-        /* Колір тексту тіла карточки */
     }
 
     .card-body {
         background-color: #d7d7d7;
-        /* Колір фону тіла карточки */
         color: #000000;
-        /* Колір тексту тіла карточки */
     }
 
     transition: box-shadow 0.3s ease,
-    transform 0.3s ease; // Плавний перехід для тіні та перетворення
-
-    &:hover {
-        box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2); // Збільшуємо розмір тіні при наведенні
-        transform: translateY(-3px); // Піднімаємо карточку на 5px при наведенні
-    }
+    transform 0.3s ease;
 }
 
-
+.card:hover {
+    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
 
 .pagination {
 
@@ -94,6 +76,22 @@ $font-family-base: 'Arial';
         &:active {
             background-color: darken($primary, 10%);
             border-color: darken($primary, 10%);
+        }
+    }
+}
+
+.dropdown-menu {
+
+    .dropdown-item {
+        &:hover {
+            color: $light;
+            background-color: darken($primary, 10%);
+            transition: background-color 0.3s ease;
+        }
+
+        &:active {
+            background-color: #000000;
+            /* Додайте інші стилі, які вам потрібні */
         }
     }
 }
