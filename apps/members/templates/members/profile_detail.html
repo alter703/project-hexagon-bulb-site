@@ -12,7 +12,7 @@
       {% if user == profile.user %}
         <div class="row row-cols-5 mx-3">
           <div class="col-2">
-            <div class="btn btn-ghost text-danger"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div>
+            <a href="{% url 'members:profile-edit' %}"><div class="btn btn-ghost text-danger"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div></a>
           </div>
           <div class="col-2">
             <a href="{% url 'members:logout' %}"><div class="btn btn-ghost text-danger"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div></a>

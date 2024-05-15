@@ -8,7 +8,7 @@ app_name = 'members'
 urlpatterns = [
     path('login/', views.LoginUserView.as_view(), name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('signup/', views.signup_view, name='signup'),
-    path('profile/<uuid:uuid>', views.ProfileDetailView.as_view(), name='profile-detail'),
-    # path('profile/edit/', views.profile_edit_view, name='profile-edit'),
+    path('signup/', views.SignUpView.as_view(), name='signup'),
+    path('profile/<uuid:uuid>', views.ProfileDetailView.as_view(), name='profile'),
+    path('profile/edit/', views.ProfileEditView.as_view(), name='profile-edit'),
 ]
