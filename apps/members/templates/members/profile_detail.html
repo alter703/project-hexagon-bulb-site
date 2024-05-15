@@ -10,15 +10,14 @@
     </div>
     <div class="card-body">
       {% if user == profile.user %}
-        <div class="row row-cols-5 mx-3">
-          <div class="col-2">
-            <a href="{% url 'members:profile-edit' %}"><div class="btn btn-ghost text-danger"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div></a>
-          </div>
-          <div class="col-2">
-            <a href="{% url 'members:logout' %}"><div class="btn btn-ghost text-danger"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div></a>
-            
-          </div>
+      <div class="btn-group-vertical d-flex p-1">
+        <div class="my-1">
+          <a href="{% url 'members:profile-edit' %}"><div class="btn btn-primary"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div></a>
         </div>
+        <div class="my-1">
+          <a href="{% url 'members:logout' %}"><div class="btn btn-danger"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div></a>
+        </div>
+      </div>
         {% endif %}
         <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
         <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>

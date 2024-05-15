@@ -1,15 +1,15 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, FormView, CreateView, View
 from django.utils.text import slugify
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 
 from django.db.models import Q
 
 from .models import Question, Answer, Category
-
 from .forms import AskQuestionForm, AnswerQuestionForm
+
+from unidecode import unidecode
 
 # Create your views here.
 class QuestionsListView(ListView):
@@ -43,7 +43,6 @@ class QuestionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['answer_form'] = AnswerQuestionForm
-        context['question_absolute_url'] = self.object.get_absolute_url()
         return context
 
 
@@ -54,7 +53,6 @@ class AskQuestionCreateView(CreateView):
     template_name = 'questionHub/ask_question.html'
 
     def get_success_url(self):
-        # print(self.object)
         return reverse_lazy('questionHub:detail', kwargs={'slug': self.object.slug})
 
     def get_context_data(self, **kwargs):
@@ -64,8 +62,12 @@ class AskQuestionCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.slug = slugify(form.instance.title)
+        slug_text = unidecode(form.instance.title)  # Конвертуємо кириличний текст в ASCII
+        form.instance.slug = slugify(slug_text)
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class AnswerView(LoginRequiredMixin, View):

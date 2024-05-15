@@ -1,6 +1,3 @@
-from django.forms import BaseModelForm
-from django.http import HttpResponse
-from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth.decorators import login_required
@@ -56,7 +53,6 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileForm
     template_name = 'members/profile_edit.html'
-    # success_url = reverse_lazy('members:profile')  # Перенаправлення на профіль після успішного оновлення
 
     def get_success_url(self):
         return reverse_lazy('members:profile', kwargs={"uuid": self.request.user.profile.id})

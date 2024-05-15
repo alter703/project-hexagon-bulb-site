@@ -13,7 +13,7 @@
       <div class="col-1 d-flex" style="height: 70px;">
         <div class="vr"></div>
       </div>
-      <div class="col-2 text-start">
+      <div class="col text-start">
         <div class="p-2"><p class="fw-normal fs-2 fw-semibold">{{ question.title }}</p></div>
       </div>
     </div>
@@ -37,7 +37,7 @@
         </div>
         <hr class="border border-dark border-1">
         <div class="container mx-auto border-2">
-          <p class="fs-5">{{question.content}}</p>
+          <p class="fs-5 text-start">{{question.content}}</p>
         </div>
         
         {% if question.is_closed %}
@@ -53,7 +53,7 @@
         </div>
         {% endif %}
         <div class="container" id="toggleForm" style="display: none;">
-          <form method="post" action="{% url 'questionHub:answer-question' slug=question.title|slugify %}">
+          <form method="post" action="{% url 'questionHub:answer-question' slug=question.slug %}">
             {% csrf_token %}
             <div class="container">
               {{answer_form}}
@@ -66,6 +66,7 @@
           <h2 class="fs-2 d-flex">Answers</h2>
         </div>
         <div class="row row-cols-1 my-2 mx-5">
+          {% if question.answers.all %}
           {% for answer in question.answers.all %}
           <div class="col my-2">
             <div class="card d-flex justify-content-start text-start">
@@ -80,6 +81,11 @@
             </div>
             </div>
           {% endfor %}
+          {% else %}
+          <div class="container mt-5">
+            <h2 class="fs-4 d-flex fst-italic">No answers. Be the first who'll answer to this question!</h2>
+          </div>
+          {% endif %}
         </div>
 
         

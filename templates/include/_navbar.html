@@ -22,7 +22,7 @@
               </li>
           </ul>
           {% if user.is_authenticated %}
-          <div class="dropstart">
+          <div class="btn-group dropstart">
               <a class="btn btn-ghost rounded-circle border-0 ms-2" data-bs-toggle="dropdown">
                   <img src="{{ user.profile.get_avatar_thumbnail }}" alt="Avatar" width="46px" class="rounded-circle">
               </a>
@@ -30,7 +30,7 @@
                   <li><a class="dropdown-item" href="{% url 'members:profile' user.profile.id %}">Profile</a></li>
                   <li><a class="dropdown-item" href="{% url 'members:logout' %}">Log out</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">What's new?</a></li>
+                  <li><a class="dropdown-item" href="{% url 'main:whats-new' %}">What's new?</a></li>
               </ul>
           </div>
           {% else %}
