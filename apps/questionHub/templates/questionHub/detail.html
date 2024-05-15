@@ -5,12 +5,16 @@
 {% block content %}
  <div class="container mx-auto my-3 text-center border border-primary border-3 rounded-2">
   <div class="container overflow-hidden text-center">
+
     <div class="row gx-5 mt-4">
       <div class="col-2 text-start">
-        <div class="p-3 fs-5 text-wrap">Author: <a href="{% url 'members:profile-detail' question.author.profile.id %}">{{question.author }}</a></div>
+        <div class="p-3 fs-4"><a href="{% url 'members:profile-detail' question.author.profile.id %}"><img src="{{question.author.profile.get_avatar_thumbnail}}" alt="Avatar" class="rounded-circle me-2 " width="30%">{{ question.author }}</a></div>
       </div>
-      <div class="col text-start">
-        <div class="p-2"><p class="fw-normal fs-2">{{ question.title }}</p></div>
+      <div class="col-1 d-flex" style="height: 70px;">
+        <div class="vr"></div>
+      </div>
+      <div class="col-2 text-start">
+        <div class="p-2"><p class="fw-normal fs-2 fw-semibold">{{ question.title }}</p></div>
       </div>
     </div>
   </div>
@@ -19,9 +23,11 @@
           <div class="col">
             <div class="p-1 text-wrap"><p class="italic">Asked: {{ question.created_at|timesince}} ago </p></div>
           </div>
+          {% if question.created_at != question.updated_at %}
           <div class="col">
             <div class="p-1 text-wrap"><p class="italic">Modified: {{ question.updated_at|timesince}} ago </p></div>
           </div>
+          {% endif %}
           <div class="col">
             <div class="p-1 text-wrap"><p class="italic">Author: {{ question.author}} </p></div>
           </div>
@@ -34,40 +40,75 @@
           <p class="fs-5">{{question.content}}</p>
         </div>
 
-        <div class="btn btn-secondary" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
+        {% if not user.is_authenticated %}
+        <div class="container d-flex justify-content-start">
+          <a href="{% url 'members:login' %}"><div class="btn btn-secondary btn-lg"><i class="fa-solid fa-plus me-3"></i>Answer</div></a>
+        </div>
+        {% elif question.author != user %}
+        <div class="container d-flex justify-content-start">
+          <div class="btn btn-secondary btn-lg" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
+        </div>
+        {% endif %}
         <div class="container" id="toggleForm" style="display: none;">
-          <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-            <label for="floatingTextarea">Your Answer</label>
-          </div>
+          <form method="post" action="{% url 'questionHub:answer-question' slug=question.title|slugify %}">
+            {% csrf_token %}
+            <div class="container">
+              {{answer_form}}
+              </div>
+            <button type="submit" class="btn btn-secondary my-2 d-flex justify-content-start btn-lg">Submit</button>
+          </form>
+        </div>
+        <div class="container mt-5">
+
+          <h2 class="fs-2 d-flex">Answers</h2>
+        </div>
+        <div class="row row-cols-1 my-2 mx-5">
+          {% for answer in question.answers.all %}
+          <div class="col my-2">
+            <div class="card d-flex justify-content-start text-start">
+              <div class="card-header d-flex">
+                <a href="{% url 'members:profile-detail' answer.author.profile.id %}"><img src="{{answer.author.profile.get_avatar_thumbnail}}" alt="Avatar" class="rounded-circle me-2" width="15%">{{ answer.author }}</a>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Answer:</h5>
+                <p class="card-text">{{ answer.content|linebreaks }}</p>
+                <a href="#" class="btn btn-primary">Like</a>
+              </div>
+            </div>
+            </div>
+          {% endfor %}
         </div>
 
-        {% for answer in question.answers.all %}
-        <div class="container">
-          <div class="row gx-5">
-            <div class="col-2">
-             <div class="p-3">Author: {{ answer.author }}</div>
-            </div>
-            <div class="col">
-              <div class="p-3 text-start">{{ answer.content }}</div>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
+        
 </div>
 
 <script>
-        function toggleForm() {
-            var button = document.getElementById("toggleButton");
-            var form = document.getElementById("toggleForm");
+  function toggleForm() {
+    var button = document.getElementById("toggleButton");
+    var form = document.getElementById("toggleForm");
 
-            if (button.style.display === "none") {
-                button.style.display = "block"; // Показуємо кнопку
-                form.style.display = "none"; // Ховаємо поле вводу
-            } else {
-                button.style.display = "none"; // Ховаємо кнопку
-                form.style.display = "block"; // Показуємо поле вводу
-            }
-        }
+    // Перевіряємо, чи кнопка видима
+    if (button.style.display !== "none") {
+        // Змінюємо стилі для зникнення кнопки та з'явлення форми
+        button.style.transition = "opacity 0.4s ease";
+        button.style.opacity = "0";
+
+        // Встановлюємо затримку перед відображенням форми
+        setTimeout(function() {
+            form.style.display = "block";
+            form.style.transition = "opacity 0.4s ease";
+            form.style.opacity = "1";
+        }, 350); // Затримка перед з'явленням форми
+    } else {
+        // Якщо кнопка вже прихована, показуємо її і ховаємо форму
+        button.style.transition = "opacity 0.4s ease";
+        button.style.opacity = "1";
+
+        // Затримка перед хованням форми
+        setTimeout(function() {
+            form.style.display = "none";
+        }, 350); // Затримка перед хованням форми
+    }
+}
 </script>
 {% endblock %}

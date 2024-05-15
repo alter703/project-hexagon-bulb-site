@@ -1,16 +1,14 @@
-from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, FormView, CreateView
 from django.utils.text import slugify
-
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
 
 from django.db.models import Q
 
 from .models import Question, Answer, Category
 
-from .forms import AskQuestionForm
+from .forms import AskQuestionForm, AnswerQuestionForm
 
 # Create your views here.
 class QuestionsListView(ListView):
@@ -33,9 +31,19 @@ class QuestionsListView(ListView):
 class QuestionDetailView(DetailView):
     template_name = 'questionHub/detail.html'
     context_object_name = 'question'
+    slug_url_kwarg = 'slug'
 
-    def get_object(self, queryset=None) -> Model:
-        return get_object_or_404(Question.objects.select_related('author'), slug=self.kwargs[self.slug_url_kwarg])
+    def get_queryset(self):
+        return Question.objects.select_related('author', 'author__profile').prefetch_related('answers__question', 'answers__author__profile')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.get_queryset(), slug=self.kwargs[self.slug_url_kwarg])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['answer_form'] = AnswerQuestionForm
+        context['question_absolute_url'] = self.object.get_absolute_url()
+        return context
 
 
 class AskQuestionCreateView(CreateView):
@@ -57,3 +65,18 @@ class AskQuestionCreateView(CreateView):
         form.instance.author = self.request.user
         form.instance.slug = slugify(form.instance.title)
         return super().form_valid(form)
+
+
+@login_required
+def comment_view(request, slug):
+    if request.method == 'POST':
+        question = get_object_or_404(Question, slug=slug)
+        form = AnswerQuestionForm(request.POST)
+        if form.is_valid():
+            answer = Answer.objects.create(
+                question=question,
+                author=request.user,
+                content=form.cleaned_data['content']
+            )
+            answer.save()
+    return redirect('questionHub:detail', slug=slug)
