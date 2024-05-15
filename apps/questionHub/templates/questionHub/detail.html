@@ -3,7 +3,7 @@
 {% block title %}The question is {{question.title}}{% endblock %}
 
 {% block content %}
- <div class="container mx-auto my-3 text-center border border-primary border-3 rounded-2">
+ <div class="container mx-auto my-3 text-center border {% if question.is_closed %}border-secondary{% else %}border-primary{% endif %} border-3 rounded-2">
   <div class="container overflow-hidden text-center">
 
     <div class="row gx-5 mt-4">
@@ -39,7 +39,10 @@
         <div class="container mx-auto border-2">
           <p class="fs-5">{{question.content}}</p>
         </div>
-
+        
+        {% if question.is_closed %}
+        <div class="text-center fs-3">This question's closed, so you can't answer</div>
+        {% else %}
         {% if not user.is_authenticated %}
         <div class="container d-flex justify-content-start">
           <a href="{% url 'members:login' %}"><div class="btn btn-secondary btn-lg"><i class="fa-solid fa-plus me-3"></i>Answer</div></a>
@@ -58,8 +61,8 @@
             <button type="submit" class="btn btn-secondary my-2 d-flex justify-content-start btn-lg">Submit</button>
           </form>
         </div>
+        {% endif %}
         <div class="container mt-5">
-
           <h2 class="fs-2 d-flex">Answers</h2>
         </div>
         <div class="row row-cols-1 my-2 mx-5">

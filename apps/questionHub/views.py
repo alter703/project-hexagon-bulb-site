@@ -1,7 +1,8 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from django.views.generic import ListView, DetailView, FormView, CreateView
+from django.views.generic import ListView, DetailView, FormView, CreateView, View
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 
 from django.db.models import Q
@@ -67,9 +68,8 @@ class AskQuestionCreateView(CreateView):
         return super().form_valid(form)
 
 
-@login_required
-def comment_view(request, slug):
-    if request.method == 'POST':
+class AnswerView(LoginRequiredMixin, View):
+    def post(self, request, slug):
         question = get_object_or_404(Question, slug=slug)
         form = AnswerQuestionForm(request.POST)
         if form.is_valid():
@@ -79,4 +79,4 @@ def comment_view(request, slug):
                 content=form.cleaned_data['content']
             )
             answer.save()
-    return redirect('questionHub:detail', slug=slug)
+        return redirect('questionHub:detail', slug=slug)
