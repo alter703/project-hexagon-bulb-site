@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, FormView, CreateView, View
 from django.utils.text import slugify
@@ -43,10 +44,11 @@ class QuestionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['answer_form'] = AnswerQuestionForm
+        context['other_questions'] = Question.objects.filter(category=self.object.category)[:3].select_related('author', 'category')
         return context
 
 
-class AskQuestionCreateView(CreateView):
+class AskQuestionCreateView(LoginRequiredMixin, CreateView):
     form_class = AskQuestionForm
     model = Question
     context_object_name = 'create_form'
@@ -62,11 +64,13 @@ class AskQuestionCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        slug_text = unidecode(form.instance.title)  # Конвертуємо кириличний текст в ASCII
+        slug_text = unidecode(f'{form.instance.title.split(' ')[:10]} by {form.instance.author}')  # Конвертуємо кириличний текст в ASCII
         form.instance.slug = slugify(slug_text)
+        messages.success(self.request, f"You've asked the question! Now wait for an answer...")
         return super().form_valid(form)
 
     def form_invalid(self, form):
+        messages.info(self.request, form.errors.as_text())
         return self.render_to_response(self.get_context_data(form=form))
 
 

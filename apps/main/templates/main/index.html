@@ -7,7 +7,7 @@
   </button>
 
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog ">
+    <div class="modal-dialog modal-dialog-centered" style="align-items: flex-end;">
       <div class="modal-content rounded-2">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
@@ -24,7 +24,7 @@
     </div>
   </div>
 
-<div class="dropdown">
+<div class="dropstart">
   <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Dropdown link
   </a>
@@ -36,10 +36,7 @@
   </ul>
 </div>
 
-<div class="form-check">
-  <input class="form-check-input" type="radio" value="" id="flexCheckDefault">
-  <label class="form-check-label" for="flexCheckDefault">
-    Default checkbox
-  </label>
-</div>
+<input type="checkbox" class="btn-check" id="btn-check-2" autocomplete="off">
+<label class="btn btn-primary" for="btn-check-2">Checked</label>
+
 {% endblock content %}

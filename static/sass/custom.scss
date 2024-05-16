@@ -6,8 +6,22 @@ $primary: #1512ca;
 $secondary: #000000;
 $grey: #cfcfcf;
 
-$font-family-base: 'Arial';
+$font-family-base: 'Arial'; // шрифт
+$modal-fade-transform: translate(0, 20px); // появлення модального вікна
 
+// @media (min-width: 1768px) {
+//     .modal-dialog.modal-dialog-centered {
+//         align-items: flex-start;
+//     }
+
+// }
+
+@media (max-width: 1024px) {
+    .modal-dialog.modal-dialog-centered {
+        align-items: flex-end;
+    }
+
+}
 
 .navbar {
     background-color: #f7f7f7;
@@ -17,7 +31,7 @@ $font-family-base: 'Arial';
 .btn.btn-primary,
 .btn.btn-secondary,
 .btn.btn-danger {
-    border-radius: 40px;
+    border-radius: 10px;
 }
 
 .btn.btn-primary:hover {

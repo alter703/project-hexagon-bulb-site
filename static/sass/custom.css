@@ -1,4 +1,9 @@
 @charset "UTF-8";
+@media (max-width: 1024px) {
+  .modal-dialog.modal-dialog-centered {
+    align-items: flex-end;
+  }
+}
 .navbar {
   background-color: #f7f7f7;
   box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
@@ -7,7 +12,7 @@
 .btn.btn-primary,
 .btn.btn-secondary,
 .btn.btn-danger {
-  border-radius: 40px;
+  border-radius: 10px;
 }
 
 .btn.btn-primary:hover {
@@ -5608,7 +5613,7 @@ textarea.form-control-lg {
 }
 .modal.fade .modal-dialog {
   transition: transform 0.3s ease-out;
-  transform: translate(0, -50px);
+  transform: translate(0, 20px);
 }
 @media (prefers-reduced-motion: reduce) {
   .modal.fade .modal-dialog {

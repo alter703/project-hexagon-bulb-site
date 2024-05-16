@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth.decorators import login_required
@@ -15,6 +16,8 @@ from django.contrib.auth import logout
 
 from .models import Profile
 
+from apps.questionHub.models import *
+from apps.pollFeed.models import *
 
 # Create your views here.
 class ProfileDetailView(DetailView):
@@ -28,6 +31,12 @@ class ProfileDetailView(DetailView):
         queryset = queryset.select_related('user')
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # self посилається на конкретний об'єкт конкретної моделі (в Profile - user, biography, image...)
+        context['user_questions'] = Question.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
+        context['user_polls'] = Poll.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
+        return context
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
@@ -38,8 +47,12 @@ class SignUpView(CreateView):
         profile = Profile(user=user)
         profile.save()
         login(self.request, user)
+        messages.success(self.request, "Welcome to our family!" )
         return redirect('main:index')
 
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
 
 class LoginUserView(LoginView):
     form_class = AuthenticationForm
@@ -47,6 +60,14 @@ class LoginUserView(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('main:index')
+
+    def form_valid(self, form):
+        messages.success(self.request, f"You've signed in!")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
@@ -58,11 +79,11 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('members:profile', kwargs={"uuid": self.request.user.profile.id})
     
     def form_valid(self, form):
-        messages.success(self.request, 'Profile updated')
+        messages.success(self.request, 'Profile is updated')
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Error updating profile')
+        messages.error(self.request, form.errors)
         return super().form_invalid(form)
 
     def get_object(self, queryset=None):
@@ -72,4 +93,5 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 @login_required
 def logout_view(request):
     logout(request)
+    messages.info(request, "You've signed out")
     return redirect('main:index')

@@ -3,30 +3,33 @@
 {% block title %}Ask your question!{% endblock %}
 
 {% block content %}
-<div class="container mx-auto border-primary border-2">
+<div class="container mx-auto my-2 py-3 border border-2 rounded-2">
+    <div class="fw-bold mx-3 fs-5 text-start fst-italic"><p class="fs-4">He who asks a question is a fool for five minutes; he who does not ask a question remains a fool forever.</p> -Chinese proverb</div>
     <form action="{% url 'questionHub:ask' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group m-5">
             {% for field in form %}
                 {% if field.name == 'title' %}
-                    <label class="form-label h5 fw-bold">Title</label>
-                    {{ field }}
+                    <div class="form-floating mb-3">
+                        <input type="text" name="title" value="" maxlength="255" required id="id_title" class="form-control">
+                        <label for="floatingInput">Title</label>
+                    </div>
                 {% elif field.name == 'category' %}
-                    <div id="id_category" class="container bg-base-200 rounded">
+                    <div id="id_category" class="row row-cols-3 my-3 bg-base-200 rounded border">
                         {% for category in categories %}
-                            <label class="cursor-pointer label mx-5" for="id_category_{{ forloop.counter0 }}">
-                                <span class="label-text italic font-medium">{{ category.name }}</span>
-                                <input type="radio" name="category" class="radio radio-primary" value="{{ category.id }}">
-                            </label>
+                        <input type="radio" class="btn-check" id="id_category_{{forloop.counter}}" name="category" value="{{forloop.counter}}" autocomplete="off">
+                        <label class="btn btn-secondary-outline border-2 fw-semibold" for="id_category_{{forloop.counter}}" >{{category.name}}</label>
                         {% endfor %}
                     </div>
                 {% elif field.name == 'content' %}
-                    <label class="form-label h5 fw-bold">Content</label>
-                    {{ field }}
+                <div class="form-floating">
+                    <textarea class="form-control" id="id_content" style="height: 100px" name="content"></textarea>
+                    <label for="id_content">Content</label>
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
-        <button class="btn btn-primary" type="submit">Publish</button>
+        <button class="btn btn-primary btn-lg ms-5" type="submit">Publish</button>
     </form>
 </div>
 
