@@ -1,27 +1,17 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="container m-4 p-3 border border-3">
-    <div class="fw-bold fs-3 mx-2 my-2">Login</div>
+<div class="container m-4 p-3 border border-3 rounded-2">
+    <div class="fw-bold fs-3 my-2">Login</div>
     <form method="post">
         {% csrf_token %}
-        {% for field in form %}
-        {% if field.name == 'username' %}
-        <div class="form-floating mb-3">
-            <input type="text" name="username" class="form-control" id="id_{{ field.name }}" autofocus autocapitalize="none" placeholder="Username" autocomplete="username" maxlength="150">
-            <label for="id_username">Username:</label>
-          </div>
-        {% elif field.name == 'password' %}
-          <div class="form-floating">
-            <input type="password" name="password" autocomplete="current-password" required id="id_password" class="form-control" placeholder="Password">
-            <label for="id_password">Password:</label>
-          </div>
-          {% endif %}
-        {% endfor %} 
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary my-3">Login</button>
     </form>
+    <a href="{% url 'members:signup' %}" class="mb-4">Don't have an account?</a>
 </div>
 
 {% endblock %}

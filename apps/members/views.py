@@ -47,12 +47,17 @@ class SignUpView(CreateView):
         profile = Profile(user=user)
         profile.save()
         login(self.request, user)
-        messages.success(self.request, "Welcome to our family!" )
+        messages.success(self.request, "Welcome to our family!")
         return redirect('main:index')
 
     def form_invalid(self, form):
-        messages.error(self.request, form.errors)
+        # Обробка власних помилок форми
+        if "username" in form.errors:
+            form.add_error('username', 'This username is already taken.')
+        if "email" in form.errors:
+            form.add_error('email', 'This email address is already registered.')
         return super().form_invalid(form)
+
 
 class LoginUserView(LoginView):
     form_class = AuthenticationForm
@@ -66,7 +71,6 @@ class LoginUserView(LoginView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        messages.error(self.request, form.errors)
         return super().form_invalid(form)
 
 
@@ -83,7 +87,6 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, form.errors)
         return super().form_invalid(form)
 
     def get_object(self, queryset=None):

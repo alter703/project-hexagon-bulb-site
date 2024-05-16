@@ -33,7 +33,7 @@
           {% endif %}
           <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
           <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
-          <p class="card-text">{{ profile.biography }}</p>
+          <p class="card-text">{% if profile.biography %}{{ profile.biography }}{% endif %}</p>
       </div>
       <div class="card-footer text-body-secondary">
         Joined: {{ profile.joined_at|date:"M d Y" }}

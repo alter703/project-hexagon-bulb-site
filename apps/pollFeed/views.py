@@ -13,5 +13,5 @@ class PollsListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('author', 'category').filter(Q(is_closed=False)).order_by('?')
+        queryset = queryset.select_related('author', 'category').prefetch_related('answers').filter(Q(is_closed=False)).order_by('?')
         return queryset
