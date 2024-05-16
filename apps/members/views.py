@@ -51,11 +51,6 @@ class SignUpView(CreateView):
         return redirect('main:index')
 
     def form_invalid(self, form):
-        # Обробка власних помилок форми
-        if "username" in form.errors:
-            form.add_error('username', 'This username is already taken.')
-        if "email" in form.errors:
-            form.add_error('email', 'This email address is already registered.')
         return super().form_invalid(form)
 
 

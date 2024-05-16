@@ -70,7 +70,7 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
             slug_text = unidecode(f'{form.instance.title.split(' ')[:10]} by {form.instance.author}')  # Конвертуємо кириличний текст в ASCII
             form.instance.slug = slugify(slug_text)
             save_form = super().form_valid(form)
-        except IntegrityError as ex:
+        except IntegrityError:
             form.add_error(None, 'You cannot ask exactly this question because you did! Delete existing one or type another title.')
             return self.form_invalid(form)
         else:

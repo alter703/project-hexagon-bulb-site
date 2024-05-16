@@ -1,0 +1,16 @@
+<div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ poll.question }}</h5>
+        <p class="card-text">Author: {{ poll.author }}</p>
+        <p class="card-text">Category: {{ poll.category }}</p>
+        <p class="card-text">Created at: {{ poll.created_at }}</p>
+        <p class="card-text">Updated at: {{ poll.updated_at }}</p>
+        <p class="card-text">Closed: {{ poll.is_closed }}</p>
+      </div>
+      <div class="card-footer">
+          <div class="fw-semibold fs-6">Answers:</div>
+          {% for answer in poll.answers.all %}
+          {{answer.content}}{{answer.id}}
+          {% endfor %}
+      </div>
+</div>

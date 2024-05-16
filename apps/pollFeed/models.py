@@ -16,7 +16,7 @@ class PollCategory(models.Model):
 
 class Answer(models.Model):
     poll = models.ForeignKey('Poll', on_delete=models.CASCADE, related_name='answers')
-    content = models.TextField()
+    content = models.CharField(max_length=255)
     is_correct = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -30,14 +30,14 @@ class Answer(models.Model):
 class Poll(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls')
     category = models.ForeignKey(PollCategory, on_delete=models.CASCADE, related_name='polls')
-    content = models.TextField()
+    question = models.TextField()
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_closed = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.content
+        return self.question
 
     class Meta:
         verbose_name = 'Опитування'
@@ -45,9 +45,9 @@ class Poll(models.Model):
 
 
 class UserAnswer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chosen_answers')
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='user_answers')
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='users_who_chose')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='poll_answers')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='poll_answers')
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='poll_answers')
 
     def __str__(self):
         return f"{self.user.username}'s answer to {self.poll} - {self.answer}"

@@ -33,7 +33,7 @@
           {% endif %}
           <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
           <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
-          <p class="card-text">{% if profile.biography %}{{ profile.biography }}{% endif %}</p>
+          <p class="card-text">{% if profile.biography %}{{ profile.biography }}{% endif%}</p>
       </div>
       <div class="card-footer text-body-secondary">
         Joined: {{ profile.joined_at|date:"M d Y" }}
@@ -44,32 +44,9 @@
         {% if user_questions %}
         {% for question in user_questions %}
         <div class="col my-3">
-          <div class="card my-2">
-            <div class="card-header rounded-top text-black">
-                <span class="badge text-bg-light">{{ question.category.name }}</span>
-                {% if question.is_closed %}
-                <span class="badge bg-success text-light">Closed</span>
-                {% endif %}
-            </div>
-            <div class="card-body rounded-bottom">
-              <div class="row gx-5">
-                <div class="col-8">
-                 <div class="p-3">
-                  <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
-                    <h5 class="card-title fs-5 text-black">{{ question.title|truncatewords:"10" }}</h5>
-                    <hr class="dropdown-divider">
-                    <p class="card-text fs-6 text-black">{{ question.content|truncatewords:"15" }}</p>
-                  </a>
-                 </div>
-                </div>
-                <div class="col-4">
-                  <div class="p-3">{{ question.author }}
-                     <hr class="border-1">
-                    {{ question.created_at|timesince }} ago</div>
-                </div>
-              </div>
-            </div>
-        </div>
+          
+          {% include 'questionHub/includes/question_card.html' %}
+
         </div>
           {% endfor %}
           {% else %}
