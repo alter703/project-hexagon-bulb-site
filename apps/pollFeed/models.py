@@ -1,5 +1,8 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 # Create your models here.
@@ -28,6 +31,8 @@ class Answer(models.Model):
 
 
 class Poll(models.Model):
+    slug = models.SlugField(max_length=255, unique=True, verbose_name='url')
+
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls')
     category = models.ForeignKey(PollCategory, on_delete=models.CASCADE, related_name='polls')
     question = models.TextField()
@@ -42,6 +47,9 @@ class Poll(models.Model):
     class Meta:
         verbose_name = 'Опитування'
         verbose_name_plural = 'Опитування'
+        
+    def get_absolute_url(self):
+        return reverse("pollFeed:detail", kwargs={"slug": self.slug})
 
 
 class UserAnswer(models.Model):

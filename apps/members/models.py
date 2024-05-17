@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 
+from django.urls import reverse
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill, SmartCrop
 
@@ -47,5 +48,7 @@ class Profile(models.Model):
             return self.avatar_thumbnail.url
         else:
             return 'https://www.gravatar.com/avatar/{}?d=identicon'.format(self.user.username)
-        
-    
+
+
+    def get_absolute_url(self):
+        return reverse("members:profile", kwargs={"uuid": self.id})

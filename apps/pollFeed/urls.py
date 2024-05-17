@@ -6,6 +6,6 @@ app_name = 'pollFeed'
 
 urlpatterns = [
     path('', views.PollsListView.as_view(), name='index'),
-    # path('poll/<int:pk>', views.QuestionDetailView.as_view(), name='detail'),
-    path('poll/publish/', views.create_poll_view, name='publish'),
+    # path('poll/<uuid:uuid>', views.QuestionDetailView.as_view(), name='detail'),
+    path('poll/publish/', views.CreatePollView.as_view(), name='publish'),
 ]

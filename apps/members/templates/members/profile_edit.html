@@ -5,11 +5,14 @@
 {% block title %}Edit profile{% endblock %}
 
 {% block content %}
-<form action="{% url 'members:profile-edit' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary my-3">Update</button>
-
-</form>
+<div class="container mx-auto my-2 py-3 border border-2 rounded-2">
+    <div class="fw-bold fs-3 my-2">Profile edit</div>
+    <form action="{% url 'members:profile-edit' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary my-3">Update</button>
+    
+    </form>
+</div>
 
 {% endblock %}

@@ -16,77 +16,50 @@
     </li>
   </ul>
   <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"><div class="card text-center mx-5 mt-4">
-      <div class="card-header fw-semibold">
-        {% if user == profile.user %}Your Profile Card{% else %}{{ profile.user.username }}'s Profile Card{% endif %}
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="card text-center mx-5 mt-4">
+        {% include 'members/includes/profile_card.html' %}
       </div>
-      <div class="card-body">
-        {% if user == profile.user %}
-        <div class="btn-group-vertical d-flex p-1">
-          <div class="my-1">
-            <a href="{% url 'members:profile-edit' %}"><div class="btn btn-primary"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div></a>
-          </div>
-          <div class="my-1">
-            <a href="{% url 'members:logout' %}"><div class="btn btn-danger"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div></a>
-          </div>
-        </div>
-          {% endif %}
-          <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
-          <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
-          <p class="card-text">{% if profile.biography %}{{ profile.biography }}{% endif%}</p>
-      </div>
-      <div class="card-footer text-body-secondary">
-        Joined: {{ profile.joined_at|date:"M d Y" }}
-      </div>
-    </div></div>
+    </div>
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
       <div class="row gx-4 row-cols-2">
         {% if user_questions %}
-        {% for question in user_questions %}
-        <div class="col my-3">
-          
-          {% include 'questionHub/includes/question_card.html' %}
-
-        </div>
+          {% for question in user_questions %}
+          <div class="col">
+            {% include 'questionHub/includes/question_card.html' %}
+          </div>
           {% endfor %}
-          {% else %}
+        {% else %}
           <div class="fw-bold fs-3 text-center">You didn't ask anything. Perhaps, you already have a question?</div>
-          <div class="p-3 d-flex justify-content-center"><a href="{% url 'questionHub:ask' %}"><div class="btn btn-primary btn-lg text-white fw-bold fs-6">Ask Question</div></a></div>
-          {% endif %}
-        </div>
+          <div class="p-3 d-flex justify-content-center">
+            <a href="{% url 'questionHub:ask' %}">
+              <div class="btn btn-primary btn-lg text-white fw-bold fs-6">Ask Question</div>
+            </a>
+          </div>
+        {% endif %}
+      </div>
     </div>
     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
       <div class="row gx-4 row-cols-2">
         {% if user_polls %}
-        {% for poll in user_polls %}
-        <div class="col-4 my-3">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title">{{ poll.content }}</h5>
-              <p class="card-text">Author: {{ poll.author }}</p>
-              <p class="card-text">Category: {{ poll.category }}</p>
-              <p class="card-text">Created at: {{ poll.created_at }}</p>
-              <p class="card-text">Updated at: {{ poll.updated_at }}</p>
-              <p class="card-text">Closed: {{ poll.is_closed }}</p>
+          {% for poll in user_polls %}
+            <div class="col">
+              {% include 'pollFeed/includes/poll_card.html' %}
             </div>
-            <div class="card-footer">
-                <div class="fw-semibold fs-6">Answers:</div>
-                {% for answer in poll.answers.all %}
-                {{answer.content}}{{answer.id}}
-                {% endfor %}
-            </div>
-          </div>
-        </div>
-        {% endfor %}
+          {% endfor %}
         {% else %}
+      </div>
         <div class="fw-bold fs-3 text-center">You didn't create any poll. Maybe you have a choice, but you don't know what to choose?</div>
-        <div class="p-3 d-flex justify-content-center"><a href="{% url 'questionHub:ask' %}"><div class="btn btn-primary btn-lg text-white fw-bold fs-6">Ask Question</div></a></div>
-        {% endif %}
+        <div class="p-3 d-flex justify-content-center">
+          <a href="{% url 'questionHub:ask' %}">
+            <div class="btn btn-primary btn-lg text-white fw-bold fs-6">Create Poll</div>
+          </a>
         </div>
+        {% endif %}
+      </div>
     </div>
   </div>
-  
-  
 </div>
+
 
 {% endblock %}

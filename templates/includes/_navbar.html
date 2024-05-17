@@ -31,7 +31,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <a href="{% url 'members:profile' user.profile.id %}" class="link-offset-2 link-underline link-underline-opacity-0">
+                        <a href="{{ user.profile.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
                             <div class="btn btn-primary d-flex justify-content-start my-2">Profile</div>
                         </a>
                         <a href="{% url 'members:logout' %}" class="link-offset-2 link-underline link-underline-opacity-0">
@@ -44,12 +44,12 @@
         {% else %}
             <div class="mx-1">
                 <a href="{% url 'members:login' %}">
-                    <div type="button" class="btn btn-secondary">Sign in</div>
+                    <div type="button" class="btn btn-secondary my-1">Sign in</div>
                 </a>
             </div>
             <div class="mx-1">
                 <a href="{% url 'members:signup' %}">
-                    <div type="button" class="btn btn-primary">Sign up</div>
+                    <div type="button" class="btn btn-primary my-1">Sign up</div>
                 </a>
             </div>
           {% endif %}

@@ -1,4 +1,10 @@
-<div class="card mb-3">
+<div class="card mb-3 border border-0">
+      <div class="card-header rounded-top text-black">
+          <span class="badge text-bg-light">{{ poll.category.name }}</span>
+          {% if poll.is_closed %}
+          <span class="badge bg-success text-light">Closed</span>
+          {% endif %}
+      </div>
       <div class="card-body">
         <h5 class="card-title">{{ poll.question }}</h5>
         <p class="card-text">Author: {{ poll.author }}</p>
@@ -10,7 +16,7 @@
       <div class="card-footer">
           <div class="fw-semibold fs-6">Answers:</div>
           {% for answer in poll.answers.all %}
-          {{answer.content}}{{answer.id}}
+          {{answer}}
           {% endfor %}
       </div>
 </div>
