@@ -42,3 +42,5 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = ('user', 'poll')
+        verbose_name = 'Голос'
+        verbose_name_plural = 'Голоси'

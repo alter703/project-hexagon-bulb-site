@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mx-auto">
+<div class="container mx-auto my-3 text-center border {% if poll.is_closed %}border-secondary{% else %}border-primary{% endif %} border-3 rounded-2">
     <h1 class="mt-4">{{ poll.text }}</h1>
-    <p class="text-muted">Created by: {{ poll.author.username }} on {{ poll.created_at|date:"F j, Y" }}</p>
+    <p class="text-muted">Created by: <a href="{{ poll.author.profile.get_absolute_url }}">{{ poll.author }}</a> on {{ poll.created_at|date:"F j, Y" }}</p>
 
     {% if poll.is_closed %}
         <p class="text-warning">This poll is closed. Here are the results:</p>
-        <div class="list-group">
+        <div class="list-group d-flex">
             {% for choice in poll.choices.all %}
                 <div class="mx-5 list-group-item d-flex justify-content-between align-items-center">
                     {{ choice.text }}<span class="fw-bold">{{ choice.votes }}</span>
@@ -17,7 +17,7 @@
     {% else %}
         {% if user_has_voted %}
             <p class="text-success">You have voted for: {{ user_vote.text }}</p>
-            <div class="list-group">
+            <div class="list-group d-flex">
                 {% for choice in poll.choices.all %}
                     <div class="list-group-item d-flex justify-content-between align-items-center">
                         {{ choice.text }}
@@ -42,7 +42,7 @@
         {% if user == poll.author %}
             <form method="post" action="{% url 'pollFeed:close' poll.id %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-secondary mt-3">Close Poll</button>
+                <button type="submit" class="btn btn-danger mt-3">Close Poll</button>
             </form>
         {% endif %}
     {% endif %}

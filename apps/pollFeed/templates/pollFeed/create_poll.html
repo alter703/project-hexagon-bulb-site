@@ -17,6 +17,7 @@
         {{ poll_form|crispy }}
         <div class="container">
             <h1 class="fs-3">Choices</h1>
+            <h1 class="fs-6">*Poll requires at least 2 choices to proceed*</h1>
         </div>
         <div class="row row-cols-5">
         {% for answer_form in answer_forms %}

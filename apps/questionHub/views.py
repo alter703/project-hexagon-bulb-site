@@ -117,7 +117,7 @@ def close_question(request, slug):
         if question.author == request.user:
             question.is_closed = True
             question.save()
-            messages.success(request, "Poll has been closed. Check the results!")
+            messages.success(request, "Question has been closed. Check the results!")
 
         return redirect('questionHub:detail', slug=slug)
     return redirect('questionHub:detail', slug=slug)
