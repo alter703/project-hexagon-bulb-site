@@ -16,6 +16,12 @@
       <div class="col text-start">
         <div class="p-2"><p class="fw-normal fs-2 fw-semibold">{{ question.title }}</p></div>
       </div>
+      <div class="col-2">
+        <div class="btn-group-vertical d-flex p-1">
+          <a href="{% url 'questionHub:update' slug=question.slug %}" method="post"><div class="btn btn-primary mb-2 rounded-3">Edit Question</div></a>
+          <div class="btn btn-danger mb-1 rounded-3" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete Question</div>
+        </div>
+      </div>
     </div>
   </div>
     <hr class="border border-dark border-1">
@@ -87,6 +93,24 @@
           </div>
           {% endif %}
         </div>
+</div>
+
+<div class="modal fade" id="deleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'questionHub:delete' slug=question.slug %}" method="post">
+          {% csrf_token %}
+          <div class="fs-2">Are you sure you want to delete&</div>
+          <button type="submit" class="btn btn-danger">Yes, delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
