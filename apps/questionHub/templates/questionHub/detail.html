@@ -27,7 +27,7 @@
           </div>
           <ul class="dropdown-menu">
             {% if not question.is_closed %}
-            <li><a class="dropdown-item" href="{% url 'questionHub:update' question.slug %}" >Edit</a></li>
+            <li><a class="dropdown-item" href="{% url 'questionHub:update' question.slug %}">Edit</a></li>
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
             {% endif %}
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
@@ -62,7 +62,7 @@
     <div class="row">
       <div class="col">
         {% if not user.is_authenticated %}
-        <div class="btn btn-secondary">Login to Answer</div>
+        <a href="{% url 'members:login' %}"><div class="btn btn-secondary">Login to Answer</div></a>
         {% else %}
         <div class="btn btn-secondary btn-lg" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
         {% endif %}

@@ -32,7 +32,7 @@ class PollListView(ListView):
         return context
 
 
-class PollDetailView(DetailView):
+class PollDetailView(LoginRequiredMixin, DetailView):
     model = Poll
     template_name = 'pollFeed/detail.html'
     context_object_name = 'poll'
