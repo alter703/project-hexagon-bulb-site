@@ -12,6 +12,8 @@
                     <p class="fw-bolder mb-4">The latest polls!</p>
                     {% for poll in recent_polls %}
                         {% include 'pollFeed/includes/poll_card.html' %}
+                    {% empty %}
+                    <div class="fs-2 fst-italic">That's weird...</div>
                     {% endfor %}
                 </div>
                 <div class="container rounded-2 py-1 my-2">
@@ -31,6 +33,8 @@
                 </div>
                 {% for poll in polls %}
                     {% include 'pollFeed/includes/poll_card.html' %}
+                {% empty %}
+                <div class="fs-2 fst-italic">Well, there is no polls...</div>
                 {% endfor %}
                 {% if is_paginated %}
                     {% include 'includes/pagination.html' %}

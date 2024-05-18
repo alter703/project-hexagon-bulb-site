@@ -13,7 +13,9 @@
               {% for question in latest_questions %}
 
               {% include 'questionHub/includes/question_card_mini.html' %}
-
+              
+              {% empty %}
+              <div class="fs-2 fst-italic">That's weird...</div>
               {% endfor %}
             </div>
             <div class="container rounded-2 py-1 my-2">
@@ -35,6 +37,8 @@
 
             {% include 'questionHub/includes/question_card.html' %}
 
+            {% empty %}
+            <div class="fs-2 fst-italic">Well, there is no questions...</div>
             {% endfor %} 
 
               {% if is_paginated %}
