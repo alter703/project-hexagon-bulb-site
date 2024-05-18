@@ -13,11 +13,11 @@
           <div class="col">
             <div class="fs-5">By: <a href="{{ question.author.profile.get_absolute_url }}" class="text-black link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ question.author }}</a></div>
           </div>
-          <div class="col-3 text-center">
+          <div class="col-3 text-center align-self-center">
             Asked at: {{ question.created_at|date:"M j, Y"}}
           </div>
           {% if question.created_at != question.updated_at %}
-          <div class="col-3 text-center">
+          <div class="col-3 text-center align-self-center">
             Changed at: {{ question.updated_at|date:"M j, Y"}}
           </div>
           {% endif %}

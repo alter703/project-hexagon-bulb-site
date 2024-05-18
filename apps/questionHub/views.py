@@ -88,7 +88,7 @@ class QuestionDeleteView(LoginRequiredMixin, View):
     def post(self, request, slug):
         question = get_object_or_404(Question, slug=slug, author=request.user)
         question.delete()
-        messages.success(request, 'Post was deleted successfully')
+        messages.success(request, 'Question was deleted successfully')
         return redirect('questionHub:index')
 
 
@@ -102,11 +102,11 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         return super().get_queryset().filter(author=self.request.user)
 
     def get_success_url(self):
-        messages.success(self.request, 'Post was updated successfully')
+        messages.success(self.request, 'Question was updated successfully')
         return reverse_lazy('questionHub:detail', kwargs={'slug': self.object.slug})
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Error updating post')
+        messages.error(self.request, 'Error while updating Question')
         return super().form_invalid(form)
 
 

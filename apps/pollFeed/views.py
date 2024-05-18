@@ -1,5 +1,6 @@
 from typing import Any
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -104,7 +105,32 @@ def vote_poll(request, id):
             return redirect('pollFeed:detail', id=poll.id)
     else:
         return render(request, "pollFeed/detail.html")
-    
+
+class PollDeleteView(LoginRequiredMixin, View):
+    def post(self, request, id):
+        question = get_object_or_404(Poll, id=id, author=request.user)
+        question.delete()
+        messages.success(request, 'Poll was deleted successfully')
+        return redirect('pollFeed:index')
+
+
+class PollUpdateView(LoginRequiredMixin, UpdateView):
+    model = Poll
+    form_class = CreatePollForm
+    template_name = 'questionHub/edit_question.html'
+    context_object_name = 'question'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
+    def get_success_url(self):
+        messages.success(self.request, 'Poll was updated successfully')
+        return reverse_lazy('pollFeed:detail', kwargs={'id': self.object.id})
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Error while updating Poll')
+        return super().form_invalid(form)
+
 
 def close_poll(request, id):
     poll = get_object_or_404(Poll, id=id)
