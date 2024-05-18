@@ -42,7 +42,7 @@
         {% if user == poll.author %}
             <form method="post" action="{% url 'pollFeed:close' poll.id %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger mt-3">Close Poll</button>
+                <button type="submit" class="btn btn-secondary mt-3">Close Poll</button>
             </form>
         {% endif %}
     {% endif %}

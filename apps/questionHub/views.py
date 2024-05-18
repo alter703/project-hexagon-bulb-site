@@ -108,3 +108,16 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Error updating post')
         return super().form_invalid(form)
+
+
+def close_question(request, slug):
+    question = get_object_or_404(Question, slug=slug)
+
+    if request.method == 'POST':
+        if question.author == request.user:
+            question.is_closed = True
+            question.save()
+            messages.success(request, "Poll has been closed. Check the results!")
+
+        return redirect('questionHub:detail', slug=slug)
+    return redirect('questionHub:detail', slug=slug)

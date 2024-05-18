@@ -24,7 +24,7 @@ class PollListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['open_polls'] = Poll.objects.filter(is_closed=False)
-        context['recent_polls'] = Poll.objects.filter(is_closed=True)[:5]  # Відобразити тільки 5 найновіших опитувань
+        context['recent_polls'] = Poll.objects.all()[:3]  # Відобразити тільки 5 найновіших опитувань
         return context
 
 
@@ -79,19 +79,27 @@ def create_poll(request):
         answer_forms = [ChoiceForm(prefix=str(i)) for i in range(0, 5)]
     return render(request, "pollFeed/create_poll.html", {"answer_forms": answer_forms, "poll_form": poll_form})
 
-
-def vote_poll(request, pk):
-    poll = get_object_or_404(Poll, pk=pk)
+def vote_poll(request, id):
+    poll = get_object_or_404(Poll, id=id)
 
     if request.method == 'POST':
         try:
-            selected_choice = poll.choices.get(pk=request.POST['choice'])
+            selected_choice = poll.choices.get(id=request.POST['choice'])
         except (KeyError, Choice.DoesNotExist):
-            messages.error(request, "You didn't select a choice.")
-            return redirect('pollFeed:detail', pk=poll.pk)
+            messages.error(request, "You didn't select a valid choice.")
+            return redirect('pollFeed:detail', id=poll.id)
         else:
+            # Отримання користувача, який голосує
+            user = request.user
+
+            # Створення та збереження об'єкта Vote в базі даних
+            vote = Vote(user=user, poll=poll, choice=selected_choice)
+            vote.save()
+
+            # Збільшення лічильника голосів для обраного варіанту відповіді
             selected_choice.votes += 1
             selected_choice.save()
+
             messages.success(request, "Your vote has been recorded.")
             return redirect('pollFeed:detail', id=poll.id)
     else:
@@ -106,7 +114,6 @@ def close_poll(request, id):
             poll.is_closed = True
             poll.save()
             messages.success(request, "Poll has been closed. Check the results!")
-        # else:
-        #     messages.error(request, "You are not autho to close this poll.")
+
         return redirect('pollFeed:detail', id=id)
     return redirect('pollFeed:detail', id=id)
