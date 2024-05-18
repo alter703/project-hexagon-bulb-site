@@ -1,9 +1,6 @@
-from django.db import IntegrityError
-
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
-from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
@@ -13,7 +10,6 @@ from django.db.models import Q
 from .models import Question, Answer, Category
 from .forms import AskQuestionForm, AnswerQuestionForm
 
-from unidecode import unidecode
 
 # Create your views here.
 class QuestionsListView(ListView):
@@ -66,17 +62,9 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        # try:
-            form.instance.author = self.request.user
-            # slug_text = unidecode(f'{form.instance.title.split(' ')[:10]} by {form.instance.author}')  # Конвертуємо кириличний текст в ASCII
-            # form.instance.slug = slugify(slug_text)
-            save_form = super().form_valid(form)
-        # except IntegrityError:
-            # form.add_error(None, 'You cannot ask exactly this question because you did! Delete existing one or type another title.')
-            # return self.form_invalid(form)
-        # else:
-            # messages.success(self.request, f"You've asked the question! Now wait for an answer...")
-            return save_form
+        form.instance.author = self.request.user
+        save_form = super().form_valid(form)
+        return save_form
 
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
@@ -120,4 +108,3 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Error updating post')
         return super().form_invalid(form)
-

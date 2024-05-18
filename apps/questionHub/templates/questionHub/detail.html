@@ -95,23 +95,12 @@
         </div>
 </div>
 
-<div class="modal fade" id="deleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="{% url 'questionHub:delete' slug=question.slug %}" method="post">
-          {% csrf_token %}
-          <div class="fs-2">Are you sure you want to delete&</div>
-          <button type="submit" class="btn btn-danger">Yes, delete</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+
+{% if user.is_authenticated and user == question.author %}
+
+{% include 'questionHub/includes/delete_modal.html' %}
+
+{% endif %}
 
 <script>
   function toggleForm() {

@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}Create a poll{% endblock %}
+{% block title %}Create Poll{% endblock %}
+
 
 {% block content %}
-<div class="container border border-2 rounded-2">
-    <form method="post" action="">
+<div class="container mx-auto">
+    <div class="fs-3  fw-bold">
+        Create Poll
+    </div>
+    <form action="{% url 'pollFeed:create' %}" method="post">
         {% csrf_token %}
         {{ poll_form|crispy }}
-        <div class="row row-cols-5">
-            {% for answer_form in answer_forms %}
-            <div class="row">
+        <br>
+        {% for answer_form in answer_forms %}
                 {{ answer_form|crispy }}
-            </div>
             {% endfor %}
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg my-2">Save</button>
+        <button type="submit" class="btn btn-primary">Publish</button>
     </form>
 </div>
+
 {% endblock %}

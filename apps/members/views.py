@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth.decorators import login_required
@@ -35,7 +34,7 @@ class ProfileDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # self посилається на конкретний об'єкт конкретної моделі (в Profile - user, biography, image...)
         context['user_questions'] = Question.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
-        context['user_polls'] = Poll.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
+        # context['user_polls'] = Poll.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
         return context
 
 class SignUpView(CreateView):

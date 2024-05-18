@@ -1,49 +1,44 @@
-from django.views.generic import ListView, DetailView, CreateView, View
+from django.shortcuts import redirect, render
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-# from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from .forms import PollForm, AnswerFormSet, AnswerForm
-from .models import Poll
-
-from django.utils.text import slugify
-from unidecode import unidecode
-from django.urls import reverse, reverse_lazy
-
+from django.contrib import messages
+from apps.pollFeed.models import Poll
+from .forms import CreatePollForm, ChoiceForm
 
 # Create your views here.
-class PollsListView(ListView):
+class PollListView(ListView):
     model = Poll
     template_name = "pollFeed/index.html"
     context_object_name = 'polls'
-    paginate_by = 10
+    paginate_by = 9
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('author', 'category').prefetch_related('answers').filter(Q(is_closed=False)).order_by('?')
+        queryset = queryset.select_related('author').order_by('?')
         return queryset
 
 
-class CreatePollView(LoginRequiredMixin, View):
-    def get(self, request):
-        poll_form = PollForm()
-        answer_forms = [AnswerForm(prefix=str(i)) for i in range(0, 5)]
-        return render(request, 'pollFeed/create_poll.html', {'poll_form': poll_form, 'answer_forms': answer_forms})
-
-    def post(self, request):
-        poll_form = PollForm(request.POST)
-        answer_forms = [AnswerForm(request.POST, prefix=str(i)) for i in range(0, 5)]
-        if poll_form.is_valid() and all(answer_form.is_valid() for answer_form in answer_forms):
+def create_poll(request):
+    if request.method == "POST":
+        poll_form = CreatePollForm(request.POST)
+        choice_forms = [ChoiceForm(request.POST, request.FILES, prefix=str(i)) for i in range(0, 5)]
+        if poll_form.is_valid() and all(answer_form.is_valid() for answer_form in choice_forms):
             poll = poll_form.save(commit=False)
             poll.author = request.user
-            poll.slug = slugify(unidecode(f'{poll.question.split(' ')[:10]} by {poll.author}'))
             poll.save()
-            for answer_form in answer_forms:
-                if answer_form.cleaned_data.get('content'):
+            valid_answers = [answer_form for answer_form in choice_forms if answer_form.cleaned_data.get('text')]
+            if len(valid_answers) < 2:
+                messages.error(request, "You must type at least two choices!")
+                return redirect('pollFeed:create')
+            for answer_form in choice_forms:
+                if answer_form.cleaned_data.get('text'):
                     answer = answer_form.save(commit=False)
-                    print(answer == True)
                     answer.poll = poll
+                    answer.author = request.user
                     answer.save()
-            return redirect('main:index')
-        return render(request, 'pollFeed/create_poll.html', {'poll_form': poll_form, 'answer_forms': answer_forms})
+            return redirect('pollFeed:index')
+    else:
+        poll_form = CreatePollForm()
+        answer_forms = [ChoiceForm(prefix=str(i)) for i in range(0, 5)]
+    return render(request, "pollFeed/create_poll.html", {"answer_forms": answer_forms, "poll_form": poll_form})

@@ -1,31 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}Poll Feed{% endblock %}
+{% block title %}Poll Feed{% endblock title %}
 
 {% block content %}
-<div class="container">
-  <div class="row gx-4">
-    <div class="col-6">
-      <div class="fs-3">Get ready to choose!</div>
-    </div>
-    <div class="col">
-      <div class="p-3 d-flex justify-content-end"><a href="{% url 'pollFeed:publish' %}"><div class="btn btn-primary text-white fw-bold fs-6">Create Poll</div></a></div>
-    </div>
-  </div>
-  <div class="row">
-    {% for poll in polls %}
-    <div class="col-md-6">
-
-      {% include 'pollFeed/includes/poll_card.html' %}
-
-    </div>
-    {% endfor %}
-  </div>
-
-          {% if is_paginated %}
-              
-            {% include 'includes/pagination.html' %}
-
-          {% endif %}
-</div>
+{% for poll in polls %}
+{{poll.text}}
+{% endfor %}
 {% endblock %}
