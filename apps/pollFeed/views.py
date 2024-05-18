@@ -19,13 +19,16 @@ class PollListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('author').order_by('?')
+        queryset = (
+            queryset.select_related('author', 'author__profile')  # Використання select_related для вибору пов'язаних об'єктів через JOIN
+            .prefetch_related('choices')  # Використання prefetch_related для вибору пов'язаних об'єктів через окремі запити
+        )
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['open_polls'] = Poll.objects.filter(is_closed=False)
-        context['recent_polls'] = Poll.objects.all()[:3]  # Відобразити тільки 5 найновіших опитувань
+        context['open_polls'] = Poll.objects.filter(is_closed=False).select_related('author', 'author__profile').prefetch_related('choices')
+        context['recent_polls'] = Poll.objects.all().select_related('author').prefetch_related('choices')[:3]
         return context
 
 

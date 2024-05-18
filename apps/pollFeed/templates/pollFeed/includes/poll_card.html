@@ -7,7 +7,7 @@
         </p>
         <ul class="list-group list-group-flush">
             {% for choice in poll.choices.all %}
-                <li class="list-group-item">{{ choice.text }}</li>
+                <li class="list-group-item my-1 rounded-2">{{ choice.text }}</li>
             {% endfor %}
         </ul>
         <a href="{% url 'pollFeed:detail' poll.id %}" class="btn btn-primary mt-3">Vote Now</a>

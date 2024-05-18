@@ -34,7 +34,7 @@
                 {% for poll in polls %}
                     {% include 'pollFeed/includes/poll_card.html' %}
                 {% empty %}
-                <div class="fs-2 fst-italic">Well, there is no polls...</div>
+                <div class="fs-2 fst-italic">Well, there are no polls...</div>
                 {% endfor %}
                 {% if is_paginated %}
                     {% include 'includes/pagination.html' %}
@@ -43,5 +43,6 @@
         </div>
     </div>
 </div>
+
 
 {% endblock %}

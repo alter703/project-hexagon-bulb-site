@@ -70,8 +70,7 @@
                     {% for choice in poll.choices.all %}
                         <label class="list-group-item">
                             <input type="radio" name="choice" value="{{ choice.id }}" class="form-check-input me-2">
-                            {{ choice.text }} <span class="badge badge-primary badge-pill">{{ choice.votes }}</span>
-                        </div>
+                            {{ choice.text }}
                         </label>
                     {% endfor %}
                 </div>
