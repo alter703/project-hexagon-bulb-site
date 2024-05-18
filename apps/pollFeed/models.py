@@ -8,6 +8,7 @@ class Poll(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls')
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_closed = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.text
@@ -32,3 +33,12 @@ class Choice(models.Model):
         ordering = ('-votes',)
         verbose_name = 'Вибір'
         verbose_name_plural = 'Вибори'
+
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_votes')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='user_votes')
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='user_votes')
+
+    class Meta:
+        unique_together = ('user', 'poll')

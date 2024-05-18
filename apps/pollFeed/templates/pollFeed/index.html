@@ -3,7 +3,41 @@
 {% block title %}Poll Feed{% endblock title %}
 
 {% block content %}
-{% for poll in polls %}
-{{poll.text}}
-{% endfor %}
+<div class="container-fluid mx-3">
+    <div class="container-fluid px-4">
+        <h1 class="mb-2 fs-2 fw-semibold text-center">Polls</h1>
+        <div class="row gx-5">
+            <div class="col-12 col-md-4 my-2 border-black border-4">
+                <div class="container py-1 text-black border border-2 rounded-2">
+                    <p class="fw-bolder mb-4">The latest polls!</p>
+                    {% for poll in latest_polls %}
+                        {% include 'pollFeed/includes/poll_card.html' %}
+                    {% endfor %}
+                </div>
+                <div class="container rounded-2 py-1 my-2">
+                    <p class="fw-bolder mb-4">Here's your ad!</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="container px-4 text-center text-black">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-7">
+                            <div class="p-3"><p class="fs-4 fw-normal">Polls that are open for voting!</div>
+                        </div>
+                        <div class="col">
+                            <div class="p-3 d-flex justify-content-end"><a href="{% url 'pollFeed:create' %}"><div class="btn btn-primary text-white fw-bold fs-6">Create Poll</div></a></div>
+                        </div>
+                    </div>
+                </div>
+                {% for poll in polls %}
+                    {% include 'pollFeed/includes/poll_card.html' %}
+                {% endfor %}
+                {% if is_paginated %}
+                    {% include 'includes/pagination.html' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

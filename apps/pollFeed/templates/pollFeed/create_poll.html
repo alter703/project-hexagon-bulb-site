@@ -5,17 +5,27 @@
 
 
 {% block content %}
-<div class="container mx-auto">
-    <div class="fs-3  fw-bold">
+<div class="container mx-auto border border-2 rounded-2">
+    <div class="fs-3 fw-bold">
         Create Poll
     </div>
     <form action="{% url 'pollFeed:create' %}" method="post">
+        <div class="container">
+            <h1 class="fs-3">The question</h1>
+        </div>
         {% csrf_token %}
         {{ poll_form|crispy }}
-        <br>
+        <div class="container">
+            <h1 class="fs-3">Choices</h1>
+        </div>
+        <div class="row row-cols-5">
         {% for answer_form in answer_forms %}
-                {{ answer_form|crispy }}
-            {% endfor %}
+        <div class="col">
+            {{ answer_form|crispy }}
+        </div>
+        {% endfor %}
+        </div>
+
         <button type="submit" class="btn btn-primary">Publish</button>
     </form>
 </div>

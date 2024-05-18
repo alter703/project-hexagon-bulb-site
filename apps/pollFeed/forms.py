@@ -1,16 +1,6 @@
 from django import forms
 from .models import Poll, Choice
 
-PollFormSet = forms.inlineformset_factory(
-    Poll,  
-    Choice,  
-    fields=('text',),  
-    extra=1,  
-    can_delete=True,  
-)
-
-pollformset = PollFormSet()
-
 
 class CreatePollForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,15 @@
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title fs-3">{{ poll.text }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Created by: {{ poll.author.username }}</h6>
+        <p class="card-text">
+            <small class="text-muted">Date: {{ poll.created_at|date:"F j, Y" }}</small>
+        </p>
+        <ul class="list-group list-group-flush">
+            {% for choice in poll.choices.all %}
+                <li class="list-group-item">{{ choice.text }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'pollFeed:detail' poll.id %}" class="btn btn-primary mt-3">Vote Now</a>
+    </div>
+</div>
