@@ -5,7 +5,7 @@ from . import views
 app_name = 'pollFeed'
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    # path('poll/<int:pk>', views.QuestionDetailView.as_view(), name='detail'),
-    # path('poll/publish/', views.AskQuestionCreateView.as_view(), name='ask'),
+    path('', views.PollsListView.as_view(), name='index'),
+    # path('poll/<uuid:uuid>', views.QuestionDetailView.as_view(), name='detail'),
+    path('poll/publish/', views.CreatePollView.as_view(), name='publish'),
 ]

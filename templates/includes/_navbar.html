@@ -1,0 +1,58 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid mx-auto rounded-1">
+      <a class="navbar-brand fw-bold" href="{% url 'main:index' %}">
+          <img src="{% static 'svg/bulb.svg' %}" alt="" width="70px"> Hexagon Bulb
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'questionHub:index' %}">Question Hub</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'pollFeed:index' %}">Poll Feed</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+              </li>
+          </ul>
+          {% if user.is_authenticated %}
+          <button type="button" class="btn btn-ghost border-0" data-bs-toggle="modal" data-bs-target="#mailModal"><img src="{{ user.profile.get_avatar_thumbnail }}" alt="" class="rounded-circle" width="45px"></button>
+          <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mainModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">{{ user.profile }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <a href="{{ user.profile.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
+                            <div class="btn btn-primary d-flex justify-content-start my-2">Profile</div>
+                        </a>
+                        <a href="{% url 'members:logout' %}" class="link-offset-2 link-underline link-underline-opacity-0">
+                            <div class="btn btn-danger d-flex justify-content-start my-2">Logout</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="mx-1">
+                <a href="{% url 'members:login' %}">
+                    <div type="button" class="btn btn-secondary my-1">Sign in</div>
+                </a>
+            </div>
+            <div class="mx-1">
+                <a href="{% url 'members:signup' %}">
+                    <div type="button" class="btn btn-primary my-1">Sign up</div>
+                </a>
+            </div>
+          {% endif %}
+      </div>
+  </div>
+</nav>

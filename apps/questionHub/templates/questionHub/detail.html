@@ -1,20 +1,26 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}The question is {{question.title}}{% endblock %}
 
 {% block content %}
  <div class="container mx-auto my-3 text-center border {% if question.is_closed %}border-secondary{% else %}border-primary{% endif %} border-3 rounded-2">
-  <div class="container overflow-hidden text-center">
-
+  <div class="container">
     <div class="row gx-5 mt-4">
       <div class="col-2 text-start">
-        <div class="p-3 fs-4"><a href="{% url 'members:profile' question.author.profile.id %}"><img src="{{question.author.profile.get_avatar_thumbnail}}" alt="Avatar" class="rounded-circle me-2 " width="30%">{{ question.author }}</a></div>
+        <div class="p-3 fs-4"><a href="{{ question.author.profile.get_absolute_url }}"><img src="{{question.author.profile.get_avatar_thumbnail}}" alt="Avatar" class="rounded-circle me-2 " width="30%">{{ question.author }}</a></div>
       </div>
       <div class="col-1 d-flex" style="height: 70px;">
         <div class="vr"></div>
       </div>
-      <div class="col-2 text-start">
+      <div class="col text-start">
         <div class="p-2"><p class="fw-normal fs-2 fw-semibold">{{ question.title }}</p></div>
+      </div>
+      <div class="col-2">
+        <div class="btn-group-vertical d-flex p-1">
+          <a href="{% url 'questionHub:update' slug=question.slug %}" method="post"><div class="btn btn-primary mb-2 rounded-3">Edit Question</div></a>
+          <div class="btn btn-danger mb-1 rounded-3" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete Question</div>
+        </div>
       </div>
     </div>
   </div>
@@ -37,7 +43,7 @@
         </div>
         <hr class="border border-dark border-1">
         <div class="container mx-auto border-2">
-          <p class="fs-5">{{question.content}}</p>
+          <p class="fs-5 text-start">{{question.content}}</p>
         </div>
         
         {% if question.is_closed %}
@@ -53,10 +59,10 @@
         </div>
         {% endif %}
         <div class="container" id="toggleForm" style="display: none;">
-          <form method="post" action="{% url 'questionHub:answer-question' slug=question.title|slugify %}">
+          <form method="post" action="{% url 'questionHub:answer-question' slug=question.slug %}">
             {% csrf_token %}
             <div class="container">
-              {{answer_form}}
+              {{ answer_form|crispy }}
               </div>
             <button type="submit" class="btn btn-secondary my-2 d-flex justify-content-start btn-lg">Submit</button>
           </form>
@@ -66,6 +72,7 @@
           <h2 class="fs-2 d-flex">Answers</h2>
         </div>
         <div class="row row-cols-1 my-2 mx-5">
+          {% if question.answers.all %}
           {% for answer in question.answers.all %}
           <div class="col my-2">
             <div class="card d-flex justify-content-start text-start">
@@ -80,9 +87,30 @@
             </div>
             </div>
           {% endfor %}
+          {% else %}
+          <div class="container mt-5">
+            <h2 class="fs-4 d-flex fst-italic">No answers. Be the first who'll answer to this question!</h2>
+          </div>
+          {% endif %}
         </div>
+</div>
 
-        
+<div class="modal fade" id="deleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'questionHub:delete' slug=question.slug %}" method="post">
+          {% csrf_token %}
+          <div class="fs-2">Are you sure you want to delete&</div>
+          <button type="submit" class="btn btn-danger">Yes, delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>

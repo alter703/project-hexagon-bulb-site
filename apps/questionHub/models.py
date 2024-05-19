@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -15,7 +16,7 @@ class Category(models.Model):
         verbose_name_plural = 'Категорії'
 
 class Question(models.Model):
-    slug = models.SlugField(max_length=255, unique=True, verbose_name='url')
+    slug = models.SlugField(max_length=255, default=uuid.uuid4, unique=True, verbose_name='url')
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='questions')

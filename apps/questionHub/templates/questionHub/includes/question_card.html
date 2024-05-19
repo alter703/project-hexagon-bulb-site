@@ -1,0 +1,27 @@
+<div class="card my-2 border border-0">
+    <div class="card-header rounded-top text-black">
+        <span class="badge text-bg-light">{{ question.category.name }}</span>
+        {% if question.is_closed %}
+        <span class="badge bg-success text-light">Closed</span>
+        {% endif %}
+    </div>
+    <div class="card-body rounded-bottom">
+      <div class="row gx-5">
+        <div class="col-8">
+         <div class="p-3">
+          <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
+            <h5 class="card-title fs-5 text-black">{{ question.title|truncatechars:"30" }}</h5>
+            <hr class="dropdown-divider">
+            <p class="card-text fs-6 text-black">{{ question.content|truncatechars:"45" }}</p>
+          </a>
+         </div>
+        </div>
+        <div class="col-4">
+          <div class="p-3 fs-6">{{ question.author }}
+             <hr class="border-1">
+            {{ question.created_at|timesince }} ago</div>
+        </div>
+      </div>
+
+    </div>
+</div>

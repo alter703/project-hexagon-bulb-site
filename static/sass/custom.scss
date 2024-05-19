@@ -4,9 +4,24 @@
 
 $primary: #1512ca;
 $secondary: #000000;
+$grey: #cfcfcf;
 
-$font-family-base: 'Arial';
+$font-family-base: 'Arial'; // шрифт
+$modal-fade-transform: translate(0, 20px); // появлення модального вікна
 
+// @media (min-width: 1768px) {
+//     .modal-dialog.modal-dialog-centered {
+//         align-items: flex-start;
+//     }
+
+// }
+
+@media (max-width: 1024px) {
+    .modal-dialog.modal-dialog-centered {
+        align-items: flex-end;
+    }
+
+}
 
 .navbar {
     background-color: #f7f7f7;
@@ -14,8 +29,9 @@ $font-family-base: 'Arial';
 }
 
 .btn.btn-primary,
-.btn.btn-secondary {
-    border-radius: 40px;
+.btn.btn-secondary,
+.btn.btn-danger {
+    border-radius: 10px;
 }
 
 .btn.btn-primary:hover {
@@ -26,15 +42,19 @@ $font-family-base: 'Arial';
     box-shadow: 0 2px 6px lighten($secondary, 10%);
 }
 
+.btn.btn-danger:hover {
+    box-shadow: 0 2px 6px lighten($danger, 10%);
+}
+
 .card {
     .card-header {
-        background-color: #d1d1d1;
+        background-color: $grey;
         color: #000000;
     }
 
     .card-body {
         // opacity: 0.6;
-        background-color: #d7d7d7;
+        background-color: lighten($grey, 5%);
         color: #000000;
     }
 
@@ -88,7 +108,7 @@ $font-family-base: 'Arial';
 
         &:hover {
             color: $light;
-            background-color: darken($primary, 10%);
+            background-color: darken($grey, 30%);
         }
 
         &:active {
@@ -112,6 +132,6 @@ $font-family-base: 'Arial';
 }
 
 
-$theme-colors: map-merge($theme-colors, ("primary": $primary, "secondary": $secondary));
+$theme-colors: map-merge($theme-colors, ("primary": $primary, "secondary": $secondary, "grey": $grey));
 
 @import '../node_modules/bootstrap/scss/bootstrap';
