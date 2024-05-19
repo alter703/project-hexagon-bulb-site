@@ -34,7 +34,8 @@ class ProfileDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # self посилається на конкретний об'єкт конкретної моделі (в Profile - user, biography, image...)
         context['user_questions'] = Question.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
-        # context['user_polls'] = Poll.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
+        context['user_polls'] = Poll.objects.filter(author=self.object.user).select_related('author').prefetch_related('choices')
+        context['bookmarks'] = Bookmark.objects.filter(user=self.object.user)
         return context
 
 class SignUpView(CreateView):

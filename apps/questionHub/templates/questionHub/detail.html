@@ -33,7 +33,7 @@
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
           </ul></div>
           {% else %}
-          <div class="col-2"><button id="bookmarkButton" class="btn btn-ghost" type="button" onclick="bookmark('{{ question.slug }}')">
+          <div class="col-1"><button id="bookmarkButton" class="btn btn-ghost" type="button" onclick="bookmark('{{ question.slug }}')">
             {% if user in question.bookmarks.all %}
             <img src="{% static 'svg/bookmark-fill.svg' %}" alt="bookmark">
             {% else %}

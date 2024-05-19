@@ -14,6 +14,9 @@
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Polls</button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="bookmark-tab" data-bs-toggle="tab" data-bs-target="#bookmark" type="button" role="tab" aria-controls="bookmark" aria-selected="false">Bookmarked</button>
+    </li>
   </ul>
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -23,40 +26,59 @@
     </div>
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
       <div class="row gx-4 row-cols-2">
-        {% if user_questions %}
           {% for question in user_questions %}
           <div class="col">
             {% include 'questionHub/includes/question_card.html' %}
           </div>
-          {% endfor %}
-        {% else %}
+          {% empty %}
           <div class="fw-bold fs-3 text-center">You didn't ask anything. Perhaps, you already have a question?</div>
           <div class="p-3 d-flex justify-content-center">
             <a href="{% url 'questionHub:ask' %}">
-              <div class="btn btn-primary btn-lg text-white fw-bold fs-6">Ask Question</div>
+              <div class="btn btn-primary btn-lg text-white fw-bold fs-6 mt-4">Ask Question</div>
             </a>
           </div>
-        {% endif %}
+          {% endfor %}
       </div>
     </div>
     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
       <div class="row gx-4 row-cols-2">
-        {% if user_polls %}
           {% for poll in user_polls %}
             <div class="col">
               {% include 'pollFeed/includes/poll_card.html' %}
             </div>
+            {% empty %}
+            <div class="fw-bold fs-3 text-center">You didn't create any poll. Maybe you have a choice, but you don't know what to choose?</div>
+            <div class="p-3 d-flex justify-content-center">
+              <a href="{% url 'pollFeed:create' %}">
+                <div class="btn btn-primary btn-lg text-white fw-bold fs-6 mt-4">Create Poll</div>
+              </a>
+            </div>
           {% endfor %}
-        {% else %}
       </div>
-        <div class="fw-bold fs-3 text-center">You didn't create any poll. Maybe you have a choice, but you don't know what to choose?</div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="bookmark" role="tabpanel" aria-labelledby="bookmark-tab">
+      <div class="row">
+        {% for bookmark in bookmarks %}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ bookmark.question.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">By: {{ bookmark.question.author.username }}</h6>
+                        <p class="card-text">{{ bookmark.question.content|truncatewords:"15" }}</p>
+                        <a href="{{ bookmark.question.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+        <div class="fw-bold fs-3 text-center">You didn't bookmarked any of questions. Try to search some questions, maybe some of them you would save to not forget.</div>
         <div class="p-3 d-flex justify-content-center">
-          <a href="{% url 'pollFeed:create' %}">
-            <div class="btn btn-primary btn-lg text-white fw-bold fs-6">Create Poll</div>
+          <a href="{% url 'questionHub:index' %}">
+            <div class="btn btn-primary btn-lg text-white fw-bold fs-6 mt-4">See Questions</div>
           </a>
         </div>
-        {% endif %}
-      </div>
+        {% endfor %}
+    </div>
     </div>
   </div>
 </div>
