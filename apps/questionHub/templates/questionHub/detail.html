@@ -32,6 +32,15 @@
             {% endif %}
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
           </ul></div>
+          {% else %}
+          <div class="col-2"><button id="bookmarkButton" class="btn btn-ghost" type="button" onclick="bookmark('{{ question.slug }}')">
+            {% if user in question.bookmarks.all %}
+            <img src="{% static 'svg/bookmark-fill.svg' %}" alt="bookmark">
+            {% else %}
+            <img src="{% static 'svg/bookmark.svg' %}" alt="bookmark">
+            {% endif %}
+        </button>
+          </button></div>
           {% endif %}
         </div>
       </div>
@@ -139,6 +148,26 @@
             form.style.display = "none";
         }, 350); // Затримка перед хованням форми
     }
+}
+
+function bookmark(slug) {
+  fetch(`${slug}/bookmark/`, {
+      method: 'GET',
+  })
+      .then((res) => res.json())
+      .then((data) => {
+          if (!data.user_bookmark) {
+              document.getElementById(`bookmarkButton`).innerHTML = `<img src="{% static 'svg/bookmark.svg' %}" alt="bookmark">`;
+
+          } else {
+              document.getElementById(`bookmarkButton`).innerHTML = `<img src="{% static 'svg/bookmark-fill.svg' %}" alt="bookmark">`;
+          }
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+          // Redirect to the login page
+          window.location.href = "{% url 'members:login' %}";
+      });
 }
 </script>
 {% endblock %}

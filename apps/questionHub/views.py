@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -124,3 +125,18 @@ class CloseQuestionView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return redirect('questionHub:detail', slug=kwargs['slug'])
+
+
+def bookmark_view(request, slug):
+    if request.method == 'GET':
+        user_bookmark = None
+        question = get_object_or_404(Question, slug=slug)
+
+        if request.user in question.bookmarks.all():
+            question.bookmarks.remove(request.user)
+            user_bookmark = False
+        else:
+            question.bookmarks.add(request.user)
+            user_bookmark = True
+
+        return JsonResponse( {'user_bookmark': user_bookmark} )

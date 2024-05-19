@@ -14,4 +14,6 @@ urlpatterns = [
     path('question/<slug:slug>/close/', views.CloseQuestionView.as_view(), name='close'),
 
     path('search/', views.QuestionsListView.as_view(), name='search'),
+
+    path('question/<slug:slug>/bookmark/', views.bookmark_view, name='bookmark')
 ]
