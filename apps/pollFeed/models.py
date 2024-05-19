@@ -19,7 +19,7 @@ class Poll(models.Model):
         verbose_name_plural = 'Голосування'
 
     def get_absolute_url(self):
-        return reverse_lazy("questionHub:detail", kwargs={"id": self.id})
+        return reverse_lazy("pollFeed:detail", kwargs={"id": self.id})
 
 
 class Choice(models.Model):
