@@ -18,14 +18,19 @@ class QuestionsListView(ListView):
     context_object_name = 'questions'
     paginate_by = 9
 
+
     def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.select_related('author', 'category').filter(Q(is_closed=False)).order_by('?')
+        query = self.request.GET.get('q', '')
+        if query:
+            queryset = Question.objects.filter(Q(title__icontains=query) & Q(is_closed=False)).select_related('author', 'author__profile')
+        else:
+            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'author__profile')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['latest_questions'] = Question.objects.order_by('-created_at')[:3].select_related('author', 'category')
+        context['latest_questions'] = Question.objects.filter(is_closed=False)[:3]
+        context['query'] = self.request.GET.get('q', '')
         return context
 
 
@@ -44,6 +49,7 @@ class QuestionDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['answer_form'] = AnswerQuestionForm
         context['other_questions'] = Question.objects.filter(category=self.object.category)[:3].select_related('author', 'category')
+        context['amount_answers'] = Answer.objects.count()
         return context
 
 
