@@ -1,0 +1,17 @@
+<div class="modal fade" id="closeBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Close Warning</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'pollFeed:close' id=poll.id %}" method="post">
+            {% csrf_token %}
+            <div class="fs-2">Are you sure you want to Close? If you will do, you can't edit it anymore</div>
+            <button type="submit" class="btn btn-danger">Yes, close</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
