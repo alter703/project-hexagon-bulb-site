@@ -14,13 +14,16 @@
             <div class="col-3 text-center align-self-center">
               Asked at: {{ poll.created_at|date:"M j, Y"}}
             </div>
+            <div class="col-3 text-center align-self-center">
+              People voted: {{ poll.user_votes.count }}
+            </div>
             {% if user == poll.author %}
             <div class="col text-end dropstart"><div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img src="{% static 'svg/three-dots.svg' %}" alt="three dots">
             </div>
             <ul class="dropdown-menu">
               {% if not poll.is_closed %}
-              <li><a class="dropdown-item" href="{% url 'pollFeed:update' poll.id %}">Edit</a></li>
+              <li><a class="dropdown-item" href="{% url 'pollFeed:update' id=poll.id %}">Edit</a></li>
               <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
               {% endif %}
               <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>

@@ -18,18 +18,17 @@ class QuestionsListView(ListView):
     context_object_name = 'questions'
     paginate_by = 9
 
-
     def get_queryset(self):
         query = self.request.GET.get('q', '')
         if query:
-            queryset = Question.objects.filter(Q(title__icontains=query) & Q(is_closed=False)).select_related('author', 'author__profile')
+            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category')
         else:
-            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'author__profile')
+            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['latest_questions'] = Question.objects.filter(is_closed=False)[:3]
+        context['latest_questions'] = Question.objects.filter(is_closed=False).select_related('author', 'category')[:3]
         context['query'] = self.request.GET.get('q', '')
         return context
 
@@ -116,14 +115,16 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-def close_question(request, slug):
-    question = get_object_or_404(Question, slug=slug)
-
-    if request.method == 'POST':
+class CloseQuestionView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        question = get_object_or_404(Question, slug=slug)
         if question.author == request.user:
             question.is_closed = True
             question.save()
             messages.success(request, "Question has been closed. Check the results!")
-
+        else:
+            messages.error(request, "You do not have permission to close this question.")
         return redirect('questionHub:detail', slug=slug)
-    return redirect('questionHub:detail', slug=slug)
+
+    def get(self, request, *args, **kwargs):
+        return redirect('questionHub:detail', slug=kwargs['slug'])
