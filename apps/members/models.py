@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill, SmartCrop
 
@@ -51,4 +51,4 @@ class Profile(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse("members:profile", kwargs={"uuid": self.id})
+        return reverse_lazy("members:profile", kwargs={"uuid": self.id})

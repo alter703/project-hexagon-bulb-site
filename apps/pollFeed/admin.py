@@ -1,31 +1,28 @@
 from django.contrib import admin
-from .models import Poll, PollCategory, Answer, UserAnswer
+
+from .models import Poll, Choice, Vote
 
 # Register your models here.
-class AnswerInline(admin.TabularInline):
-    model = Answer
-    fields = ('content', 'is_correct')
+
+class ChoiceInline(admin.TabularInline):
+    model = Choice
     extra = 1
-
-
-@admin.register(PollCategory)
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    list_display_links = ('name',)
-
-
-@admin.register(Answer)
-class PollAdmin(admin.ModelAdmin):
-    list_display = ('id', 'content', 'poll')
-    list_display_links = ('id', 'content')
 
 
 @admin.register(Poll)
 class PollAdmin(admin.ModelAdmin):
-    inlines = [AnswerInline]
+    list_display = ('id', 'text', 'created_at')
+    list_display_links = ('id', 'text')
+    inlines = [ChoiceInline]
 
+@admin.register(Choice)
+class ChoiceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'text', 'votes')
+    list_display_links = ('id', 'text',)
 
-@admin.register(UserAnswer)
-class UserAnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'poll', 'answer')
-    list_display_links = ('id', 'poll')
+@admin.register(Vote)
+class VoteAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'poll', 'choice',]
+    list_filter = ['poll']
+    search_fields = ['user__username', 'poll__text', 'choice__text']
+    list_per_page = 20

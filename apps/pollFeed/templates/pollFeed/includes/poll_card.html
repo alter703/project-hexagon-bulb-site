@@ -1,22 +1,15 @@
-<div class="card mb-3 border border-0">
-      <div class="card-header rounded-top text-black">
-          <span class="badge text-bg-light">{{ poll.category.name }}</span>
-          {% if poll.is_closed %}
-          <span class="badge bg-success text-light">Closed</span>
-          {% endif %}
-      </div>
-      <div class="card-body">
-        <h5 class="card-title">{{ poll.question }}</h5>
-        <p class="card-text">Author: {{ poll.author }}</p>
-        <p class="card-text">Category: {{ poll.category }}</p>
-        <p class="card-text">Created at: {{ poll.created_at }}</p>
-        <p class="card-text">Updated at: {{ poll.updated_at }}</p>
-        <p class="card-text">Closed: {{ poll.is_closed }}</p>
-      </div>
-      <div class="card-footer">
-          <div class="fw-semibold fs-6">Answers:</div>
-          {% for answer in poll.answers.all %}
-          {{answer}}
-          {% endfor %}
-      </div>
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title fs-3">{{ poll.text }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Created by: {{ poll.author.username }}</h6>
+        <p class="card-text">
+            <small class="text-muted">Date: {{ poll.created_at|date:"F j, Y" }}</small>
+        </p>
+        <ul class="list-group list-group-flush">
+            {% for choice in poll.choices.all %}
+                <li class="list-group-item my-1 rounded-2">{{ choice.text }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'pollFeed:detail' poll.id %}" class="btn btn-primary mt-3">Vote Now</a>
+    </div>
 </div>

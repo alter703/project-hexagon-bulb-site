@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 # Create your models here.
 class Category(models.Model):
@@ -36,7 +36,7 @@ class Question(models.Model):
         verbose_name_plural = 'Питання'
 
     def get_absolute_url(self):
-        return reverse("questionHub:detail", kwargs={"slug": self.slug})
+        return reverse_lazy("questionHub:detail", kwargs={"slug": self.slug})
 
 
 class Answer(models.Model):
