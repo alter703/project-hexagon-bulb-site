@@ -46,11 +46,17 @@
       </div>
       <div class="col d-flex flex-column border border-2 my-3"></div>
       <div class="col">
-        <div class="row g-2 g-lg-3">
-          <div class="col fs-2 fw-bold">{{question.title}}</div>
-          <div class="col-2 fs-4"><span class="badge badge-lg text-bg-primary">{{ question.category }}</span></div>
-          {% if question.is_closed %}<div class="col-1 fs-4"><span class="badge badge-lg text-bg-secondary">Closed</span></div>{% endif %}
-        </div>
+          <div class="row g-2 g-lg-3">
+              <div class="col fs-2 fw-bold">{{ question.title }}</div>
+              <div class="col-2 fs-4">
+                  <span class="badge badge-lg text-bg-primary me-2">{{ question.category }}</span>
+              </div>
+              {% if question.is_closed %}
+              <div class="col-1 fs-4">
+                  <span class="badge badge-lg text-bg-secondary">Closed</span>
+              </div>
+              {% endif %}
+          </div>
       </div>
       <div class="col d-flex flex-column border border-2 my-3"></div>
       <div class="col">

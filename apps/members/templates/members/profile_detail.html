@@ -60,16 +60,9 @@
     <div class="tab-pane fade" id="bookmark" role="tabpanel" aria-labelledby="bookmark-tab">
       <div class="row">
         {% for bookmark in bookmarks %}
-            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ bookmark.question.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">By: {{ bookmark.question.author.username }}</h6>
-                        <p class="card-text">{{ bookmark.question.content|truncatewords:"15" }}</p>
-                        <a href="{{ bookmark.question.get_absolute_url }}" class="btn btn-primary">Read More</a>
-                    </div>
-                </div>
-            </div>
+        
+        {% include 'members/includes/bookmark_card.html' %}
+
         {% empty %}
         <div class="fw-bold fs-3 text-center">You didn't bookmarked any of questions. Try to search some questions, maybe some of them you would save to not forget.</div>
         <div class="p-3 d-flex justify-content-center">

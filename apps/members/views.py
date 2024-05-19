@@ -35,7 +35,7 @@ class ProfileDetailView(DetailView):
         # self посилається на конкретний об'єкт конкретної моделі (в Profile - user, biography, image...)
         context['user_questions'] = Question.objects.filter(author=self.object.user).select_related('author', 'category').prefetch_related('answers')
         context['user_polls'] = Poll.objects.filter(author=self.object.user).select_related('author').prefetch_related('choices')
-        context['bookmarks'] = Bookmark.objects.filter(user=self.object.user)
+        context['bookmarks'] = Bookmark.objects.filter(user=self.object.user).select_related('user', 'question').prefetch_related('question__author')
         return context
 
 class SignUpView(CreateView):
