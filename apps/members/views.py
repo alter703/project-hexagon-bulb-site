@@ -41,6 +41,7 @@ class SignUpView(CreateView):
     form_class = UserCreationForm
     template_name = 'members/signup.html'
 
+    
     def form_valid(self, form):
         user = form.save()
         profile = Profile(user=user)
@@ -84,7 +85,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
     def get_object(self, queryset=None):
-        return Profile.objects.get(user=self.request.user)
+        return Profile.objects.select_related('user').get(user=self.request.user)
 
 
 @login_required

@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 
@@ -23,7 +22,7 @@ class QuestionsListView(ListView):
         if query:
             queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category')
         else:
-            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category')
+            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?')
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -70,9 +69,6 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         save_form = super().form_valid(form)
         return save_form
-
-    def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
 
 
 class AnswerView(LoginRequiredMixin, View):
