@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Poll(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls')
-    text = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_closed = models.BooleanField(default=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls', verbose_name='Автор')
+    text = models.CharField(max_length=255, verbose_name='Текст')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Було створено')
+    is_closed = models.BooleanField(default=False, verbose_name='Чи закрито')
 
     def __str__(self) -> str:
         return self.text
@@ -23,10 +23,10 @@ class Poll(models.Model):
 
 
 class Choice(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='choices')
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='choices')
-    text = models.CharField(max_length=255)
-    votes = models.IntegerField(default=0)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='choices', verbose_name='Автор')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='choices', verbose_name='Голосування')
+    text = models.CharField(max_length=255, verbose_name='Текст')
+    votes = models.IntegerField(default=0, verbose_name='Голосів')
 
 
     class Meta:
@@ -36,9 +36,9 @@ class Choice(models.Model):
 
 
 class Vote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_votes')
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='user_votes')
-    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='user_votes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_votes', verbose_name='Користувач')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='user_votes', verbose_name='Голосування')
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='user_votes', verbose_name='Вибір')
 
     class Meta:
         unique_together = ('user', 'poll')
