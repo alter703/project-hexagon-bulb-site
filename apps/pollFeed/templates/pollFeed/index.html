@@ -47,7 +47,7 @@
                 <div class="fs-2 fst-italic">Well, there are no polls...</div>
                 {% endfor %}
                 {% if is_paginated %}
-                    {% include 'includes/pagination.html' %}
+                    {% include 'includes/pagination.html' with object=recent_polls %}
                 {% endif %}
             </div>
         </div>

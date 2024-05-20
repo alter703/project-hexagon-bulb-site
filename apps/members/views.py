@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-
+from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from .forms import ProfileForm
 from django.contrib import messages
@@ -94,3 +94,34 @@ def logout_view(request):
     logout(request)
     messages.info(request, "You've signed out")
     return redirect('main:index')
+
+
+def user_questions_view(request, uuid):
+    profile = get_object_or_404(Profile, id=uuid)
+    questions = Question.objects.filter(author=profile.user).select_related('author', 'category').prefetch_related('answers')
+    paginator = Paginator(questions, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'members/user_questions.html', {'profile': profile, 'page_obj': page_obj})
+
+def user_polls_view(request, uuid):
+    profile = get_object_or_404(Profile, id=uuid)
+    polls = Poll.objects.filter(author=profile.user).select_related('author').prefetch_related('choices')
+    paginator = Paginator(polls, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'members/user_polls.html', {'profile': profile, 'page_obj': page_obj})
+
+def user_bookmarks_view(request, uuid):
+    profile = get_object_or_404(Profile, id=uuid)
+    bookmarks = Bookmark.objects.filter(author=profile.user).select_related('author').prefetch_related('choices')
+    paginator = Paginator(bookmarks, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'members/user_polls.html', {'profile': profile, 'page_obj': page_obj})

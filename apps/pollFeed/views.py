@@ -15,7 +15,7 @@ class PollListView(ListView):
     model = Poll
     template_name = "pollFeed/index.html"
     context_object_name = 'polls'
-    paginate_by = 9
+    paginate_by = 1
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
