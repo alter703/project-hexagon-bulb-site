@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block title %}Question Hub{% endblock %}
 
@@ -44,29 +44,49 @@
                 </div>
               </div>
             </div>
+            <div class="row infinite-container">
             {% for question in questions %}
-
-            {% include 'questionHub/includes/question_card.html' %}
-
-            {% empty %}
-            {% if query %}
-            <div class="fs-2 fst-italic">Questions not found</div>
-            {% else %}
-            <div class="fs-2 fst-italic">Well, there is no questions...</div>
-            {% endif %}
-            {% endfor %} 
-
-              {% if is_paginated %}
-
-              {% include 'includes/pagination.html' %}  <!--отримання пагінації з базових шаблонів templates-->
-
+              <div class="col-12 infinite-item">
+                {% include 'questionHub/includes/question_card.html' %}
+              </div>
+              {% empty %}
+              {% if query %}
+              <div class="fs-2 fst-italic">Questions not found</div>
+              {% else %}
+              <div class="fs-2 fst-italic">Well, there is no questions...</div>
               {% endif %}
-
+              {% endfor %} 
+            </div>
+            <div class="text-center mt-4">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
         </div>
       </div>
     </div>
-      
+    {% if page_obj.has_next %}
+    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}" style="display: none;">next</a>
+    {% endif %}
 </div>
 
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/infinite.min.js' %}"></script>
+
+<script>
+  var infinite = new Waypoint.Infinite({
+    element: $('.infinite-container')[0],
+
+    offset: 'bottom-in-view',
+
+    onBeforePageUpload: function () {
+      $('.spinner-border').show()
+    },
+
+    onAfterPageUpload: function () {
+      $('.spinner-border').hide()
+    }
+  });
+</script>
 
 {% endblock %}

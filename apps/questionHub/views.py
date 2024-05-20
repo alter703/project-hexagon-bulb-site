@@ -16,7 +16,7 @@ class QuestionsListView(ListView):
     model = Question
     template_name = "questionHub/index.html"
     context_object_name = 'questions'
-    paginate_by = 9
+    paginate_by = 7
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
