@@ -4,89 +4,102 @@
 
 {% block content %}
 <div class="container mx-auto">
-    <div class="container p-3 my-2 border {% if poll.is_closed %}border-secondary{% else %}border-primary{% endif %} border-2 rounded-2">
+  <div class="container p-3 my-2 border {% if poll.is_closed %}border-secondary{% else %}border-primary{% endif %} border-2 rounded-2">
       <div class="row mx-4 d-flex flex-column gx-3">
-        <div class="col">
-          <div class="row">
-            <div class="col">
-              <div class="fs-5">By: <a href="{{ poll.author.profile.get_absolute_url }}" class="text-black link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ poll.author }}</a></div>
-            </div>
-            <div class="col-3 text-center align-self-center">
-              Asked at: {{ poll.created_at|date:"M j, Y"}}
-            </div>
-            <div class="col-3 text-center align-self-center">
-              People voted: {{ poll.user_votes.count }}
-            </div>
-            {% if user == poll.author %}
-            <div class="col text-end dropstart"><div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="{% static 'svg/three-dots.svg' %}" alt="three dots">
-            </div>
-            <ul class="dropdown-menu">
-              {% if not poll.is_closed %}
-              <li><a class="dropdown-item" href="{% url 'pollFeed:update' id=poll.id %}">Edit</a></li>
-              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
-              {% endif %}
-              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
-            </ul></div>
-            {% endif %}
+          <div class="col">
+              <div class="row">
+                  <div class="col">
+                      <div class="fs-5">By: 
+                          <a href="{{ poll.author.profile.get_absolute_url }}" class="text-black link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                              {{ poll.author }}
+                          </a>
+                      </div>
+                  </div>
+                  <div class="col-3 text-center align-self-center">
+                      Asked at: {{ poll.created_at|date:"M j, Y"}}
+                  </div>
+                  <div class="col-3 text-center align-self-center">
+                      People voted: {{ poll.user_votes.count }}
+                  </div>
+                  {% if user == poll.author %}
+                  <div class="col text-end dropstart">
+                      <div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="{% static 'svg/three-dots.svg' %}" alt="three dots">
+                      </div>
+                      <ul class="dropdown-menu">
+                          {% if not poll.is_closed %}
+                          <li><a class="dropdown-item" href="{% url 'pollFeed:update' id=poll.id %}">Edit</a></li>
+                          <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
+                          {% endif %}
+                          <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
+                      </ul>
+                  </div>
+                  {% endif %}
+              </div>
           </div>
-        </div>
-        <div class="col d-flex flex-column border border-2 my-3"></div>
-        <div class="col">
-          <div class="row g-2 g-lg-3">
-            <div class="col fs-2 fw-bold">{{ poll.text }}</div>
-            <div class="col-1 fs-4"><span class="badge badge-lg text-bg-primary">{{ poll.category }}</span></div>
-            {% if poll.is_closed %}<div class="col-1 fs-4"><span class="badge badge-lg text-bg-secondary">Closed</span></div>{% endif %}
+          <div class="col d-flex flex-column border border-2 my-3"></div>
+          <div class="col">
+              <div class="row g-2 g-lg-3">
+                  <div class="col fs-2 fw-bold">{{ poll.text }}</div>
+                  <div class="col-1 fs-4">
+                      <span class="badge badge-lg text-bg-primary">{{ poll.category }}</span>
+                  </div>
+                  {% if poll.is_closed %}
+                  <div class="col-1 fs-4">
+                      <span class="badge badge-lg text-bg-secondary">Closed</span>
+                  </div>
+                  {% endif %}
+              </div>
           </div>
-        </div>
       </div>
-    </div>
-    <div class="container p-3 border {% if poll.is_closed %}border-secondary{% else %}border-primary{% endif %} border-2 rounded-2">
-        <div class="row">
-            <div class="col">
-                {% if poll.is_closed %}
-                <p class="fs-3 text-center text-black">This poll is closed. Here are the results:</p>
-                <div class="list-group mx-6">
-                {% for choice in poll.choices.all %}
-                <div class="list-group-item d-flex justify-content-between">
-                    {{ choice.text }} <span class="fw-bold">{{ choice.votes }}</span>
-                </div>
-            {% endfor %}
-            </div>
-            {% else %}
-            {% if user_has_voted %}
-                <p class="text-success">You have voted for: {{ user_vote.text }}</p>
-                <div class="list-group">
-                    {% for choice in poll.choices.all %}
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ choice.text }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
+  </div>
+  <div class="container p-3 border {% if poll.is_closed %}border-secondary{% else %}border-primary{% endif %} border-2 rounded-2">
+      <div class="row">
+          <div class="col">
+              {% if poll.is_closed %}
+              <p class="fs-3 text-center text-black">This poll is closed. Here are the results:</p>
+              <div class="list-group mx-6">
+                  {% for choice in poll.choices.all %}
+                  <div class="list-group-item d-flex justify-content-between">
+                      {{ choice.text }} <span class="fw-bold">{{ choice.votes }}</span>
+                  </div>
+                  {% endfor %}
+              </div>
+              {% else %}
+              {% if user_has_voted %}
+              <p class="text-success">You have voted for: {{ user_vote.text }}</p>
+              <div class="list-group">
+                  {% for choice in poll.choices.all %}
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                      {{ choice.text }}
+                  </div>
+                  {% endfor %}
+              </div>
+              {% else %}
               {% if not user.is_authenticated %}
               <div class="btn btn-secondary">Login to Vote</div>
               {% else %}
               <form method="post" action="{% url 'pollFeed:vote' id=poll.id %}">
-                {% csrf_token %}
-                <div class="list-group">
-                    {% for choice in poll.choices.all %}
-                        <label class="list-group-item">
-                            <input type="radio" name="choice" value="{{ choice.id }}" class="form-check-input me-2">
-                            {{ choice.text }}
-                        </label>
-                    {% endfor %}
-                </div>
-                <button type="submit" class="btn btn-secondary my-2 d-flex justify-content-start btn-lg">Submit Vote</button>
-            </form>
+                  {% csrf_token %}
+                  <div class="list-group">
+                      {% for choice in poll.choices.all %}
+                      <label class="list-group-item">
+                          <input type="radio" name="choice" value="{{ choice.id }}" class="form-check-input me-2">
+                          {{ choice.text }}
+                      </label>
+                      {% endfor %}
+                  </div>
+                  <button type="submit" class="btn btn-secondary my-2 d-flex justify-content-start btn-lg">Submit Vote</button>
+              </form>
               {% endif %}
-            </div>
-            {% endif %}
-            {% endif %}
+              </div>
+              {% endif %}
+              {% endif %}
           </div>
-    </div> 
-    </div>
+      </div>
   </div>
+</div>
+
 
 
 {% include 'pollFeed/includes/close_modal.html' %}

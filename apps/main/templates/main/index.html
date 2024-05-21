@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
-{% block title %}{% endblock title %}
+{% load static %}
+
+{% block title %}Welcome{% endblock title %}
 
 {% block content %}
+<div class="container d-flex justify-content-center">
+  <img src="{% static 'icons/hexagon_bulb-removebg.png' %}" alt="Зображення" class="w-25">
+</div>
 <button type="button" class="btn btn-altprimary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Launch static backdrop modal
   </button>
-
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="align-items: flex-end;">
       <div class="modal-content rounded-2">
