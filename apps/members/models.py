@@ -11,15 +11,15 @@ from imagekit.processors import ResizeToFill, SmartCrop
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='profile')
-    biography = models.TextField(null=True, blank=True, max_length=255)
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='profile', verbose_name='Користувач')
+    biography = models.TextField(null=True, blank=True, max_length=255, verbose_name='Біографія')
     avatar = ProcessedImageField(
         upload_to='avatars/',
         processors=[ResizeToFill(550, 550)],
         format='JPEG',
         options={'quality': 90},
         blank=True,
-        null=True)
+        null=True, verbose_name='Зображення')
     avatar_thumbnail = ImageSpecField(
         source='avatar',
         processors=[ResizeToFill(250, 250)],
@@ -27,7 +27,7 @@ class Profile(models.Model):
         options={'quality': 60},
     )
 
-    joined_at = models.DateTimeField(auto_now_add=True)
+    joined_at = models.DateTimeField(auto_now_add=True, verbose_name='Приєднався')
 
     def __str__(self):
         return self.user.username

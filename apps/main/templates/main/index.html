@@ -1,43 +1,36 @@
 {% extends 'base.html' %}
-{% block title %}{% endblock title %}
+{% load static %}
+
+{% block title %}Welcome{% endblock title %}
 
 {% block content %}
-<button type="button" class="btn btn-altprimary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Launch static backdrop modal
-  </button>
-
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="align-items: flex-end;">
-      <div class="modal-content rounded-2">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-          <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p class="text text-accent">HELLO!!</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-altsecondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-altprimary">Understood</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<div class="dropstart">
-  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Dropdown link
-  </a>
-
-  <ul class="dropdown-menu ">
-    <li><a class="dropdown-item" href="#">Action</a></li>
-    <li><a class="dropdown-item" href="#">Another action</a></li>
-    <li><a class="dropdown-item" href="#">Something else here</a></li>
-  </ul>
+<div class="container text-center my-5">
+  <img src="{% static 'icons/hexagon_bulb-removebg.png' %}" alt="Зображення" class="w-25">
+  <div class="fs-1 fw-bolder">Get free answers from other people here!</div>
 </div>
 
-<input type="checkbox" class="btn-check" id="btn-check-2" autocomplete="off">
-<label class="btn btn-primary" for="btn-check-2">Checked</label>
+<div class="fw-bold fs-4 text-center">Try to answer to these questions!</div>
+<div id="carouselExample" class="carousel slide bg-dark bg-opacity-50 rounded-3">
+  <div class="carousel-inner">
+    {% for question in questions %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <div class="container" style="width: 70%;">
+
+        {% include 'questionHub/includes/question_card.html' %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
 <div class="accordion accordion-flush" id="accordionFlushExample">
   <div class="accordion-item">
     <h2 class="accordion-header">
@@ -46,29 +39,30 @@
       </button>
     </h2>
     <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+      <div class="accordion-body">It's a site in that you can ask question? answer to other person's one or set poll and vice versa, bookmark questions(yet) maybe make friends.</div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-        What's interesting in this site?
+        Who was created it?
       </button>
     </h2>
     <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+      <div class="accordion-body">Me</div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-        Nya
+        How can i control my questions and polls?
       </button>
     </h2>
     <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+      <div class="accordion-body">Imagine you have a couple of questions and polls, after filling a form you are able to edit, close and delete. But keep in your mind, once you close one, it is unavaliable to edit or reopen!</div>
     </div>
   </div>
 </div>
+
 
 {% endblock content %}

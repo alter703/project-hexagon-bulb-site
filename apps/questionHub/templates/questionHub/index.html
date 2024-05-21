@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Question Hub{% endblock %}
 
@@ -6,65 +7,91 @@
 <div class="container-fluid mx-3">
   <div class="container-fluid px-4">
     <div class="row gx-4 my-4">
-      <div class="col-7">
-        <h1 class="mb-2 fs-2 fw-semibold text-center">Questions</h1>
+      <div class="col-12 col-md-7">
+        <h1 class="mb-4 fs-2 fw-semibold text-center">Questions</h1>
       </div>
-      <div class="col-4">
+      <div class="col-12 col-md-5">
         <form action="{% url 'questionHub:search' %}" method="get" class="d-flex" role="search">
-          <input class="form-control me-2"name="q" type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-primary" type="submit">Search</button>
         </form>
       </div>
     </div>
-        <div class="row gx-5">
-          <div class="col-12 col-md-4 my-2 border-black border-4">
-            <div class="container py-1 text-black border border-2 rounded-2">
-              <p class="fw-bolder mb-4">The latest questions!</p>
-              {% for question in latest_questions %}
-
-              {% include 'questionHub/includes/question_card_mini.html' %}
-              
-              {% empty %}
-              <div class="fs-2 fst-italic">That's weird...</div>
-              {% endfor %}
-            </div>
-            <div class="container rounded-2 py-1 my-2">
-              <p class="fw-bolder mb-4">Here's your ad!</p>
-            </div>
-          </div>
-          <div class="col-12 col-md-8">
-            <div class="container px-4 text-center text-black">
-              <div class="row gx-5 align-items-center">
-                <div class="col-7">
-                 <div class="p-3"><p class="fs-4 fw-normal">Questions that are waiting for answers!</div>
-                </div>
-                <div class="col">
-                  <div class="p-3 d-flex justify-content-end"><a href="{% url 'questionHub:ask' %}"><div class="btn btn-primary text-white fw-bold fs-6">Ask Question</div></a></div>
-                </div>
+    <div class="row gx-5">
+      <div class="col-12 col-md-4 my-2">
+        <div class="container py-3 text-black border border-2 rounded-2">
+          <h2 class="fw-bolder mb-2">The latest questions!</h2>
+          {% for question in latest_questions %}
+            {% include 'questionHub/includes/question_card_mini.html' %}
+          {% empty %}
+            <div class="fs-2 fst-italic">That's weird...</div>
+          {% endfor %}
+        </div>
+        <div class="container rounded-2 py-3 my-2 border border-2">
+          <p class="fw-bolder mb-4">Do you want to visit PollFeed, the place where you can set poll when you have choices but you dont know what to choose?</p>
+          <a href="{% url 'pollFeed:index' %}"><div class="btn btn-primary">Visit PollFeed</div></a>
+        </div>
+      </div>
+      <div class="col-12 col-md-8">
+        <div class="container px-4 text-center text-black">
+          <div class="row gx-5 align-items-center">
+            <div class="col-12 col-md-7">
+              <div class="p-3">
+                <h2 class="fs-4 fw-normal">Questions that are waiting for answers!</h2>
               </div>
             </div>
-            {% for question in questions %}
-
-            {% include 'questionHub/includes/question_card.html' %}
-
-            {% empty %}
+            <div class="col-12 col-md-5">
+              <div class="p-3 d-flex justify-content-end">
+                <a href="{% url 'questionHub:ask' %}" class="btn btn-primary text-white fw-bold fs-6">Ask Question</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row infinite-container">
+          {% for question in questions %}
+            <div class="col-12 infinite-item mb-2">
+              {% include 'questionHub/includes/question_card.html' %}
+            </div>
+          {% empty %}
             {% if query %}
-            <div class="fs-2 fst-italic">Questions not found</div>
+              <div class="fs-2 fst-italic">Questions not found</div>
             {% else %}
-            <div class="fs-2 fst-italic">Well, there is no questions...</div>
+              <div class="fs-2 fst-italic">Well, there are no questions...</div>
             {% endif %}
-            {% endfor %} 
-
-              {% if is_paginated %}
-
-              {% include 'includes/pagination.html' %}  <!--отримання пагінації з базових шаблонів templates-->
-
-              {% endif %}
-
+          {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
     </div>
-      
+    {% if page_obj.has_next %}
+      <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}" style="display: none;">next</a>
+    {% endif %}
+  </div>
 </div>
+
+
+
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/infinite.min.js' %}"></script>
+
+<script>
+  var infinite = new Waypoint.Infinite({
+    element: $('.infinite-container')[0],
+
+    offset: 'bottom-in-view',
+
+    onBeforePageUpload: function () {
+      $('.spinner-border').show()
+    },
+
+    onAfterPageUpload: function () {
+      $('.spinner-border').hide()
+    }
+  });
+</script>
 
 {% endblock %}

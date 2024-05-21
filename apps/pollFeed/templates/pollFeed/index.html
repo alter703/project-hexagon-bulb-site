@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Poll Feed{% endblock title %}
 
 {% block content %}
 <div class="container-fluid mx-3">
     <div class="container-fluid px-4">
-        <div class="row gx-4 my-4">
-            <div class="col-7">
-                <h1 class="mb-2 fs-2 fw-semibold text-center">Polls</h1>
-            </div>
-            <div class="col-4">
-              <form action="{% url 'pollFeed:search' %}" method="get" class="d-flex" role="search">
-                <input class="form-control me-2"name="q" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-              </form>
-            </div>
-          </div>
+      <div class="row gx-4 my-4">
+        <div class="col-12 col-md-7">
+          <h1 class="mb-4 fs-2 fw-semibold text-center">Polls</h1>
+        </div>
+        <div class="col-12 col-md-5">
+          <form action="{% url 'pollFeed:search' %}" method="get" class="d-flex" role="search">
+            <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
         <div class="row gx-5">
             <div class="col-12 col-md-4 my-2 border-black border-4">
                 <div class="container py-1 text-black border border-2 rounded-2">
@@ -26,8 +27,9 @@
                     <div class="fs-2 fst-italic">That's weird...</div>
                     {% endfor %}
                 </div>
-                <div class="container rounded-2 py-1 my-2">
-                    <p class="fw-bolder mb-4">Here's your ad!</p>
+                <div class="container rounded-2 py-1 my-2 border border-2">
+                  <p class="fw-bolder mb-4">Do you want to visit QuestionHub, the place where you can aks question and get answers in seconds?</p>
+                  <a href="{% url 'questionHub:index' %}"><div class="btn btn-primary">Visit QuestionHub</div></a>
                 </div>
             </div>
             <div class="col-12 col-md-8">
@@ -41,18 +43,44 @@
                         </div>
                     </div>
                 </div>
-                {% for poll in polls %}
-                    {% include 'pollFeed/includes/poll_card.html' %}
-                {% empty %}
-                <div class="fs-2 fst-italic">Well, there are no polls...</div>
-                {% endfor %}
-                {% if is_paginated %}
-                    {% include 'includes/pagination.html' %}
-                {% endif %}
+                <div class="row infinite-container">
+                    {% for poll in polls %}
+                    <div class="col-12 infinite-item">
+                        {% include 'pollFeed/includes/poll_card.html' %}
+                      </div>
+                    {% empty %}
+                    <div class="fs-2 fst-italic">Well, there are no polls...</div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-4">
+                    <div class="spinner-border" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-    </div>
+            {% if page_obj.has_next %}
+            <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}" style="display: none;">next</a>
+            {% endif %}
 </div>
 
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/infinite.min.js' %}"></script>
 
+<script>
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+  
+      offset: 'bottom-in-view',
+  
+      onBeforePageUpload: function () {
+        $('.spinner-border').show()
+      },
+  
+      onAfterPageUpload: function () {
+        $('.spinner-border').hide()
+      }
+    });
+  </script>
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}your polls{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>{{ profile.user.username }}'s Bookmarks</h2>
+  <div class="row row-cols-2">
+    {% for bookmark in page_obj %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+      {% include 'members/includes/bookmark_card.html' %}
+    </div>
+    {% empty %}
+      <div class="text-center">
+        <div class="fw-bold fs-3 mb-3">You haven't bookmarked any questions. You can visit the QuestionHub main page!</div>
+        <a href="{% url 'questionHub:index' %}" class="btn btn-primary btn-lg text-white fw-bold fs-6 mt-4">Visit QuestionHub</a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="d-flex justify-content-center">
+    {% if page_obj.has_other_pages %}
+    {% include 'includes/pagination.html' %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+

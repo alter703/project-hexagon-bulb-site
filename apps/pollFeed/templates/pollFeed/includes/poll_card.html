@@ -10,6 +10,7 @@
                 <li class="list-group-item my-1 rounded-2">{{ choice.text }}</li>
             {% endfor %}
         </ul>
-        <a href="{% url 'pollFeed:detail' poll.id %}" class="btn btn-primary mt-3">Vote Now</a>
+        <a href="{{ poll.get_absolute_url }}" class="btn btn-primary mt-3">Vote Now</a>
     </div>
 </div>
+

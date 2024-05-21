@@ -32,16 +32,31 @@
             {% endif %}
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
           </ul></div>
+          {% else %}
+          <div class="col-1"><button id="bookmarkButton" class="btn btn-ghost" type="button" onclick="bookmark('{{ question.slug }}')">
+            {% if user in question.bookmarks.all %}
+            <img src="{% static 'svg/bookmark-fill.svg' %}" alt="bookmark">
+            {% else %}
+            <img src="{% static 'svg/bookmark.svg' %}" alt="bookmark">
+            {% endif %}
+        </button>
+          </button></div>
           {% endif %}
         </div>
       </div>
       <div class="col d-flex flex-column border border-2 my-3"></div>
       <div class="col">
-        <div class="row g-2 g-lg-3">
-          <div class="col fs-2 fw-bold">{{question.title}}</div>
-          <div class="col-1 fs-4"><span class="badge badge-lg text-bg-primary">{{ question.category }}</span></div>
-          {% if question.is_closed %}<div class="col-1 fs-4"><span class="badge badge-lg text-bg-secondary">Closed</span></div>{% endif %}
-        </div>
+          <div class="row g-2 g-lg-3">
+              <div class="col fs-2 fw-bold">{{ question.title }}</div>
+              <div class="col-2 fs-4">
+                  <span class="badge badge-lg text-bg-primary me-2">{{ question.category }}</span>
+              </div>
+              {% if question.is_closed %}
+              <div class="col-1 fs-4">
+                  <span class="badge badge-lg text-bg-secondary">Closed</span>
+              </div>
+              {% endif %}
+          </div>
       </div>
       <div class="col d-flex flex-column border border-2 my-3"></div>
       <div class="col">
@@ -95,7 +110,7 @@
         </div>
       <div class="col border border-2 my-3"></div>
       <div class="col">
-        <div class="fs-5">{{ answer.content }}</div>
+        <div class="fs-5">{{ answer.content|linebreaks }}</div>
       </div>
       </div>
       {% empty %}
@@ -139,6 +154,26 @@
             form.style.display = "none";
         }, 350); // Затримка перед хованням форми
     }
+}
+
+function bookmark(slug) {
+  fetch(`${slug}/bookmark/`, {
+      method: 'GET',
+  })
+      .then((res) => res.json())
+      .then((data) => {
+          if (!data.user_bookmark) {
+              document.getElementById(`bookmarkButton`).innerHTML = `<img src="{% static 'svg/bookmark.svg' %}" alt="bookmark">`;
+
+          } else {
+              document.getElementById(`bookmarkButton`).innerHTML = `<img src="{% static 'svg/bookmark-fill.svg' %}" alt="bookmark">`;
+          }
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+          // Redirect to the login page
+          window.location.href = "{% url 'members:login' %}";
+      });
 }
 </script>
 {% endblock %}

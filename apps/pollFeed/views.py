@@ -15,7 +15,7 @@ class PollListView(ListView):
     model = Poll
     template_name = "pollFeed/index.html"
     context_object_name = 'polls'
-    paginate_by = 9
+    paginate_by = 7
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -85,36 +85,34 @@ def create_poll(request):
         answer_forms = [ChoiceForm(prefix=str(i)) for i in range(0, 5)]
     return render(request, "pollFeed/create_poll.html", {"answer_forms": answer_forms, "poll_form": poll_form})
 
-def vote_poll(request, id):
-    poll = get_object_or_404(Poll, id=id)
+class VotePollView(View):
+    def post(self, request, id):
+        poll = get_object_or_404(Poll, id=id)
 
-    if request.method == 'POST':
         try:
             selected_choice = poll.choices.get(id=request.POST['choice'])
         except (KeyError, Choice.DoesNotExist):
             messages.error(request, "You didn't select a valid choice.")
             return redirect('pollFeed:detail', id=poll.id)
-        else:
-            # Отримання користувача, який голосує
-            user = request.user
 
-            # Створення та збереження об'єкта Vote в базі даних
-            vote = Vote(user=user, poll=poll, choice=selected_choice)
-            vote.save()
+        user = request.user
+        vote = Vote(user=user, poll=poll, choice=selected_choice)
+        vote.save()
 
-            # Збільшення лічильника голосів для обраного варіанту відповіді
-            selected_choice.votes += 1
-            selected_choice.save()
+        selected_choice.votes += 1
+        selected_choice.save()
 
-            messages.success(request, "Your vote has been recorded.")
-            return redirect('pollFeed:detail', id=poll.id)
-    else:
+        messages.success(request, "Your vote has been recorded.")
+        return redirect('pollFeed:detail', id=poll.id)
+
+    def get(self, request, id):
         return render(request, "pollFeed/detail.html")
+
 
 class PollDeleteView(LoginRequiredMixin, View):
     def post(self, request, id):
-        question = get_object_or_404(Poll, id=id, author=request.user)
-        question.delete()
+        poll = get_object_or_404(Poll, id=id, author=request.user)
+        poll.delete()
         messages.success(request, 'Poll was deleted successfully')
         return redirect('pollFeed:index')
 
@@ -122,8 +120,9 @@ class PollDeleteView(LoginRequiredMixin, View):
 class PollUpdateView(LoginRequiredMixin, UpdateView):
     model = Poll
     form_class = CreatePollForm
-    template_name = 'questionHub/edit_question.html'
-    context_object_name = 'question'
+    template_name = 'pollFeed/edit_poll.html'
+    context_object_name = 'poll'
+    pk_url_kwarg = 'id'
 
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
@@ -137,14 +136,17 @@ class PollUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-def close_poll(request, id):
-    poll = get_object_or_404(Poll, id=id)
-
-    if request.method == 'POST':
+class ClosePollView(LoginRequiredMixin, View):
+    def post(self, request, id):
+        poll = get_object_or_404(Poll, id=id)
         if poll.author == request.user:
             poll.is_closed = True
             poll.save()
             messages.success(request, "Poll has been closed. Check the results!")
-
+        else:
+            messages.error(request, "You do not have permission to close this poll.")
         return redirect('pollFeed:detail', id=id)
-    return redirect('pollFeed:detail', id=id)
+
+    def get(self, request, *args, **kwargs):
+        return redirect('pollFeed:detail', id=kwargs['id'])
+

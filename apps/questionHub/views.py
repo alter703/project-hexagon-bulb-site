@@ -1,7 +1,7 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 
@@ -16,20 +16,19 @@ class QuestionsListView(ListView):
     model = Question
     template_name = "questionHub/index.html"
     context_object_name = 'questions'
-    paginate_by = 9
-
+    paginate_by = 6
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
         if query:
-            queryset = Question.objects.filter(Q(title__icontains=query) & Q(is_closed=False)).select_related('author', 'author__profile')
+            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category')
         else:
-            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'author__profile')
+            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['latest_questions'] = Question.objects.filter(is_closed=False)[:3]
+        context['latest_questions'] = Question.objects.filter(is_closed=False).select_related('author', 'category')[:3]
         context['query'] = self.request.GET.get('q', '')
         return context
 
@@ -72,9 +71,6 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
         save_form = super().form_valid(form)
         return save_form
 
-    def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
-
 
 class AnswerView(LoginRequiredMixin, View):
     def post(self, request, slug):
@@ -116,14 +112,31 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-def close_question(request, slug):
-    question = get_object_or_404(Question, slug=slug)
-
-    if request.method == 'POST':
+class CloseQuestionView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        question = get_object_or_404(Question, slug=slug)
         if question.author == request.user:
             question.is_closed = True
             question.save()
             messages.success(request, "Question has been closed. Check the results!")
-
+        else:
+            messages.error(request, "You do not have permission to close this question.")
         return redirect('questionHub:detail', slug=slug)
-    return redirect('questionHub:detail', slug=slug)
+
+    def get(self, request, *args, **kwargs):
+        return redirect('questionHub:detail', slug=kwargs['slug'])
+
+
+class BookmarkView(View):
+    def get(self, request, slug):
+        user_bookmark = None
+        question = get_object_or_404(Question, slug=slug)
+
+        if request.user in question.bookmarks.all():
+            question.bookmarks.remove(request.user)
+            user_bookmark = False
+        else:
+            question.bookmarks.add(request.user)
+            user_bookmark = True
+
+        return JsonResponse({'user_bookmark': user_bookmark})
