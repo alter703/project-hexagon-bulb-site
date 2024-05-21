@@ -127,8 +127,8 @@ class CloseQuestionView(LoginRequiredMixin, View):
         return redirect('questionHub:detail', slug=kwargs['slug'])
 
 
-def bookmark_view(request, slug):
-    if request.method == 'GET':
+class BookmarkView(View):
+    def get(self, request, slug):
         user_bookmark = None
         question = get_object_or_404(Question, slug=slug)
 
@@ -139,4 +139,4 @@ def bookmark_view(request, slug):
             question.bookmarks.add(request.user)
             user_bookmark = True
 
-        return JsonResponse( {'user_bookmark': user_bookmark} )
+        return JsonResponse({'user_bookmark': user_bookmark})

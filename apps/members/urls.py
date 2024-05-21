@@ -14,5 +14,5 @@ urlpatterns = [
 
     path('profile/<uuid:uuid>/questions/', views.user_questions_view, name='user_questions'),
     path('profile/<uuid:uuid>/polls/', views.user_polls_view, name='user_polls'),
-    path('profile/<uuid:uuid>/bookmarks/', views.user_polls_view, name='user_bookmarks'),
+    path('profile/<uuid:uuid>/bookmarks/', views.user_bookmarks_view, name='user_bookmarks'),
 ]

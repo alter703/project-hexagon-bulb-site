@@ -118,10 +118,10 @@ def user_polls_view(request, uuid):
 
 def user_bookmarks_view(request, uuid):
     profile = get_object_or_404(Profile, id=uuid)
-    bookmarks = Bookmark.objects.filter(author=profile.user).select_related('author').prefetch_related('choices')
+    bookmarks = Bookmark.objects.filter(user=profile.user)
     paginator = Paginator(bookmarks, 10)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'members/user_polls.html', {'profile': profile, 'page_obj': page_obj})
+    return render(request, 'members/user_bookmarks.html', {'profile': profile, 'page_obj': page_obj})

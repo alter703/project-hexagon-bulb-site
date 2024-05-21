@@ -20,7 +20,11 @@
     {% endfor %}
   </div>
 
-  {% include 'includes/pagination.html' %}
+  <div class="d-flex justify-content-center">
+    {% if page_obj.has_other_pages %}
+    {% include 'includes/pagination.html' %}
+    {% endif %}
+  </div>
 
 </div>
 {% endblock %}
