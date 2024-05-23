@@ -4,7 +4,7 @@ from apps.questionHub.models import Question
 def index(request):
 
     context = {
-        'questions': Question.objects.filter(is_closed=False).order_by('?')[:4].select_related('author', 'category')
+        'questions': Question.objects.filter(is_closed=False).order_by('?')[:4].select_related('author', 'category').prefetch_related('answers')
     }
 
     return render(request, 'main/index.html', context)

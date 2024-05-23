@@ -79,6 +79,7 @@ def create_poll(request):
                     answer.author = request.user
                     answer.save()
 
+            messages.success(request, 'Your poll was published successfully!')
             return redirect('pollFeed:index')
     else:
         poll_form = CreatePollForm()

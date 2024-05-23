@@ -21,9 +21,9 @@ class QuestionsListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q', '')
         if query:
-            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category')
+            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category').prefetch_related('answers')
         else:
-            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?')
+            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?').prefetch_related('answers')
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -83,6 +83,7 @@ class AnswerView(LoginRequiredMixin, View):
                 content=form.cleaned_data['content']
             )
             answer.save()
+        messages.success(request, 'Your answer was sent successfully!')
         return redirect('questionHub:detail', slug=slug)
 
 

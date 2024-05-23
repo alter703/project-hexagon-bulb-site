@@ -27,7 +27,7 @@
                   <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
                       <h5 class="card-title fs-3 text-black">{{ question.title|truncatechars:"30" }}</h5>
                       <hr class="dropdown-divider">
-                      <p class="card-text fs-5 text-black">{{ question.content|truncatechars:"45" }}</p>
+                      <p class="card-text fs-5 text-black">{{ question.content|truncatechars:"120" }}</p>
                   </a>
               </div>
           </div>
@@ -36,6 +36,8 @@
                   <p class="mb-0">By: {{ question.author }}</p>
                   <hr class="border-1">
                   <p class="mb-0">Asked at: {{ question.created_at|timesince }} ago</p>
+                  <hr class="border-1">
+                  <h4 class="card-text fs-5 text-black">{{ question.answers.count }}  answers</h4>
               </div>
           </div>
       </div>
