@@ -15,8 +15,9 @@ class Category(models.Model):
         verbose_name = 'Категорія'
         verbose_name_plural = 'Категорії'
 
+
 class Question(models.Model):
-    slug = models.SlugField(max_length=255, default=uuid.uuid4, unique=True, verbose_name='url')
+    id = models.UUIDField(max_length=255, default=uuid.uuid4, unique=True, editable=False, primary_key=True, verbose_name='url')
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions', verbose_name='Автор')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='questions', verbose_name='Категорія')
@@ -37,7 +38,7 @@ class Question(models.Model):
         verbose_name_plural = 'Питання'
 
     def get_absolute_url(self):
-        return reverse_lazy("questionHub:detail", kwargs={"slug": self.slug})
+        return reverse_lazy("questionHub:detail", kwargs={"id": self.id})
 
 
 class Answer(models.Model):
@@ -69,6 +70,3 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.question.title}"
-
-    def get_absolute_url(self):
-        return reverse_lazy("questionHub:select-category", kwargs={"id": self.id})

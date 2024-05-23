@@ -27,7 +27,7 @@
           </div>
           <ul class="dropdown-menu">
             {% if not question.is_closed %}
-            <li><a class="dropdown-item" href="{% url 'questionHub:update' question.slug %}">Edit</a></li>
+            <li><a class="dropdown-item" href="{% url 'questionHub:update' id=question.id %}">Edit</a></li>
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
             {% endif %}
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
@@ -66,7 +66,7 @@
   </div>
   <div class="container p-3 border {% if question.is_closed %}border-secondary{% else %}border-primary{% endif %} border-2 rounded-2">
     <div class="p-2" id="toggleForm" style="display: none;">
-      <form method="post" action="{% url 'questionHub:answer-question' slug=question.slug %}">
+      <form method="post" action="{% url 'questionHub:answer-question' id=question.id %}">
         {% csrf_token %}
         <div class="container">
         {{ answer_form|crispy }}

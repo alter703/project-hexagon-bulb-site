@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
@@ -5,6 +6,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Poll(models.Model):
+    id = models.UUIDField(max_length=255, default=uuid.uuid4, unique=True, editable=False, primary_key=True, verbose_name='url')
+
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls', verbose_name='Автор')
     text = models.CharField(max_length=255, verbose_name='Текст')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Було створено')

@@ -10,7 +10,7 @@ from imagekit.processors import ResizeToFill, SmartCrop
 # Create your models here.
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
+    
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='profile', verbose_name='Користувач')
     biography = models.TextField(null=True, blank=True, max_length=255, verbose_name='Біографія')
     avatar = ProcessedImageField(

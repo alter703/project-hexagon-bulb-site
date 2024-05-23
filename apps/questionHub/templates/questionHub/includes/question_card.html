@@ -13,7 +13,7 @@
           </div>
           <ul class="dropdown-menu">
               {% if not question.is_closed %}
-              <li><a class="dropdown-item" href="{% url 'questionHub:update' question.slug %}">Edit</a></li>
+              <li><a class="dropdown-item" href="{% url 'questionHub:update' question.id %}">Edit</a></li>
               {% endif %}
               <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
           </ul>
@@ -31,7 +31,7 @@
                   </a>
               </div>
           </div>
-          <div class="col-lg-4 col-md-5 col-sm-12">
+          <div class="col-lg-4 col-md-10 col-sm-12">
               <div class="p-3 fs-6">
                   <p class="mb-0">By: {{ question.author }}</p>
                   <hr class="border-1">
