@@ -21,7 +21,7 @@ class QuestionsListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q', '')
         if query:
-            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category').prefetch_related('answers')
+            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(category__name__icontains=query)).select_related('author', 'category').prefetch_related('answers')
         else:
             queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?').prefetch_related('answers')
         return queryset
