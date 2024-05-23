@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
@@ -20,19 +21,40 @@ class QuestionsListView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
+
         if query:
-            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(category__name__icontains=query)).select_related('author', 'category').prefetch_related('answers')
+            if query.startswith('#'):
+                queryset = Question.objects.filter(Q(category__name__icontains=query[1:])).select_related('author', 'category').prefetch_related('answers')
+            else:
+                queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category').prefetch_related('answers')
         else:
             queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?').prefetch_related('answers')
         return queryset
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['latest_questions'] = Question.objects.filter(is_closed=False).select_related('author', 'category')[:3]
-        context['query'] = self.request.GET.get('q', '')
+        context['categories'] = Category.objects.all()
         return context
 
 
+class QuestionsByCategoryListView(ListView):
+    model = Question
+    template_name = "questionHub/category_list.html"
+    context_object_name = 'cat_questions'
+    paginate_by = 9
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('id')
+        category = get_object_or_404(Category, id=category_id)
+        queryset = Question.objects.filter(category=category).select_related('author', 'category').prefetch_related('answers')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = get_object_or_404(Category, id=self.kwargs.get('id'))
+        return context
 class QuestionDetailView(DetailView):
     template_name = 'questionHub/detail.html'
     context_object_name = 'question'

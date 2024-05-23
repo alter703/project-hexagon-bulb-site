@@ -1,12 +1,12 @@
 <div class="card my-2 border border-0">
-    <div class="card-header rounded-top text-black">
+  <div class="card-header rounded-top text-black">
       <span class="badge text-bg-light">{{ question.category.name }}</span>
-    </div>
-    <div class="card-body rounded-bottom">
-      <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
-        <h5 class="card-title fs-5 text-black">{{ question.title|truncatechars:"25" }}</h5>
-        <hr class="dropdown-divider">
-        <p class="card-text fs-6 text-black">{{ question.content|truncatechars:"30" }}</p>
-      </a>
-    </div>
   </div>
+  <div class="card-body rounded-bottom">
+      <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
+          <h5 class="card-title fs-5 text-black">{{ question.title|truncatechars:"25" }}</h5>
+          <hr class="dropdown-divider">
+          <p class="card-text fs-6 text-black">{{ question.content|truncatechars:"30" }}</p>
+      </a>
+  </div>
+</div>

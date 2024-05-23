@@ -20,7 +20,7 @@
     <div class="row gx-5">
       <div class="col-12 col-md-4 my-2">
         <div class="container py-3 text-black border border-2 rounded-2">
-          <h2 class="fw-bolder mb-2">The latest questions!</h2>
+          <h2 class="fw-bolder fs-4 mb-2">The latest questions!</h2>
           {% for question in latest_questions %}
             {% include 'questionHub/includes/question_card_mini.html' %}
           {% empty %}
@@ -28,9 +28,16 @@
           {% endfor %}
         </div>
         <div class="container rounded-2 py-3 my-2 border border-2">
+          <p class="fw-bolder fs-4 mb-4">Find questions by a category!</p>
+          {% for category in categories %}
+          <a href="{% url 'questionHub:select-category' category.id %}"><div class="btn btn-secondary p-2 my-1">{{ category.name }}</div></a>
+          {% endfor %}
+        </div>
+        <div class="container rounded-2 py-3 my-2 border border-2">
           <p class="fw-bolder mb-4">Do you want to visit PollFeed, the place where you can set poll when you have choices but you dont know what to choose?</p>
           <a href="{% url 'pollFeed:index' %}"><div class="btn btn-primary">Visit PollFeed</div></a>
         </div>
+
       </div>
       <div class="col-12 col-md-8">
         <div class="container px-4 text-center text-black">

@@ -69,3 +69,6 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.question.title}"
+
+    def get_absolute_url(self):
+        return reverse_lazy("questionHub:select-category", kwargs={"id": self.id})

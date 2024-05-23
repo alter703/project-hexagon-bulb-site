@@ -14,6 +14,6 @@ urlpatterns = [
     path('question/<slug:slug>/close/', views.CloseQuestionView.as_view(), name='close'),
 
     path('search/', views.QuestionsListView.as_view(), name='search'),
-
-    path('question/<slug:slug>/bookmark/', views.BookmarkView.as_view(), name='bookmark')
+    path('category/<int:id>/', views.QuestionsByCategoryListView.as_view(), name='select-category'),
+    path('question/<slug:slug>/bookmark/', views.BookmarkView.as_view(), name='bookmark'),
 ]

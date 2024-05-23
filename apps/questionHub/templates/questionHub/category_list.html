@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Questions - {{ category.name }} category{% endblock %}
+{% block content %}
+
+<div class="container mx-auto">
+    <div class="row gx-4 my-4">
+        <div class="col-12 col-md-7">
+          <h1 class="mb-4 fs-2 fw-semibold text-center">Questions with {{ category.name }} category</h1>
+        </div>
+      </div>
+    <div class="row row-cols-3">
+        {% for question in cat_questions %}
+        <div class="col">
+            {% include 'questionHub/includes/question_card.html' %}
+        </div>
+        {% empty %}
+        <div class=" text-center fs-2 fw-bold">Nobody has chosen this category for their own question(s)</div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
