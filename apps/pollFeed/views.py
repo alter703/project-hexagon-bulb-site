@@ -21,16 +21,14 @@ class PollListView(ListView):
         query = self.request.GET.get('q', '')
     
         if query:
-            queryset = Poll.objects.filter(Q(text__icontains=query) & Q(is_closed=False)).select_related('author', 'author__profile').prefetch_related('choices')
+            queryset = Poll.objects.filter(Q(text__icontains=query) & Q(is_closed=False)).select_related('author').prefetch_related('choices')
         else:
-            queryset = Poll.objects.filter(Q(is_closed=False)).select_related('author', 'author__profile').prefetch_related('choices')
+            queryset = Poll.objects.filter(Q(is_closed=False)).select_related('author').prefetch_related('choices')
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['open_polls'] = Poll.objects.filter(is_closed=False).select_related('author', 'author__profile').prefetch_related('choices')
-        context['recent_polls'] = Poll.objects.all().select_related('author').prefetch_related('choices')[:3]
-        context['query'] = self.request.GET.get('q', '')
+        context['recent_polls'] = Poll.objects.select_related('author').prefetch_related('choices')[:3]
         return context
 
 

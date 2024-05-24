@@ -21,6 +21,9 @@
                   <div class="col-3 text-center align-self-center">
                       People voted: {{ poll.user_votes.count }}
                   </div>
+                  <div class="col text-end"><button class="btn btn-ghost" onclick="copyUrl()" data-toggle="tooltip" title="Copy url" id="copyButton">
+                    <img src="{% static 'svg/share-fill.svg' %}" alt="share fill"></button>
+                  </div>
                   {% if user == poll.author %}
                   <div class="col text-end dropstart">
                       <div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -106,6 +109,13 @@
 
 {% include 'pollFeed/includes/delete_modal.html' %}
 
+<script>
+    function copyUrl() {
+      var button = document.getElementById("copyButton");
+      let url = window.location.href;
+      navigator.clipboard.writeText(url)
+      }
+</script>  
 
 {% endblock %}
 
