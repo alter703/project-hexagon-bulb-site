@@ -3,8 +3,8 @@
       <span class="badge text-bg-light">{{ question.category.name }}</span>
   </div>
   <div class="card-body rounded-bottom">
-      <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
-          <h5 class="card-title fs-5 text-black">{{ question.title|truncatechars:"25" }}</h5>
+      <a href="{{ question.get_absolute_url }}" class="text-black link-offset-2 link-offset-3-hover link-secondary link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+          <p class="card-title fs-5 text-black">{{ question.title|truncatechars:"25" }}</p>
           <hr class="dropdown-divider">
           <p class="card-text fs-6 text-black">{{ question.content|truncatechars:"30" }}</p>
       </a>

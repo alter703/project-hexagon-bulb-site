@@ -24,8 +24,8 @@
       <div class="row gx-5">
           <div class="col-lg-8 col-md-11 col-sm-12">
               <div class="p-3">
-                  <a href="{{ question.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
-                      <h5 class="card-title fs-3 text-black">{{ question.title|truncatechars:"30" }}</h5>
+                  <a href="{{ question.get_absolute_url }}" class="text-black link-offset-2 link-offset-3-hover link-secondary link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                      <p class="card-title fs-3 text-black">{{ question.title|truncatechars:"30" }}</p>
                       <hr class="dropdown-divider">
                       <p class="card-text fs-5 text-black">{{ question.content|truncatechars:"120" }}</p>
                   </a>
