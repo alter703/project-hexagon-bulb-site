@@ -32,7 +32,7 @@ class PollListView(ListView):
         return context
 
 
-class PollDetailView(LoginRequiredMixin, DetailView):
+class PollDetailView(DetailView):
     model = Poll
     template_name = 'pollFeed/detail.html'
     context_object_name = 'poll'
@@ -45,11 +45,17 @@ class PollDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_has_voted = Vote.objects.filter(user=self.request.user, poll=self.object).exists()
+        user_has_voted = False
+        user_vote = None
+
+        if self.request.user.is_authenticated:
+            vote = Vote.objects.filter(user=self.request.user, poll=self.object).first()
+            if vote:
+                user_has_voted = True
+                user_vote = vote.choice
+
         context['user_has_voted'] = user_has_voted
-        if user_has_voted:
-            user_vote = Vote.objects.get(user=self.request.user, poll=self.object)
-            context['user_vote'] = user_vote.choice
+        context['user_vote'] = user_vote
         return context
 
 
@@ -84,23 +90,39 @@ def create_poll(request):
         answer_forms = [ChoiceForm(prefix=str(i)) for i in range(0, 5)]
     return render(request, "pollFeed/create_poll.html", {"answer_forms": answer_forms, "poll_form": poll_form})
 
+
 class VotePollView(View):
     def post(self, request, id):
         poll = get_object_or_404(Poll, id=id)
+        selected_choice = get_object_or_404(Choice, id=request.POST.get('choice'))
 
-        try:
-            selected_choice = poll.choices.get(id=request.POST['choice'])
-        except (KeyError, Choice.DoesNotExist):
-            messages.error(request, "You didn't select a valid choice.")
-            return redirect('pollFeed:detail', id=poll.id)
+        # Check if the user is authenticated
+        if request.user.is_authenticated:
+            user = request.user
+            # Check if the user has already voted
+            if Vote.objects.filter(user=user, poll=poll).exists():
+                messages.error(request, "You have already voted in this poll.")
+                return redirect('pollFeed:detail', id=poll.id)
+            is_anonymous = False
+        else:
+            # Check if the user has already voted anonymously
+            session_key = f'voted_{poll.id}'
+            if request.session.get(session_key, False):
+                messages.error(request, "You have already voted in this poll.")
+                return redirect('pollFeed:detail', id=poll.id)
+            user = None
+            is_anonymous = True
 
-        user = request.user
-        vote = Vote(user=user, poll=poll, choice=selected_choice)
+        # Create the vote
+        vote = Vote(user=user, poll=poll, choice=selected_choice, is_anonymous=is_anonymous)
         vote.save()
-
         selected_choice.votes += 1
         selected_choice.save()
 
+        if is_anonymous:
+            # print(request.session[session_key]) # KeyError
+            request.session[session_key] = True
+            # print(request.session[session_key]) # True
         messages.success(request, "Your vote has been recorded.")
         return redirect('pollFeed:detail', id=poll.id)
 
