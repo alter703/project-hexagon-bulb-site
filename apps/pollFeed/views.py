@@ -120,8 +120,9 @@ class VotePollView(View):
         selected_choice.save()
 
         if is_anonymous:
+            # print(request.session[session_key]) # KeyError
             request.session[session_key] = True
-
+            # print(request.session[session_key]) # True
         messages.success(request, "Your vote has been recorded.")
         return redirect('pollFeed:detail', id=poll.id)
 
