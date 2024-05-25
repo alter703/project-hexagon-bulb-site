@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 
 # Create your models here.
 class Category(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name="Ім'я")
 
     def __str__(self):
         return self.name

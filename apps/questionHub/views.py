@@ -55,6 +55,8 @@ class QuestionsByCategoryListView(ListView):
         context = super().get_context_data(**kwargs)
         context['category'] = get_object_or_404(Category, id=self.kwargs.get('id'))
         return context
+    
+
 class QuestionDetailView(DetailView):
     template_name = 'questionHub/detail.html'
     context_object_name = 'question'
@@ -95,8 +97,8 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
 
 
 class AnswerView(LoginRequiredMixin, View):
-    def post(self, request, slug):
-        question = get_object_or_404(Question, slug=slug)
+    def post(self, request, id):
+        question = get_object_or_404(Question, id=id)
         form = AnswerQuestionForm(request.POST)
         if form.is_valid():
             answer = Answer.objects.create(
@@ -106,7 +108,7 @@ class AnswerView(LoginRequiredMixin, View):
             )
             answer.save()
         messages.success(request, 'Your answer was sent successfully!')
-        return redirect('questionHub:detail', slug=slug)
+        return redirect('questionHub:detail', id=id)
 
 
 class QuestionDeleteView(LoginRequiredMixin, View):
