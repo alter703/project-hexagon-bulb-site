@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
@@ -20,29 +21,52 @@ class QuestionsListView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
+
         if query:
-            queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category').prefetch_related('answers')
+            if query.startswith('#'):
+                queryset = Question.objects.filter(Q(category__name__icontains=query[1:])).select_related('author', 'category').prefetch_related('answers')
+            else:
+                queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category').prefetch_related('answers')
         else:
             queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?').prefetch_related('answers')
         return queryset
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['latest_questions'] = Question.objects.filter(is_closed=False).select_related('author', 'category')[:3]
-        context['query'] = self.request.GET.get('q', '')
+        context['categories'] = Category.objects.all()
         return context
 
+
+class QuestionsByCategoryListView(ListView):
+    model = Question
+    template_name = "questionHub/category_list.html"
+    context_object_name = 'cat_questions'
+    paginate_by = 9
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('id')
+        category = get_object_or_404(Category, id=category_id)
+        queryset = Question.objects.filter(category=category).select_related('author', 'category').prefetch_related('answers')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = get_object_or_404(Category, id=self.kwargs.get('id'))
+        return context
+    
 
 class QuestionDetailView(DetailView):
     template_name = 'questionHub/detail.html'
     context_object_name = 'question'
-    slug_url_kwarg = 'slug'
+    pk_url_kwarg = 'id'
 
     def get_queryset(self):
         return Question.objects.select_related('author', 'author__profile').prefetch_related('answers__question', 'answers__author__profile')
 
     def get_object(self, queryset=None):
-        return get_object_or_404(self.get_queryset(), slug=self.kwargs[self.slug_url_kwarg])
+        return get_object_or_404(self.get_queryset(), id=self.kwargs[self.pk_url_kwarg])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,7 +83,7 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
     template_name = 'questionHub/ask_question.html'
 
     def get_success_url(self):
-        return reverse_lazy('questionHub:detail', kwargs={'slug': self.object.slug})
+        return reverse_lazy('questionHub:detail', kwargs={'id': self.object.id})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,8 +97,8 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
 
 
 class AnswerView(LoginRequiredMixin, View):
-    def post(self, request, slug):
-        question = get_object_or_404(Question, slug=slug)
+    def post(self, request, id):
+        question = get_object_or_404(Question, id=id)
         form = AnswerQuestionForm(request.POST)
         if form.is_valid():
             answer = Answer.objects.create(
@@ -84,12 +108,12 @@ class AnswerView(LoginRequiredMixin, View):
             )
             answer.save()
         messages.success(request, 'Your answer was sent successfully!')
-        return redirect('questionHub:detail', slug=slug)
+        return redirect('questionHub:detail', id=id)
 
 
 class QuestionDeleteView(LoginRequiredMixin, View):
-    def post(self, request, slug):
-        question = get_object_or_404(Question, slug=slug, author=request.user)
+    def post(self, request, id):
+        question = get_object_or_404(Question, id=id, author=request.user)
         question.delete()
         messages.success(request, 'Question was deleted successfully')
         return redirect('questionHub:index')
@@ -100,13 +124,14 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     form_class = AskQuestionForm
     template_name = 'questionHub/edit_question.html'
     context_object_name = 'question'
+    pk_url_kwarg = 'id'
 
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
 
     def get_success_url(self):
         messages.success(self.request, 'Question was updated successfully')
-        return reverse_lazy('questionHub:detail', kwargs={'slug': self.object.slug})
+        return reverse_lazy('questionHub:detail', kwargs={'id': self.kwargs[self.pk_url_kwarg]})
 
     def form_invalid(self, form):
         messages.error(self.request, 'Error while updating Question')
@@ -114,24 +139,24 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class CloseQuestionView(LoginRequiredMixin, View):
-    def post(self, request, slug):
-        question = get_object_or_404(Question, slug=slug)
+    def post(self, request, id):
+        question = get_object_or_404(Question, id=id)
         if question.author == request.user:
             question.is_closed = True
             question.save()
             messages.success(request, "Question has been closed. Check the results!")
         else:
             messages.error(request, "You do not have permission to close this question.")
-        return redirect('questionHub:detail', slug=slug)
+        return redirect('questionHub:detail', id=id)
 
     def get(self, request, *args, **kwargs):
-        return redirect('questionHub:detail', slug=kwargs['slug'])
+        return redirect('questionHub:detail', id=kwargs['id'])
 
 
 class BookmarkView(View):
-    def get(self, request, slug):
+    def get(self, request, id):
         user_bookmark = None
-        question = get_object_or_404(Question, slug=slug)
+        question = get_object_or_404(Question, id=id)
 
         if request.user in question.bookmarks.all():
             question.bookmarks.remove(request.user)

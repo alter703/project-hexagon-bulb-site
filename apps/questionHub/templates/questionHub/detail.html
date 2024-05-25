@@ -21,13 +21,16 @@
             Changed at: {{ question.updated_at|date:"M j, Y"}}
           </div>
           {% endif %}
+          <div class="col text-end"><button class="btn btn-ghost" onclick="copyUrl()" data-toggle="tooltip" title="Copy url" id="copyButton">
+            <img src="{% static 'svg/share-fill.svg' %}" alt="share fill"></button>
+          </div>
           {% if user == question.author %}
-          <div class="col text-end dropstart"><div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="col-1 text-end dropstart"><div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="{% static 'svg/three-dots.svg' %}" alt="three dots">
           </div>
           <ul class="dropdown-menu">
             {% if not question.is_closed %}
-            <li><a class="dropdown-item" href="{% url 'questionHub:update' question.slug %}">Edit</a></li>
+            <li><a class="dropdown-item" href="{% url 'questionHub:update' id=question.id %}">Edit</a></li>
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
             {% endif %}
             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
@@ -66,7 +69,7 @@
   </div>
   <div class="container p-3 border {% if question.is_closed %}border-secondary{% else %}border-primary{% endif %} border-2 rounded-2">
     <div class="p-2" id="toggleForm" style="display: none;">
-      <form method="post" action="{% url 'questionHub:answer-question' slug=question.slug %}">
+      <form method="post" action="{% url 'questionHub:answer-question' id=question.id %}">
         {% csrf_token %}
         <div class="container">
         {{ answer_form|crispy }}
@@ -128,6 +131,13 @@
 {% endif %}
 
 <script>
+  function copyUrl() {
+    var button = document.getElementById("copyButton");
+    let url = window.location.href;
+    navigator.clipboard.writeText(url)
+    }
+
+
   function toggleForm() {
     var button = document.getElementById("toggleButton");
     var form = document.getElementById("toggleForm");
