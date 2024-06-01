@@ -27,6 +27,8 @@ urlpatterns = [
     path('question-hub/', include('apps.questionHub.urls')),
     path('poll-feed/', include('apps.pollFeed.urls')),
     path('profile/', include('apps.members.urls')),
+
+    path('api/v1/', include('apps.api.urls')),
 ]
 
 handler404 = 'apps.main.views.error_404_view'
