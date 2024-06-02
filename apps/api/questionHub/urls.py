@@ -6,5 +6,5 @@ from . import views
 
 urlpatterns = [
     path('question/<uuid:id>', views.question_detail, name='detail'),
-    path('question/ask/', views.question_post, name='ask')
+    # path('question/ask/', views.question_post, name='ask')
 ]

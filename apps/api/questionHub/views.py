@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from apps.api.questionHub.serializers import QuestionSerializer
-
+from django.contrib.auth.models import User
 from apps.questionHub.models import Category, Question
 
 @api_view(['GET', ])
@@ -18,14 +18,14 @@ def question_detail(request, id):
         return Response(serializer.data)
 
 
-@api_view(['POST', ])
-def question_post(request):
-    print(request.user, '---------')
-    # request.data['category'] = Category.objects.get(pk=request.data['category'])
-    # request.data['author'] = request.user
-    serializer = QuestionSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
+# @api_view(['POST', ])
+# def question_post(request):
+#     # request.data['category'] = Category.objects.get(id=request.data['category']).id
+#     request.data['author'] = User.objects.get(id=1).id
+#     print(request.data['category'])
+#     serializer = QuestionSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
