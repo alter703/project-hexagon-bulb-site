@@ -5,6 +5,8 @@ from . import views
 # app_name = 'questionHub'
 
 urlpatterns = [
-    path('question/<uuid:id>', views.question_detail, name='detail'),
-    # path('question/ask/', views.question_post, name='ask')
+    path('', views.QuestionAPIView.as_view(), name='index'),
+    path('question/<uuid:id>/', views.question_detail, name='detail'),
+    path('question/random/', views.question_random, name='random-detail'),
+    path('question/ask/', views.QuestionAskAPIView.as_view(), name='ask')
 ]
