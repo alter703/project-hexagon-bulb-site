@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from apps.api.questionHub.serializers import QuestionSerializer
+from apps.api.questionHub.serializers import QuestionSerializer, CategorySerializer
 from django.contrib.auth.models import User
 from apps.questionHub.models import Category, Question
 
@@ -54,6 +54,12 @@ class QuestionAskAPIView(APIView):
 
         return Response({'question': QuestionSerializer(question).data})
 
+
+class CategoryAPIView(APIView):
+    def get(self, request):
+        categories = Category.objects.all()
+
+        return Response({'categories': CategorySerializer(categories, many=True).data})
 
 # @api_view(['POST', ])
 # def question_post(request):
