@@ -9,39 +9,40 @@ from django.contrib import messages
 
 from .models import Poll, Choice, Vote
 from .forms import CreatePollForm, ChoiceForm
+from .mixins import PollMultipleObjectMixin, PollSingleObjectMixin
 
 # Create your views here.
-class PollListView(ListView):
-    model = Poll
+class PollListView(PollMultipleObjectMixin, ListView):
+    # model = Poll
     template_name = "pollFeed/index.html"
-    context_object_name = 'polls'
-    paginate_by = 7
+    # context_object_name = 'polls'
+    # paginate_by = 7
 
-    def get_queryset(self):
-        query = self.request.GET.get('q', '')
+    # def get_queryset(self):
+    #     query = self.request.GET.get('q', '')
     
-        if query:
-            queryset = Poll.objects.filter(Q(text__icontains=query) & Q(is_closed=False)).select_related('author').prefetch_related('choices')
-        else:
-            queryset = Poll.objects.filter(Q(is_closed=False)).select_related('author').prefetch_related('choices')
-        return queryset
-    
+    #     if query:
+    #         queryset = Poll.objects.filter(Q(text__icontains=query) & Q(is_closed=False)).select_related('author').prefetch_related('choices')
+    #     else:
+    #         queryset = Poll.objects.filter(Q(is_closed=False)).select_related('author').prefetch_related('choices')
+    #     return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['recent_polls'] = Poll.objects.select_related('author').prefetch_related('choices')[:3]
         return context
 
 
-class PollDetailView(DetailView):
-    model = Poll
+class PollDetailView(PollSingleObjectMixin, DetailView):
+    # model = Poll
     template_name = 'pollFeed/detail.html'
-    context_object_name = 'poll'
+    # context_object_name = 'poll'
 
-    def get_queryset(self):
-        return Poll.objects.select_related('author', 'author__profile')
+    # def get_queryset(self):
+    #     return Poll.objects.select_related('author', 'author__profile')
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(self.get_queryset(), id=self.kwargs['id'])
+    # def get_object(self, queryset=None):
+    #     return get_object_or_404(self.get_queryset(), id=self.kwargs['id'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

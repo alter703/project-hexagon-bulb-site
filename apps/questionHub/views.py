@@ -1,36 +1,18 @@
 from django.contrib import messages
-from django.db.models.query import QuerySet
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 
-from django.db.models import Q
-
 from .models import Question, Answer, Category
 from .forms import AskQuestionForm, AnswerQuestionForm
+from .mixins import QuestionMultipleObjectMixin, QuestionsByCategoryMixin, QuestionSingleObjectMixin
 
 
 # Create your views here.
-class QuestionsListView(ListView):
-    model = Question
+class QuestionsListView(QuestionMultipleObjectMixin, ListView):
     template_name = "questionHub/index.html"
-    context_object_name = 'questions'
-    paginate_by = 6
-
-    def get_queryset(self):
-        query = self.request.GET.get('q', '')
-
-        if query:
-            if query.startswith('#'):
-                queryset = Question.objects.filter(Q(category__name__icontains=query[1:])).select_related('author', 'category').prefetch_related('answers')
-            else:
-                queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category').prefetch_related('answers')
-        else:
-            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?').prefetch_related('answers')
-        return queryset
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,34 +21,26 @@ class QuestionsListView(ListView):
         return context
 
 
-class QuestionsByCategoryListView(ListView):
-    model = Question
+class QuestionsByCategoryListView(QuestionsByCategoryMixin, ListView):
+    # model = Question
     template_name = "questionHub/category_list.html"
     context_object_name = 'cat_questions'
     paginate_by = 9
 
-    def get_queryset(self):
-        category_id = self.kwargs.get('id')
-        category = get_object_or_404(Category, id=category_id)
-        queryset = Question.objects.filter(category=category).select_related('author', 'category').prefetch_related('answers')
-        return queryset
+    # def get_queryset(self):
+    #     category_id = self.kwargs.get('id')
+    #     category = get_object_or_404(Category, id=category_id)
+    #     queryset = Question.objects.filter(category=category).select_related('author', 'category').prefetch_related('answers')
+    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = get_object_or_404(Category, id=self.kwargs.get('id'))
         return context
-    
 
-class QuestionDetailView(DetailView):
+
+class QuestionDetailView(QuestionSingleObjectMixin, DetailView):
     template_name = 'questionHub/detail.html'
-    context_object_name = 'question'
-    pk_url_kwarg = 'id'
-
-    def get_queryset(self):
-        return Question.objects.select_related('author', 'author__profile').prefetch_related('answers__question', 'answers__author__profile')
-
-    def get_object(self, queryset=None):
-        return get_object_or_404(self.get_queryset(), id=self.kwargs[self.pk_url_kwarg])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -4,20 +4,28 @@ from rest_framework.response import Response
 from apps.api.questionHub.serializers import QuestionSerializer, CategorySerializer
 from django.contrib.auth.models import User
 from apps.questionHub.models import Category, Question
-
+from rest_framework import generics
 from rest_framework.views import APIView
 
-@api_view(['GET', ])
-def question_detail(request, id):
-    # print(request.data)
-    try:
-        question = Question.objects.get(id=id)
-    except Question.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+from .mixins import QuestionMixin, CategoryMixin
+
+class QuestionDetailAPIView(QuestionMixin, generics.RetrieveAPIView):
+    lookup_field = 'id' 
+    # def get_serializer_class(self):
+    #     return 
+
+
+# @api_view(['GET', ])
+# def question_detail(request, id):
+#     # print(request.data)
+#     try:
+#         question = Question.objects.get(id=id)
+#     except Question.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
     
-    if request.method == 'GET':
-        serializer = QuestionSerializer(question)
-        return Response(serializer.data)
+#     if request.method == 'GET':
+#         serializer = QuestionSerializer(question)
+#         return Response(serializer.data)
 
 
 @api_view(['GET', ])
@@ -42,8 +50,8 @@ class QuestionAskAPIView(APIView):
     def post(self, request):
         request.data['author'] = request.user.id
 
-        # serializer = QuestionSerializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
+        serializer = QuestionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         question = Question.objects.create(
             author=User.objects.get(id=request.data['author']),
@@ -55,20 +63,11 @@ class QuestionAskAPIView(APIView):
         return Response({'question': QuestionSerializer(question).data})
 
 
-class CategoryAPIView(APIView):
-    def get(self, request):
-        categories = Category.objects.all()
+class CategoryListAPIView(CategoryMixin, generics.ListAPIView):
+    pass
 
-        return Response({'categories': CategorySerializer(categories, many=True).data})
+# class CategoryAPIView(APIView):
+#     def get(self, request):
+#         categories = Category.objects.all()
 
-# @api_view(['POST', ])
-# def question_post(request):
-#     # request.data['category'] = Category.objects.get(id=request.data['category']).id
-#     request.data['author'] = User.objects.get(id=1).id
-#     print(request.data['category'])
-#     serializer = QuestionSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return Response({'categories': CategorySerializer(categories, many=True).data})
