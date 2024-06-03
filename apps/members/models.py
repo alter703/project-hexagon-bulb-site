@@ -49,6 +49,5 @@ class Profile(models.Model):
         else:
             return 'https://www.gravatar.com/avatar/{}?d=identicon'.format(self.user.username)
 
-
     def get_absolute_url(self):
         return reverse_lazy("members:profile", kwargs={"id": self.id})

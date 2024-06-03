@@ -26,7 +26,7 @@ class QuestionsByCategoryListView(QuestionsByCategoryMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = get_object_or_404(Category, id=self.kwargs.get('id'))
+        context['category_name'] = Category.objects.filter(id=self.kwargs.get('id')).values_list('name', flat=True).first() # flat is for passing in a single field only
         return context
 
 
