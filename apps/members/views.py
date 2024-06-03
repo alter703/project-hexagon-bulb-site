@@ -23,7 +23,7 @@ class ProfileDetailView(DetailView):
     model = Profile
     template_name = 'members/profile_detail.html'
     context_object_name = 'profile'
-    pk_url_kwarg = 'uuid'  # Змінюємо pk_url_kwarg на 'uuid'
+    pk_url_kwarg = 'id'  # Змінюємо pk_url_kwarg на 'uuid'
 
     def get_queryset(self):
         queryset = super().get_queryset()
