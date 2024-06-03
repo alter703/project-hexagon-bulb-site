@@ -22,16 +22,7 @@ class QuestionsListView(QuestionMultipleObjectMixin, ListView):
 
 
 class QuestionsByCategoryListView(QuestionsByCategoryMixin, ListView):
-    # model = Question
     template_name = "questionHub/category_list.html"
-    context_object_name = 'cat_questions'
-    paginate_by = 9
-
-    # def get_queryset(self):
-    #     category_id = self.kwargs.get('id')
-    #     category = get_object_or_404(Category, id=category_id)
-    #     queryset = Question.objects.filter(category=category).select_related('author', 'category').prefetch_related('answers')
-    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,9 +41,8 @@ class QuestionDetailView(QuestionSingleObjectMixin, DetailView):
         return context
 
 
-class AskQuestionCreateView(LoginRequiredMixin, CreateView):
+class AskQuestionCreateView(LoginRequiredMixin, QuestionSingleObjectMixin, CreateView):
     form_class = AskQuestionForm
-    model = Question
     context_object_name = 'create_form'
     template_name = 'questionHub/ask_question.html'
 

@@ -23,11 +23,10 @@ class QuestionMultipleObjectMixin(MultipleObjectMixin):
             queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?').prefetch_related('answers')
         return queryset
 
+
 class QuestionsByCategoryMixin(QuestionMultipleObjectMixin):
-    # model = Question
-    # template_name = "questionHub/category_list.html"
-    context_object_name = 'cat_questions'
     paginate_by = 9
+    context_object_name = 'cat_questions'
 
     def get_queryset(self):
         category_id = self.kwargs.get('id')
@@ -35,10 +34,6 @@ class QuestionsByCategoryMixin(QuestionMultipleObjectMixin):
         queryset = Question.objects.filter(category=category).select_related('author', 'category').prefetch_related('answers')
         return queryset
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['category'] = get_object_or_404(Category, id=self.kwargs.get('id'))
-    #     return context
 
 class QuestionSingleObjectMixin(SingleObjectMixin):
     model = Question
