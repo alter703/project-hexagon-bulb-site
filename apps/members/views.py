@@ -76,7 +76,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     template_name = 'members/profile_edit.html'
 
     def get_success_url(self):
-        return reverse_lazy('members:profile', kwargs={"uuid": self.request.user.profile.id})
+        return reverse_lazy('members:profile', kwargs={"id": self.request.user.profile.id})
     
     def form_valid(self, form):
         messages.success(self.request, 'Profile is updated')
@@ -96,8 +96,8 @@ def logout_view(request):
     return redirect('main:index')
 
 
-def user_questions_view(request, uuid):
-    profile = get_object_or_404(Profile, id=uuid)
+def user_questions_view(request, id):
+    profile = get_object_or_404(Profile, id=id)
     questions = Question.objects.filter(author=profile.user).select_related('author', 'category').prefetch_related('answers')
     paginator = Paginator(questions, 10)
 
@@ -106,8 +106,8 @@ def user_questions_view(request, uuid):
 
     return render(request, 'members/user_questions.html', {'profile': profile, 'page_obj': page_obj})
 
-def user_polls_view(request, uuid):
-    profile = get_object_or_404(Profile, id=uuid)
+def user_polls_view(request, id):
+    profile = get_object_or_404(Profile, id=id)
     polls = Poll.objects.filter(author=profile.user).select_related('author').prefetch_related('choices')
     paginator = Paginator(polls, 10)
 
@@ -116,8 +116,8 @@ def user_polls_view(request, uuid):
 
     return render(request, 'members/user_polls.html', {'profile': profile, 'page_obj': page_obj})
 
-def user_bookmarks_view(request, uuid):
-    profile = get_object_or_404(Profile, id=uuid)
+def user_bookmarks_view(request, id):
+    profile = get_object_or_404(Profile, id=id)
     bookmarks = Bookmark.objects.filter(user=profile.user).select_related('user', 'question').prefetch_related('question__author')
     paginator = Paginator(bookmarks, 10)
 
