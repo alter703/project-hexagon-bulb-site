@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'apps.members',
     'apps.questionHub',
     'apps.pollFeed',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
