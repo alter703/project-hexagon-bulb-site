@@ -74,7 +74,14 @@ def create_poll(request):
 class VotePollView(View):
     def post(self, request, id):
         poll = get_object_or_404(Poll, id=id)
-        selected_choice = get_object_or_404(Choice, id=request.POST.get('choice'))
+        selected_choice_id = request.POST.get('choice')
+        
+        # Check if a choice was selected
+        if not selected_choice_id:
+            messages.error(request, "Please select a choice.")
+            return redirect('pollFeed:detail', id=poll.id)
+
+        selected_choice = get_object_or_404(Choice, id=selected_choice_id)
 
         # Check if the user is authenticated
         if request.user.is_authenticated:
@@ -100,14 +107,14 @@ class VotePollView(View):
         selected_choice.save()
 
         if is_anonymous:
-            # print(request.session[session_key]) # KeyError
             request.session[session_key] = True
-            # print(request.session[session_key]) # True
+
         messages.success(request, "Your vote has been recorded.")
         return redirect('pollFeed:detail', id=poll.id)
 
     def get(self, request, id):
         return render(request, "pollFeed/detail.html")
+
 
 
 class PollDeleteView(LoginRequiredMixin, View):
