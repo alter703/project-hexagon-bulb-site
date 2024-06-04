@@ -42,9 +42,12 @@ class QuestionAPIView(APIView):
         return Response({'questions': questions, 'is_user_authenticated': request.user.is_authenticated})
 
 
-class QuestionAskAPIView(APIView):
+class QuestionManageAPIView(APIView):
     def post(self, request):
-        request.data['author'] = request.user.id
+        if request.user.is_authenticated:
+            request.data['author'] = request.user.id
+        else:
+            return Response({"AuthorizationError": "You are not authorized user to create Question."}, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = QuestionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -54,21 +57,42 @@ class QuestionAskAPIView(APIView):
 
     def put(self, request, *args, **kwargs):
         q_id = kwargs.get('id', None)
-        request.data['author'] = request.user.id
 
         if not q_id:
-            return Response({'error': "Method \"Put\" is not allowed."})
+            return Response({'error': 'Method "PUT" is not allowed without an id.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             instance = Question.objects.get(id=q_id)
-        except Exception:
-            return Response({"error": "This Question does not exists."})
+        except Question.DoesNotExist:
+            return Response({'error': 'This Question does not exist.'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = QuestionSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        if instance.author != request.user:
+            return Response({'AuthorError': 'You are not the author of this Question to update.'}, status=status.HTTP_403_FORBIDDEN)
 
-        return Response({"question": serializer.data})
+        request.data['author'] = request.user.id
+        serializer = QuestionSerializer(instance, data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'question': serializer.data})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, *args, **kwargs):
+        q_id = kwargs.get('id', None)
+
+        if not q_id:
+            return Response({'error': 'Method "DELETE" is not allowed without an id.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            instance = Question.objects.get(id=q_id)
+        except Question.DoesNotExist:
+            return Response({"error": "This Question does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        if instance.author != request.user:
+            return Response({'AuthorError': 'You are not the author of this Question to delete.'}, status=status.HTTP_403_FORBIDDEN)
+
+        instance.delete()
+        return Response({"success": "This Question is deleted."}, status=status.HTTP_200_OK)
 
 
 class CategoryListAPIView(CategoryMixin, generics.ListAPIView):
