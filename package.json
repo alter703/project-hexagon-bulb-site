@@ -1,14 +1,14 @@
 {
+  "name": "newblog",
+  "version": "1.0.0",
+  "description": "To work with this site you have to do some steps:\r 1. Download Bootstrap ```npm install bootstrap@5.3.3```;\r 2. Install and configure Live Sass Compiler extension on VS code;\r 3. Configure environment variables `.env`;\r That's it, maybe",
+  "main": "index.js",
   "dependencies": {
     "bootstrap": "^5.3.3"
   },
-  "name": "newblog",
-  "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "description": ""
+  "license": "ISC"
 }

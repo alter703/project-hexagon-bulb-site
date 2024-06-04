@@ -8,6 +8,7 @@ from django.urls import reverse, reverse_lazy
 from .models import Question, Answer, Category
 from .forms import AskQuestionForm, AnswerQuestionForm
 from .mixins import QuestionMultipleObjectMixin, QuestionsByCategoryMixin, QuestionSingleObjectMixin
+from apps.main.mixins import ProfanityCheckMixin
 
 
 # Create your views here.
@@ -41,7 +42,8 @@ class QuestionDetailView(QuestionSingleObjectMixin, DetailView):
         return context
 
 
-class AskQuestionCreateView(LoginRequiredMixin, QuestionSingleObjectMixin, CreateView):
+class AskQuestionCreateView(LoginRequiredMixin, ProfanityCheckMixin,
+                             QuestionSingleObjectMixin, CreateView):
     form_class = AskQuestionForm
     context_object_name = 'create_form'
     template_name = 'questionHub/ask_question.html'
@@ -55,23 +57,35 @@ class AskQuestionCreateView(LoginRequiredMixin, QuestionSingleObjectMixin, Creat
         return context
 
     def form_valid(self, form):
+        if not self.check_profanity(form, ['title', 'content']):
+            return self.form_invalid(form)
+
         form.instance.author = self.request.user
         save_form = super().form_valid(form)
         return save_form
 
 
-class AnswerView(LoginRequiredMixin, View):
+class AnswerView(LoginRequiredMixin, ProfanityCheckMixin, View):
     def post(self, request, id):
         question = get_object_or_404(Question, id=id)
         form = AnswerQuestionForm(request.POST)
+        
         if form.is_valid():
-            answer = Answer.objects.create(
+            content = form.cleaned_data['content']
+            
+            if not self.check_profanity(form, ['content']):
+                return redirect('questionHub:detail', id=id)
+                
+            Answer.objects.create(
                 question=question,
                 author=request.user,
-                content=form.cleaned_data['content']
+                content=content
             )
-            answer.save()
-        messages.success(request, 'Your answer was sent successfully!')
+            
+            messages.success(request, 'Your answer was sent successfully!')
+        else:
+            messages.error(request, 'There was an error with your submission.')
+        
         return redirect('questionHub:detail', id=id)
 
 
@@ -83,23 +97,22 @@ class QuestionDeleteView(LoginRequiredMixin, View):
         return redirect('questionHub:index')
 
 
-class QuestionUpdateView(LoginRequiredMixin, UpdateView):
+class QuestionUpdateView(LoginRequiredMixin, ProfanityCheckMixin, UpdateView):
     model = Question
     form_class = AskQuestionForm
     template_name = 'questionHub/edit_question.html'
     context_object_name = 'question'
     pk_url_kwarg = 'id'
 
-    def get_queryset(self):
-        return super().get_queryset().filter(author=self.request.user)
-
     def get_success_url(self):
-        messages.success(self.request, 'Question was updated successfully')
         return reverse_lazy('questionHub:detail', kwargs={'id': self.kwargs[self.pk_url_kwarg]})
 
-    def form_invalid(self, form):
-        messages.error(self.request, 'Error while updating Question')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        if not self.check_profanity(form, ['title', 'content']):
+            return super().form_invalid(form)
+
+        messages.success(self.request, 'Question was updated successfully')
+        return super().form_valid(form)
 
 
 class CloseQuestionView(LoginRequiredMixin, View):

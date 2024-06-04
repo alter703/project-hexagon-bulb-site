@@ -8,8 +8,8 @@
         <div class="modal-body">
           <form action="{% url 'questionHub:close' question.id %}" method="post">
             {% csrf_token %}
-            <div class="fs-2">Are you sure you want to Close? If you will do, you can't edit it anymore</div>
-            <button type="submit" class="btn btn-danger">Yes, close</button>
+            <div class="fs-4">Are you sure you want to Close? If you will do, you can't edit it anymore</div>
+            <button type="submit" class="btn btn-danger mt-3">Yes, close</button>
           </form>
         </div>
       </div>
