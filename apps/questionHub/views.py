@@ -5,8 +5,6 @@ from django.views.generic import ListView, DetailView, DeleteView, UpdateView, C
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 
-from better_profanity import profanity
-
 from .models import Question, Answer, Category
 from .forms import AskQuestionForm, AnswerQuestionForm
 from .mixins import QuestionMultipleObjectMixin, QuestionsByCategoryMixin, QuestionSingleObjectMixin

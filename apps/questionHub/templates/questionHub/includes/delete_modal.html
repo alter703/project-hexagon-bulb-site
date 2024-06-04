@@ -8,8 +8,8 @@
         <div class="modal-body">
           <form action="{% url 'questionHub:delete' question.id %}" method="post">
             {% csrf_token %}
-            <div class="fs-2">Are you sure you want to delete?</div>
-            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <div class="fs-4">Are you sure you want to delete?</div>
+            <button type="submit" class="btn btn-danger mt-3">Yes, delete</button>
           </form>
         </div>
       </div>

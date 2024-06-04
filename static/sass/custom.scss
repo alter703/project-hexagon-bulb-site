@@ -2,19 +2,14 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import '../node_modules/bootstrap/scss/_variables-dark';
 
-$primary: #1512ca;
-$secondary: #000000;
-$grey: #cfcfcf;
+$primary: #152475;
+$secondary: #111c35;
+$grey: #c0c0c0;
+$danger: #E43F5A;
 
-$font-family-base: 'Arial'; // шрифт
+$font-family-base: 'Roboto', sans-serif; // шрифт
 $modal-fade-transform: translate(0, 20px); // появлення модального вікна
 
-// @media (min-width: 1768px) {
-//     .modal-dialog.modal-dialog-centered {
-//         align-items: flex-start;
-//     }
-
-// }
 
 @media (max-width: 1024px) {
     .modal-dialog.modal-dialog-centered {
@@ -63,8 +58,8 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 }
 
 .card:hover {
-    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);
-    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
 }
 
 .pagination {
