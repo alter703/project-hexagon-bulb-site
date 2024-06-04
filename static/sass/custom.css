@@ -30,13 +30,10 @@
 .card {
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
-.card .card-header {
-  background-color: #c0c0c0;
-  color: #000000;
-}
-.card .card-body {
-  background-color: #cdcdcd;
-  color: #000000;
+.card .card-body,
+.card .card-header,
+.card .card-footer {
+  background-color: #0b1222;
 }
 
 .card:hover {
@@ -73,7 +70,7 @@
 }
 .dropdown-menu .dropdown-item:hover {
   color: #f8f9fa;
-  background-color: #747474;
+  background-color: #0d174a;
 }
 .dropdown-menu .dropdown-item:active {
   background-color: #000000;

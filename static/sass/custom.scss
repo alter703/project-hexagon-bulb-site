@@ -42,15 +42,12 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 }
 
 .card {
-    .card-header {
-        background-color: $grey;
-        color: #000000;
-    }
 
-    .card-body {
-        // opacity: 0.6;
-        background-color: lighten($grey, 5%);
-        color: #000000;
+    .card-body,
+    // .card-title,
+    .card-header,
+    .card-footer {
+        background-color: darken($secondary, 5%);
     }
 
     transition: box-shadow 0.3s ease,
@@ -66,8 +63,7 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
     .page-item {
         &.active .page-link {
-            // color: #fff; // Колір тексту посилання, коли воно обране
-            background-color: $primary; // Колір фону посилання, коли воно обране
+            background-color: $primary;
             border-color: $primary;
 
         }
@@ -103,7 +99,7 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
         &:hover {
             color: $light;
-            background-color: darken($grey, 30%);
+            background-color: darken($primary, 10%);
         }
 
         &:active {

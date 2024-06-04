@@ -1,16 +1,21 @@
-<div class="card mb-4">
-    <div class="card-body">
-        <h5 class="card-title fs-3">{{ poll.text }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Created by: {{ poll.author.username }}</h6>
+<div class="card mb-4 border border-0">
+    <div class="card-body text-light rounded-3">
+        <h5 class="card-title fs-4 fw-semibold">{{ poll.text|truncatechars:"20" }}</h5>
+        <h6 class="card-subtitle">By: {{ poll.author.username }}</h6>
         <p class="card-text">
-            <small class="text-muted">Date: {{ poll.created_at|date:"F j, Y" }}</small>
+            <small class="text-light">{{ poll.created_at|timesince }} ago</small>
         </p>
         <ul class="list-group list-group-flush">
-            {% for choice in poll.choices.all %}
-                <li class="list-group-item my-1 rounded-2">{{ choice.text }}</li>
-            {% endfor %}
+            <div class="row">
+                {% for choice in poll.choices.all %}
+                <div class="col">
+                    <li class="list-group-item my-1 rounded-2 bg-light">{{ choice.text|truncatechars:"30" }}</li>
+                </div>
+                {% endfor %}
+            </div>
         </ul>
         <a href="{{ poll.get_absolute_url }}" class="btn btn-primary mt-3">Vote Now</a>
     </div>
 </div>
+
 

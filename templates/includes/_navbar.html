@@ -22,10 +22,10 @@
                 </li>
             </ul>
             {% if user.is_authenticated %}
-            <button type="button" class="btn btn-ghost border-0" data-bs-toggle="modal" data-bs-target="#mailModal"><img src="{{ user.profile.get_avatar_thumbnail }}" alt="" class="rounded-circle" width="45px"></button>
+            <button type="button" class="btn btn-ghost border border-0" data-bs-toggle="modal" data-bs-target="#mailModal"><img src="{{ user.profile.get_avatar_thumbnail }}" alt="" class="rounded-circle" width="45px"></button>
             <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mainModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
+                  <div class="modal-content border border-2 border-secondary">
                       <div class="modal-header">
                           <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">{{ user.profile }}</h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
