@@ -35,11 +35,11 @@ class ProfileDetailView(DetailView):
         context['bookmarks'] = Bookmark.objects.filter(user=self.object.user).select_related('user', 'question').prefetch_related('question__author')
         return context
 
+
 class SignUpView(CreateView):
     form_class = UserCreationForm
     template_name = 'members/signup.html'
 
-    
     def form_valid(self, form):
         user = form.save()
         profile = Profile(user=user)
@@ -47,9 +47,6 @@ class SignUpView(CreateView):
         login(self.request, user)
         messages.success(self.request, "Welcome to our family!")
         return redirect('main:index')
-
-    def form_invalid(self, form):
-        return super().form_invalid(form)
 
 
 class LoginUserView(LoginView):
@@ -62,9 +59,6 @@ class LoginUserView(LoginView):
     def form_valid(self, form):
         messages.success(self.request, f"You've signed in!")
         return super().form_valid(form)
-    
-    def form_invalid(self, form):
-        return super().form_invalid(form)
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
@@ -74,16 +68,13 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('members:profile', kwargs={"id": self.request.user.profile.id})
-    
-    def form_valid(self, form):
-        messages.success(self.request, 'Profile is updated')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        return super().form_invalid(form)
 
     def get_object(self, queryset=None):
         return Profile.objects.select_related('user').get(user=self.request.user)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Profile is updated')
+        return super().form_valid(form)
 
 
 @login_required
@@ -103,6 +94,7 @@ def user_questions_view(request, id):
 
     return render(request, 'members/user_questions.html', {'profile': profile, 'page_obj': page_obj})
 
+
 def user_polls_view(request, id):
     profile = get_object_or_404(Profile, id=id)
     polls = Poll.objects.filter(author=profile.user).select_related('author').prefetch_related('choices')
@@ -112,6 +104,7 @@ def user_polls_view(request, id):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'members/user_polls.html', {'profile': profile, 'page_obj': page_obj})
+
 
 def user_bookmarks_view(request, id):
     profile = get_object_or_404(Profile, id=id)
