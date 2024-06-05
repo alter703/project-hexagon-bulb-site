@@ -4,13 +4,20 @@
 
 $primary: #152475;
 $secondary: #111c35;
-$grey: #c0c0c0;
+$grey: #ababab;
 $danger: #E43F5A;
 
 $font-family-base: 'Roboto', sans-serif; // шрифт
 $modal-fade-transform: translate(0, 20px); // появлення модального вікна
 $alert-border-width: 2px;
 
+
+::selection {
+    background-color: darken($grey, 15%);
+    /* Колір фону виділення */
+    color: #ffffff;
+    /* Колір тексту виділення */
+}
 
 @media (max-width: 1024px) {
     .modal-dialog.modal-dialog-centered {
