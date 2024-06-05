@@ -30,7 +30,8 @@ $alert-border-width: 2px;
     border-radius: 10px;
 }
 
-.btn.btn-primary:hover {
+.btn.btn-primary:hover,
+.btn.btn-outline-primary:hover {
     box-shadow: 0 2px 6px lighten($primary, 10%);
 }
 

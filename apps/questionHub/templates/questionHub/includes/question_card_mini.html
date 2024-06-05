@@ -10,8 +10,8 @@
       <p class="card-text">{{ question.content|truncatechars:"80" }}</p>
     </a>
     <div class="d-flex justify-content-between mt-3">
-      <p class="mb-0 text-light"><b>By:</b> {{ question.author }}</p>
-      <p class="mb-0 text-light"><b>{{ question.created_at|timesince }}</b> ago</p>
+      <p class="mb-0 text-light fw-light">By: {{ question.author }}</p>
+      <p class="mb-0 text-light fw-light">{{ question.created_at|timesince }} ago</p>
     </div>
   </div>
 </div>

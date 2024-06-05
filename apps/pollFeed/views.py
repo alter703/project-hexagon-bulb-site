@@ -90,7 +90,7 @@ class VotePollView(View):
             messages.error(request, "Please select a choice.")
             return redirect('pollFeed:detail', id=poll.id)
 
-        selected_choice = get_object_or_404(Choice, id=selected_choice_id)
+        selected_choice = get_object_or_404(Choice, id=selected_choice_id, poll=poll)
 
         # Check if the user is authenticated
         if request.user.is_authenticated:
@@ -122,7 +122,8 @@ class VotePollView(View):
         return redirect('pollFeed:detail', id=poll.id)
 
     def get(self, request, id):
-        return render(request, "pollFeed/detail.html")
+        poll = get_object_or_404(Poll, id=id)
+        return render(request, "pollFeed/detail.html", {'poll': poll})
 
 
 class PollDeleteView(LoginRequiredMixin, View):

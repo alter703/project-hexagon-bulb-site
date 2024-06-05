@@ -6,13 +6,13 @@
 {% block content %}
 <div class="container-fluid mx-3">
   <div class="container-fluid px-4">
-    <div class="row gx-4 my-4 align-items-center">
+    <div class="row gx-4 my-4 align-items-start">
       <div class="col-12 col-md-7">
         <h1 class="mb-4 fs-2 fw-semibold text-center">Questions</h1>
       </div>
       <div class="col-12 col-md-5">
         <form action="{% url 'questionHub:search' %}" method="get" class="d-flex" role="search">
-          <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control me-1 ms-auto" name="q" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-primary" type="submit">Search</button>
         </form>
       </div>
@@ -53,7 +53,7 @@
             </div>
             <div class="col-12 col-md-5">
               <div class="p-3 d-flex justify-content-end">
-                <a href="{% url 'questionHub:ask' %}" class="btn btn-primary text-white fw-bold fs-6">Ask Question</a>
+                <a href="{% url 'questionHub:ask' %}" class="btn btn-primary fw-bold btn-lg fs-6">Ask Question</a>
               </div>
             </div>
           </div>

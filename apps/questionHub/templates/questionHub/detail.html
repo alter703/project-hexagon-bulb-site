@@ -83,9 +83,9 @@
         <div class="fs-3 text-center">This question's closed, so you can't answer to it</div>
         {% else %}
         {% if not user.is_authenticated %}
-        <a href="{% url 'members:login' %}"><div class="btn btn-secondary">Login to Answer</div></a>
+        <a href="{% url 'members:login' %}"><div class="btn btn-danger fw-bold btn-lg fs-6">Login to Answer</div></a>
         {% else %}
-        <div class="btn btn-secondary btn-lg" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
+        <div class="btn btn-primary fw-bold btn-lg fs-5" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
         {% endif %}
         {% endif %}
       </div>
