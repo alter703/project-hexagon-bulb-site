@@ -1,19 +1,17 @@
-<div class="card my-2 border border-0">
-    <div class="card-header d-flex justify-content-between rounded-top-3 text-black fs-6">
-      <span class="badge bg-light text-black align-self-center my-2">{{ question.category.name }}</span>
-      {% if question.is_closed %}
-        <span class="badge bg-light text-black align-self-center">Closed</span>
-      {% endif %}
-    </div>
-    <div class="card-body text-light rounded-bottom-3">
-      <a href="{{ question.get_absolute_url }}" class="text-light link-danger link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-        <p class="card-title fs-5 fw-semibold">{{ question.title|truncatechars:"20" }}</p>
-        <hr class="dropdown-divider">
-        <p class="card-text fs-6">{{ question.content|truncatechars:"80" }}</p>
-      </a>
-      <div class="d-flex justify-content-between fs-7 mt-2">
-        <p>By: {{ question.author }}</p>
-        <p>{{ question.created_at|timesince }} ago</p>
-      </div>
+{% load static %}
+
+<div class="card my-3 border-0 rounded-3 bg-light">
+  <div class="card-header d-flex justify-content-start rounded-top-3 fs-6">
+    <span class="badge bg-light text-black align-self-center my-2">{{ question.category.name }}</span>
+  </div>
+  <div class="card-body text-dark rounded-bottom-3">
+    <a href="{{ question.get_absolute_url }}" class="text-light link-light link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+      <h5 class="card-title fs-5 fw-semibold">{{ question.title|truncatechars:"30" }}</h5>
+      <p class="card-text">{{ question.content|truncatechars:"80" }}</p>
+    </a>
+    <div class="d-flex justify-content-between mt-3">
+      <p class="mb-0 text-light"><b>By:</b> {{ question.author }}</p>
+      <p class="mb-0 text-light"><b>{{ question.created_at|timesince }}</b> ago</p>
     </div>
   </div>
+</div>

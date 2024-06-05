@@ -1,5 +1,5 @@
 <div class="card mb-4 border border-0">
-    <div class="card-body text-light rounded-3">
+    <div class="card-body rounded-3">
         <h5 class="card-title fs-4 fw-semibold">{{ poll.text|truncatechars:"20" }}</h5>
         <h6 class="card-subtitle">By: {{ poll.author.username }}</h6>
         <p class="card-text">
@@ -17,5 +17,3 @@
         <a href="{{ poll.get_absolute_url }}" class="btn btn-primary mt-3">Vote Now</a>
     </div>
 </div>
-
-

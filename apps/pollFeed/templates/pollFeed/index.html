@@ -27,9 +27,12 @@
                     <div class="fs-2 fst-italic">That's weird...</div>
                     {% endfor %}
                 </div>
-                <div class="container rounded-2 py-1 my-2 border border-2">
-                  <p class="fw-bolder mb-4">Do you want to visit QuestionHub, the place where you can aks question and get answers in seconds?</p>
-                  <a href="{% url 'questionHub:index' %}"><div class="btn btn-primary">Visit QuestionHub</div></a>
+                <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
+                  <h2 class="fw-bolder fs-4 mb-4">Visit QuestionHub</h2>
+                  <p>Do you want to visit QuestionHub, the place where you can aks question and get answers in seconds?</p>
+                  <a href="{% url 'questionHub:index' %}">
+                    <div class="btn btn-primary w-100">Visit QuestionHub</div>
+                  </a>
                 </div>
             </div>
             <div class="col-12 col-md-8">

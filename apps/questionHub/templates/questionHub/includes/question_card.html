@@ -1,16 +1,16 @@
 {% load static %}
 
-<div class="card my-2 border border-0">
-  <div class="card-header d-flex justify-content-start rounded-top-3 text-black fs-6">
+<div class="card my-1 border-0 rounded-3 bg-light">
+  <div class="card-header d-flex justify-content-start rounded-top-3 fs-6">
     <span class="badge bg-light text-black align-self-center my-2">{{ question.category.name }}</span>
     {% if question.is_closed %}
       <span class="badge bg-light text-black align-self-center ms-2">Closed</span>
     {% endif %}
     {% if user.is_authenticated and user == question.author %}
       <div class="ms-auto d-flex">
-        <div class="btn btn-light dropstart py-0 align-self-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-light dropstart py-0 align-self-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="{% static 'svg/three-dots.svg' %}" alt="three dots">
-        </div>
+        </button>
         <ul class="dropdown-menu">
           {% if not question.is_closed %}
             <li><a class="dropdown-item" href="{% url 'questionHub:update' question.id %}">Edit</a></li>
@@ -20,22 +20,22 @@
       </div>
     {% endif %}
   </div>
-  <div class="card-body text-light rounded-bottom-3">
+  <div class="card-body rounded-bottom-3">
     <div class="row gx-5">
       <div class="col-lg-8 col-md-11 col-sm-12">
+        <a href="{{ question.get_absolute_url }}" class="text-light link-light link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
         <div class="p-3">
-          <a href="{{ question.get_absolute_url }}" class="text-light link-danger link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-            <p class="card-title fs-3 fw-semibold">{{ question.title|truncatechars:"30" }}</p>
+            <h3 class="card-title fs-3 fw-semibold">{{ question.title|truncatechars:"30" }}</h3>
             <hr class="dropdown-divider">
             <p class="card-text fs-5">{{ question.content|truncatechars:"120" }}</p>
-          </a>
-        </div>
+          </div>
+        </a>
       </div>
       <div class="col-lg-4 col-md-10 col-sm-12">
         <div class="p-3 fs-6">
-          <p class="mb-0">By: {{ question.author }}</p>
+          <p class="mb-0"><strong>By:</strong> {{ question.author }}</p>
           <hr class="border-1">
-          <p class="mb-0">{{ question.created_at|timesince }} ago</p>
+          <p class="mb-0"><strong>{{ question.created_at|timesince }}</strong> ago</p>
           <hr class="border-1">
           <h4 class="card-text fs-5">{{ question.answers.count }} answers</h4>
         </div>
@@ -47,5 +47,7 @@
 {% if user.is_authenticated and user == question.author %}
   {% include 'questionHub/includes/delete_modal.html' %}
 {% endif %}
+
+
 
 

@@ -5,8 +5,7 @@
   }
 }
 .navbar {
-  background-color: #f7f7f7;
-  box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
 .btn.btn-primary,
@@ -33,12 +32,12 @@
 .card .card-body,
 .card .card-header,
 .card .card-footer {
+  color: #ffffff;
   background-color: #0b1222;
 }
 
 .card:hover {
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-  transform: translateY(-1px);
+  box-shadow: 0 6px 10px #0b1222;
 }
 
 .pagination .page-item.active .page-link {
@@ -47,18 +46,14 @@
 }
 .pagination .page-link {
   color: #fff;
-  /* Колір тексту посилання */
   background-color: #152475;
-  /* Колір фону посилання */
   border-color: #152475;
   transition: background-color 0.3s;
-  /* Плавний перехід для зміни кольору фону */
 }
 .pagination .page-link:hover {
   color: #ffffff;
   background-color: #0d174a;
   border-color: #0d174a;
-  /* Темніший колір фону посилання при наведенні */
 }
 .pagination .page-link:active {
   background-color: #0d174a;
@@ -74,7 +69,6 @@
 }
 .dropdown-menu .dropdown-item:active {
   background-color: #000000;
-  /* Додайте інші стилі, які вам потрібні */
 }
 
 .form-check .form-check-input[type=checkbox],

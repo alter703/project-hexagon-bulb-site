@@ -19,8 +19,8 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 }
 
 .navbar {
-    background-color: #f7f7f7;
-    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    // box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
 }
 
 .btn.btn-primary,
@@ -41,12 +41,15 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
     box-shadow: 0 2px 6px lighten($danger, 10%);
 }
 
+
+
 .card {
 
     .card-body,
     // .card-title,
     .card-header,
     .card-footer {
+        color: #ffffff;
         background-color: darken($secondary, 5%);
     }
 
@@ -55,8 +58,7 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 }
 
 .card:hover {
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-    transform: translateY(-1px);
+    box-shadow: 0 6px 10px darken($secondary, 5%);
 }
 
 .pagination {
@@ -71,18 +73,14 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
     .page-link {
         color: #fff;
-        /* Колір тексту посилання */
         background-color: $primary;
-        /* Колір фону посилання */
         border-color: $primary;
         transition: background-color 0.3s;
-        /* Плавний перехід для зміни кольору фону */
 
         &:hover {
             color: #ffffff;
             background-color: darken($primary, 10%);
             border-color: darken($primary, 10%);
-            /* Темніший колір фону посилання при наведенні */
         }
 
         &:active {
@@ -104,7 +102,6 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
         &:active {
             background-color: #000000;
-            /* Додайте інші стилі, які вам потрібні */
         }
     }
 }
@@ -113,7 +110,7 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
     .form-check-input[type="checkbox"],
     .form-check-input[type="radio"] {
-        background-color: $secondary; // Замініть це на бажаний колір
+        background-color: $secondary;
 
         &:checked {
             background-color: $primary;

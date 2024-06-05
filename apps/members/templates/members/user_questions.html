@@ -8,7 +8,7 @@
   <div class="row">
     {% for question in page_obj %}
       <div class="col-md-4">
-        {% include 'questionHub/includes/question_card.html' %}
+        {% include 'questionHub/includes/question_card_mini.html' %}
       </div>
     {% empty %}
       <div class="fw-bold fs-3 text-center">You didn't ask anything. Perhaps, you already have a question?</div>

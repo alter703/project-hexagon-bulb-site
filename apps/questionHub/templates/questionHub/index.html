@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-fluid mx-3">
   <div class="container-fluid px-4">
-    <div class="row gx-4 my-4">
+    <div class="row gx-4 my-4 align-items-center">
       <div class="col-12 col-md-7">
         <h1 class="mb-4 fs-2 fw-semibold text-center">Questions</h1>
       </div>
@@ -19,25 +19,29 @@
     </div>
     <div class="row gx-5">
       <div class="col-12 col-md-4 my-2">
-        <div class="container py-3 text-black border border-2 rounded-2">
-          <h2 class="fw-bolder fs-4 mb-2">The latest questions!</h2>
+        <div class="container py-3 text-black border border-2 rounded-3 shadow-sm bg-light">
+          <h2 class="fw-bolder fs-4 mb-3">The latest questions!</h2>
           {% for question in latest_questions %}
             {% include 'questionHub/includes/question_card_mini.html' %}
           {% empty %}
-            <div class="fs-2 fst-italic">That's weird...</div>
+            <div class="fs-5 fst-italic">That's weird...</div>
           {% endfor %}
         </div>
-        <div class="container rounded-2 py-3 my-2 border border-2">
-          <p class="fw-bolder fs-4 mb-4">Find questions by a category!</p>
+        <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
+          <h2 class="fw-bolder fs-4 mb-4">Find questions by a category!</h2>
           {% for category in categories %}
-          <a href="{% url 'questionHub:select-category' category.id %}"><div class="btn btn-secondary p-2 my-1">{{ category.name }}</div></a>
+            <a href="{% url 'questionHub:select-category' category.id %}">
+              <div class="btn btn-secondary p-2 my-1 w-100 text-start">{{ category.name }}</div>
+            </a>
           {% endfor %}
         </div>
-        <div class="container rounded-2 py-3 my-2 border border-2">
-          <p class="fw-bolder mb-4">Do you want to visit PollFeed, the place where you can set poll when you have choices but you dont know what to choose?</p>
-          <a href="{% url 'pollFeed:index' %}"><div class="btn btn-primary">Visit PollFeed</div></a>
+        <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
+          <h2 class="fw-bolder fs-4 mb-4">Visit PollFeed</h2>
+          <p>Do you want to visit PollFeed, the place where you can set poll when you have choices but you don't know what to choose?</p>
+          <a href="{% url 'pollFeed:index' %}">
+            <div class="btn btn-primary w-100">Visit PollFeed</div>
+          </a>
         </div>
-
       </div>
       <div class="col-12 col-md-8">
         <div class="container px-4 text-center text-black">
@@ -56,14 +60,14 @@
         </div>
         <div class="row infinite-container">
           {% for question in questions %}
-            <div class="col-12 infinite-item mb-2">
+            <div class="col-12 infinite-item mb-3">
               {% include 'questionHub/includes/question_card.html' %}
             </div>
           {% empty %}
             {% if query %}
-              <div class="fs-2 fst-italic">Questions not found</div>
+              <div class="fs-5 fst-italic">Questions not found</div>
             {% else %}
-              <div class="fs-2 fst-italic">Well, there are no questions...</div>
+              <div class="fs-5 fst-italic">Well, there are no questions...</div>
             {% endif %}
           {% endfor %}
         </div>
@@ -79,8 +83,6 @@
     {% endif %}
   </div>
 </div>
-
-
 
 <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'js/infinite.min.js' %}"></script>
@@ -102,3 +104,4 @@
 </script>
 
 {% endblock %}
+
