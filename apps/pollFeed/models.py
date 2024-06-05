@@ -42,11 +42,13 @@ class Choice(models.Model):
         verbose_name = 'Вибір'
         verbose_name_plural = 'Вибори'
 
+    def __str__(self) -> str:
+        return self.text
 
 class Vote(models.Model):
     STATUS_VOTE_CHOICES = (
         (True, 'Так'),
-        (False, 'ні'),
+        (False, 'Ні'),
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_votes', verbose_name='Користувач', null=True, blank=True)

@@ -11,7 +11,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'created_at', 'updated_at')
+    list_display = ('id', 'title', 'created_at', 'category')
     list_display_links = ('id', 'title')
 
 
@@ -20,6 +20,7 @@ class AnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'content', 'created_at', 'updated_at')
     list_display_links = ('id', 'content')
 
+
 @admin.register(Bookmark)
-class AnswerAdmin(admin.ModelAdmin):
+class BookmarkAdmin(admin.ModelAdmin):
     list_display = ('id','created_at')
