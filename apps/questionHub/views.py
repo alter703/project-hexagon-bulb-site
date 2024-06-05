@@ -58,7 +58,7 @@ class AskQuestionCreateView(LoginRequiredMixin, ProfanityCheckMixin,
         return context
 
     def form_valid(self, form):
-        fields = [field for field in form.fields.keys()] # list of fileds in the form
+        fields = [field for field in form.fields.keys()] # list of fields in the form
         fields.remove('category')
         # print(fields)
         if not self.check_profanity(form, fields):
