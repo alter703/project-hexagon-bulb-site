@@ -6,30 +6,33 @@
 {% block content %}
 <div class="container-fluid mx-3">
     <div class="container-fluid px-4">
-      <div class="row gx-4 my-4">
+      <div class="row gx-4 my-4 align-items-start">
         <div class="col-12 col-md-7">
           <h1 class="mb-4 fs-2 fw-semibold text-center">Polls</h1>
         </div>
         <div class="col-12 col-md-5">
           <form action="{% url 'pollFeed:search' %}" method="get" class="d-flex" role="search">
-            <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control me-1 ms-auto" name="q" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-primary" type="submit">Search</button>
           </form>
         </div>
       </div>
         <div class="row gx-5">
             <div class="col-12 col-md-4 my-2 border-black border-4">
-                <div class="container py-1 text-black border border-2 rounded-2">
-                    <p class="fw-bolder mb-4">The latest polls!</p>
+                <div class="container py-3 text-black border border-2 rounded-3 shadow-sm bg-light">
+                  <h2 class="fw-bolder fs-4 mb-3">The latest polls!</h2>
                     {% for poll in recent_polls %}
                         {% include 'pollFeed/includes/poll_card.html' %}
                     {% empty %}
                     <div class="fs-2 fst-italic">That's weird...</div>
                     {% endfor %}
                 </div>
-                <div class="container rounded-2 py-1 my-2 border border-2">
-                  <p class="fw-bolder mb-4">Do you want to visit QuestionHub, the place where you can aks question and get answers in seconds?</p>
-                  <a href="{% url 'questionHub:index' %}"><div class="btn btn-primary">Visit QuestionHub</div></a>
+                <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
+                  <h2 class="fw-bolder fs-4 mb-4">Visit QuestionHub</h2>
+                  <p>Do you want to visit QuestionHub, the place where you can aks question and get answers in seconds?</p>
+                  <a href="{% url 'questionHub:index' %}">
+                    <div class="btn btn-primary w-100">Visit QuestionHub</div>
+                  </a>
                 </div>
             </div>
             <div class="col-12 col-md-8">
@@ -39,7 +42,9 @@
                             <div class="p-3"><p class="fs-4 fw-normal">Polls that are open for voting!</div>
                         </div>
                         <div class="col">
-                            <div class="p-3 d-flex justify-content-end"><a href="{% url 'pollFeed:create' %}"><div class="btn btn-primary text-white fw-bold fs-6">Create Poll</div></a></div>
+                          <div class="p-3 d-flex justify-content-end">
+                            <a href="{% url 'pollFeed:create' %}" class="btn btn-primary fw-bold btn-lg fs-6">Create Poll</a>
+                          </div>
                         </div>
                     </div>
                 </div>

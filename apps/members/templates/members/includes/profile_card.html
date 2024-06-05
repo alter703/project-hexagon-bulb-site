@@ -1,37 +1,38 @@
-<div class="card-header border border-0 fw-semibold">
-    {% if user == profile.user %}
-    Your Profile Card
-    {% else %}
-    {{ profile.user.username }}'s Profile Card
-    {% endif %}
-</div>
+<div class="card text-center shadow-none border border-0 rounded-3 mx-5 mt-4">
+    <div class="card-header rounded-top-3 text-light rounded-top-3 border border-0 fw-semibold">
+        {% if user == profile.user %}
+        Your Profile Card
+        {% else %}
+        {{ profile.user.username }}'s Profile Card
+        {% endif %}
+    </div>
 
-<div class="card-body">
-    {% if user == profile.user %}
-    <div class="btn-group-vertical d-flex p-1">
-        <div class="my-1">
-            <a href="{% url 'members:profile-edit' %}">
-                <div class="btn btn-primary"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div>
-            </a>
+    <div class="card-body bg-dark bg-gradient">
+        {% if user == profile.user %}
+        <div class="btn-group-vertical d-flex p-1">
+            <div class="my-1">
+                <a href="{% url 'members:profile-edit' %}">
+                    <div class="btn btn-primary btn-md"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div>
+                </a>
+            </div>
+            <div class="my-1">
+                <a href="{% url 'members:logout' %}">
+                    <div class="btn btn-danger btn-md"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div>
+                </a>
+            </div>
         </div>
-        <div class="my-1">
-            <a href="{% url 'members:logout' %}">
-                <div class="btn btn-danger"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div>
-            </a>
+        {% endif %}
+        <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
+        <h5 class="card-title text-white p-2 fw-bolder fs-2">{{ profile.user.username }}</h5>
+        <div class="card-text text-white fs-5">
+            {% if profile.biography %}
+            <p>{{ profile.biography }}</p>
+            {% endif%}
         </div>
     </div>
-    {% endif %}
-    <img src="{{ profile.get_avatar }}" alt="" width="25%" class="rounded-circle">
-    <h5 class="card-title p-2 fw-bolder fs-3">{{ profile.user.username }}</h5>
-    <p class="card-text">
-        {% if profile.biography %}
-        {{ profile.biography }}
-        {% endif%}
-    </p>
+    
+    <div class="card-footer text-white rounded-bottom-3">
+        <p>Joined: {{ profile.joined_at|date:"M d Y" }}</p>
+    </div>
 </div>
-
-<div class="card-footer text-body-secondary">
-    Joined: {{ profile.joined_at|date:"M d Y" }}
-</div>
-
   

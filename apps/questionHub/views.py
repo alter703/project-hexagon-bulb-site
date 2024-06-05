@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, View, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
 from .models import Question, Answer, Category
 from .forms import AskQuestionForm, AnswerQuestionForm
@@ -22,20 +22,11 @@ class QuestionsListView(QuestionMultipleObjectMixin, ListView):
 
 
 class QuestionsByCategoryListView(QuestionsByCategoryMixin, ListView):
-    # model = Question
     template_name = "questionHub/category_list.html"
-    context_object_name = 'cat_questions'
-    paginate_by = 9
-
-    # def get_queryset(self):
-    #     category_id = self.kwargs.get('id')
-    #     category = get_object_or_404(Category, id=category_id)
-    #     queryset = Question.objects.filter(category=category).select_related('author', 'category').prefetch_related('answers')
-    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = get_object_or_404(Category, id=self.kwargs.get('id'))
+        context['category_name'] = Category.objects.filter(id=self.kwargs.get('id')).values_list('name', flat=True).first() # flat is for passing in a single field only
         return context
 
 
@@ -45,18 +36,17 @@ class QuestionDetailView(QuestionSingleObjectMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['answer_form'] = AnswerQuestionForm
-        context['other_questions'] = Question.objects.filter(category=self.object.category)[:3].select_related('author', 'category')
         context['amount_answers'] = Answer.objects.count()
         return context
 
 
-class AskQuestionCreateView(LoginRequiredMixin, CreateView):
+class AskQuestionView(LoginRequiredMixin, QuestionSingleObjectMixin, CreateView):
     form_class = AskQuestionForm
-    model = Question
     context_object_name = 'create_form'
     template_name = 'questionHub/ask_question.html'
 
     def get_success_url(self):
+        # print(self.__dict__)
         return reverse_lazy('questionHub:detail', kwargs={'id': self.object.id})
 
     def get_context_data(self, **kwargs):
@@ -66,26 +56,31 @@ class AskQuestionCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        save_form = super().form_valid(form)
-        return save_form
+        return super().form_valid(form)
 
 
 class AnswerView(LoginRequiredMixin, View):
     def post(self, request, id):
         question = get_object_or_404(Question, id=id)
         form = AnswerQuestionForm(request.POST)
-        if form.is_valid():
-            answer = Answer.objects.create(
+
+        if form.is_valid(): 
+            content = form.cleaned_data['content']
+
+            Answer.objects.create(
                 question=question,
                 author=request.user,
-                content=form.cleaned_data['content']
+                content=content
             )
-            answer.save()
-        messages.success(request, 'Your answer was sent successfully!')
+            
+            messages.success(request, 'Your answer was sent successfully!')
+        else:
+            messages.error(request, 'There was an error with your submission.')
+
         return redirect('questionHub:detail', id=id)
 
 
-class QuestionDeleteView(LoginRequiredMixin, View):
+class QuestionDeleteView(LoginRequiredMixin, DeleteView):
     def post(self, request, id):
         question = get_object_or_404(Question, id=id, author=request.user)
         question.delete()
@@ -100,16 +95,12 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     context_object_name = 'question'
     pk_url_kwarg = 'id'
 
-    def get_queryset(self):
-        return super().get_queryset().filter(author=self.request.user)
-
     def get_success_url(self):
-        messages.success(self.request, 'Question was updated successfully')
         return reverse_lazy('questionHub:detail', kwargs={'id': self.kwargs[self.pk_url_kwarg]})
 
-    def form_invalid(self, form):
-        messages.error(self.request, 'Error while updating Question')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        messages.success(self.request, 'Question was updated successfully')
+        return super().form_valid(form)
 
 
 class CloseQuestionView(LoginRequiredMixin, View):

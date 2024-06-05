@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from apps.questionHub.models import Question
+
+
 # Create your views here.
 def index(request):
 

@@ -1,31 +1,19 @@
-from typing import Any
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
-from django.db.models import Q
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import Poll, Choice, Vote
-from .forms import CreatePollForm, ChoiceForm
+from .forms import CreatePollForm
 from .mixins import PollMultipleObjectMixin, PollSingleObjectMixin
+# from apps.main.mixins import ProfanityCheckMixin
+
 
 # Create your views here.
 class PollListView(PollMultipleObjectMixin, ListView):
-    # model = Poll
     template_name = "pollFeed/index.html"
-    # context_object_name = 'polls'
-    # paginate_by = 7
-
-    # def get_queryset(self):
-    #     query = self.request.GET.get('q', '')
-    
-    #     if query:
-    #         queryset = Poll.objects.filter(Q(text__icontains=query) & Q(is_closed=False)).select_related('author').prefetch_related('choices')
-    #     else:
-    #         queryset = Poll.objects.filter(Q(is_closed=False)).select_related('author').prefetch_related('choices')
-    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -34,15 +22,7 @@ class PollListView(PollMultipleObjectMixin, ListView):
 
 
 class PollDetailView(PollSingleObjectMixin, DetailView):
-    # model = Poll
     template_name = 'pollFeed/detail.html'
-    # context_object_name = 'poll'
-
-    # def get_queryset(self):
-    #     return Poll.objects.select_related('author', 'author__profile')
-
-    # def get_object(self, queryset=None):
-    #     return get_object_or_404(self.get_queryset(), id=self.kwargs['id'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -60,42 +40,55 @@ class PollDetailView(PollSingleObjectMixin, DetailView):
         return context
 
 
-@login_required
-def create_poll(request):
-    if request.method == "POST":
-        poll_form = CreatePollForm(request.POST)
-        choice_forms = [ChoiceForm(request.POST, request.FILES, prefix=str(i)) for i in range(0, 5)]
+class CreatePollView(LoginRequiredMixin, View):
+    form_class = CreatePollForm
+    template_name = "pollFeed/create_poll.html"
 
-        if poll_form.is_valid() and all(answer_form.is_valid() for answer_form in choice_forms):
+    def get(self, request, *args, **kwargs):
+        poll_form = self.form_class()
+        return render(request, self.template_name, {"poll_form": poll_form})
+
+    def post(self, request, *args, **kwargs):
+        poll_form = self.form_class(request.POST)
+
+        if poll_form.is_valid():
             poll = poll_form.save(commit=False)
             poll.author = request.user
             poll.save()
 
-            valid_answers = [answer_form for answer_form in choice_forms if answer_form.cleaned_data.get('text')]
+            # Saving choices
+            choice_texts = [poll_form.cleaned_data.get(f'choice{i}') for i in range(1, 5)]
+            valid_choices = [text for text in choice_texts if text]
 
-            if len(valid_answers) < 2:
+            if len(valid_choices) < 2:
                 messages.error(request, "You must type at least two choices!")
+                poll.delete()
                 return redirect('pollFeed:create')
 
-            for answer_form in choice_forms:
-                if answer_form.cleaned_data.get('text'):
-                    answer = answer_form.save(commit=False)
-                    answer.poll = poll
-                    answer.author = request.user
-                    answer.save()
+            for text in valid_choices:
+                Choice.objects.create(
+                    poll=poll, 
+                    text=text, 
+                    author=request.user
+                )
 
-            messages.success(request, 'Your poll was published successfully!')
+            messages.success(request, 'Your Poll is created successfully!')
             return redirect('pollFeed:index')
-    else:
-        poll_form = CreatePollForm()
-        answer_forms = [ChoiceForm(prefix=str(i)) for i in range(0, 5)]
-    return render(request, "pollFeed/create_poll.html", {"answer_forms": answer_forms, "poll_form": poll_form})
+
+        return render(request, self.template_name, {"poll_form": poll_form})    
 
 
 class VotePollView(View):
     def post(self, request, id):
         poll = get_object_or_404(Poll, id=id)
-        selected_choice = get_object_or_404(Choice, id=request.POST.get('choice'))
+        selected_choice_id = request.POST.get('choice')
+        
+        # Check if a choice was selected
+        if not selected_choice_id:
+            messages.error(request, "Please select a choice.")
+            return redirect('pollFeed:detail', id=poll.id)
+
+        selected_choice = get_object_or_404(Choice, id=selected_choice_id, poll=poll)
 
         # Check if the user is authenticated
         if request.user.is_authenticated:
@@ -121,14 +114,14 @@ class VotePollView(View):
         selected_choice.save()
 
         if is_anonymous:
-            # print(request.session[session_key]) # KeyError
             request.session[session_key] = True
-            # print(request.session[session_key]) # True
+
         messages.success(request, "Your vote has been recorded.")
         return redirect('pollFeed:detail', id=poll.id)
 
     def get(self, request, id):
-        return render(request, "pollFeed/detail.html")
+        poll = get_object_or_404(Poll, id=id)
+        return render(request, "pollFeed/detail.html", {'poll': poll})
 
 
 class PollDeleteView(LoginRequiredMixin, View):
@@ -171,4 +164,3 @@ class ClosePollView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return redirect('pollFeed:detail', id=kwargs['id'])
-

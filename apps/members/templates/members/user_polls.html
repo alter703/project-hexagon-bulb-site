@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}your polls{% endblock %}
+{% block title %}{{ profile.user.username }} polls{% endblock %}
 
 {% block content %}
 <div class="container">
-  <h2>{{ user.username }}'s Polls</h2>
+  <h2>{{ profile.user.username  }}'s Polls</h2>
   <div class="row">
     {% for poll in page_obj %}
       <div class="col-md-4">

@@ -11,7 +11,7 @@
       <div class="col">
         <div class="row">
           <div class="col">
-            <div class="fs-5">By: <a href="{{ question.author.profile.get_absolute_url }}" class="text-black link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ question.author }}</a></div>
+            <div class="fs-5">By: <a href="{{ question.author.profile.get_absolute_url }}" class="text-black link-primary link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ question.author }}</a></div>
           </div>
           <div class="col-3 text-center align-self-center">
             Asked at: {{ question.created_at|date:"M j, Y"}}
@@ -74,7 +74,7 @@
         <div class="container">
         {{ answer_form|crispy }}
         </div>
-        <button type="submit" class="btn btn-secondary my-2 btn-lg">Submit</button>
+        <button type="submit" class="btn btn-primary my-2 btn-lg">Submit</button>
       </form>
     </div>
     <div class="row">
@@ -83,9 +83,9 @@
         <div class="fs-3 text-center">This question's closed, so you can't answer to it</div>
         {% else %}
         {% if not user.is_authenticated %}
-        <a href="{% url 'members:login' %}"><div class="btn btn-secondary">Login to Answer</div></a>
+        <a href="{% url 'members:login' %}"><div class="btn btn-danger fw-bold btn-lg fs-6">Login to Answer</div></a>
         {% else %}
-        <div class="btn btn-secondary btn-lg" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
+        <div class="btn btn-primary fw-bold btn-lg fs-5" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
         {% endif %}
         {% endif %}
       </div>
@@ -102,7 +102,7 @@
       <div class="col my-2 border border-2 rounded-2 p-2">
         <div class="row">
           <div class="col">
-            <div class="fs-5">By: <a href="{{ question.author.profile.get_absolute_url }}" class="text-black link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ question.author }}</a></div>
+            <div class="fs-5">By: <a href="{{ question.author.profile.get_absolute_url }}" class="text-black link-danger link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ question.author }}</a></div>
           </div>
           <div class="col-3 text-center">
             Answered at: {{ question.created_at|date:"M j, Y"}}
@@ -167,7 +167,7 @@
 }
 
 function bookmark(id) {
-  fetch(`${id}/bookmark/`, {
+  fetch(`../${id}/bookmark/`, {
       method: 'GET',
   })
       .then((res) => res.json())

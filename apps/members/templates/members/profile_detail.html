@@ -3,12 +3,10 @@
 {% block title %}{% if user == profile.user %}Your Profile{% else %}Profile{% endif %}{% endblock %}
 
 {% block content %}
-<div class="card text-center mx-5 mt-4">
   {% include 'members/includes/profile_card.html' %}
   <div class="my-3">
     <a href="{% url 'members:user_questions' profile.id %}" class="btn btn-primary">View Questions</a>
     <a href="{% url 'members:user_polls' profile.id %}" class="btn btn-primary">View Polls</a>
     <a href="{% url 'members:user_bookmarks' profile.id %}" class="btn btn-primary">View Bookmarked Questions</a>
   </div>
-</div>
 {% endblock %}

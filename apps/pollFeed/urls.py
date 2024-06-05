@@ -6,7 +6,7 @@ app_name = 'pollFeed'
 
 urlpatterns = [
     path('', views.PollListView.as_view(), name='index'),
-    path('poll/create/', views.create_poll, name='create'),
+    path('poll/create/', views.CreatePollView.as_view(), name='create'),
     path('poll/<uuid:id>/', views.PollDetailView.as_view(), name='detail'),
     path('poll/<uuid:id>/vote/', views.VotePollView.as_view(), name='vote'),
     path('poll/<uuid:id>/close/', views.ClosePollView.as_view(), name='close'),

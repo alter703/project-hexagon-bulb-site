@@ -17,6 +17,11 @@ class Category(models.Model):
 
 
 class Question(models.Model):
+    STATUS_QUESTION_CHOICES = (
+        (True, 'Закрито'),
+        (False, 'Відкрито'),
+    )
+
     id = models.UUIDField(max_length=255, default=uuid.uuid4, unique=True, editable=False, primary_key=True, verbose_name='url')
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions', verbose_name='Автор')
@@ -26,7 +31,7 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Було створено')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Було оновлено')
 
-    is_closed = models.BooleanField(default=False, verbose_name='Чи закрито')
+    is_closed = models.BooleanField(default=False, verbose_name='Чи закрито', choices=STATUS_QUESTION_CHOICES)
     bookmarks = models.ManyToManyField(User, through='Bookmark', related_name='bookmarked_questions', verbose_name='Закладки')
 
     def __str__(self):

@@ -2,19 +2,22 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import '../node_modules/bootstrap/scss/_variables-dark';
 
-$primary: #1512ca;
-$secondary: #000000;
-$grey: #cfcfcf;
+$primary: #152475;
+$secondary: #111c35;
+$grey: #ababab;
+$danger: #E43F5A;
 
-$font-family-base: 'Arial'; // шрифт
+$font-family-base: 'Roboto', sans-serif; // шрифт
 $modal-fade-transform: translate(0, 20px); // появлення модального вікна
+$alert-border-width: 2px;
 
-// @media (min-width: 1768px) {
-//     .modal-dialog.modal-dialog-centered {
-//         align-items: flex-start;
-//     }
 
-// }
+::selection {
+    background-color: darken($grey, 15%);
+    /* Колір фону виділення */
+    color: #ffffff;
+    /* Колір тексту виділення */
+}
 
 @media (max-width: 1024px) {
     .modal-dialog.modal-dialog-centered {
@@ -24,8 +27,8 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 }
 
 .navbar {
-    background-color: #f7f7f7;
-    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    // box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
 }
 
 .btn.btn-primary,
@@ -34,7 +37,8 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
     border-radius: 10px;
 }
 
-.btn.btn-primary:hover {
+.btn.btn-primary:hover,
+.btn.btn-outline-primary:hover {
     box-shadow: 0 2px 6px lighten($primary, 10%);
 }
 
@@ -46,16 +50,16 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
     box-shadow: 0 2px 6px lighten($danger, 10%);
 }
 
-.card {
-    .card-header {
-        background-color: $grey;
-        color: #000000;
-    }
 
-    .card-body {
-        // opacity: 0.6;
-        background-color: lighten($grey, 5%);
-        color: #000000;
+
+.card {
+
+    .card-body,
+    // .card-title,
+    .card-header,
+    .card-footer {
+        color: #ffffff;
+        background-color: darken($secondary, 5%);
     }
 
     transition: box-shadow 0.3s ease,
@@ -63,16 +67,14 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 }
 
 .card:hover {
-    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);
-    transform: translateY(-3px);
+    box-shadow: 0 6px 10px darken($secondary, 5%);
 }
 
 .pagination {
 
     .page-item {
         &.active .page-link {
-            // color: #fff; // Колір тексту посилання, коли воно обране
-            background-color: $primary; // Колір фону посилання, коли воно обране
+            background-color: $primary;
             border-color: $primary;
 
         }
@@ -80,18 +82,14 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
     .page-link {
         color: #fff;
-        /* Колір тексту посилання */
         background-color: $primary;
-        /* Колір фону посилання */
         border-color: $primary;
         transition: background-color 0.3s;
-        /* Плавний перехід для зміни кольору фону */
 
         &:hover {
             color: #ffffff;
             background-color: darken($primary, 10%);
             border-color: darken($primary, 10%);
-            /* Темніший колір фону посилання при наведенні */
         }
 
         &:active {
@@ -108,12 +106,11 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
         &:hover {
             color: $light;
-            background-color: darken($grey, 30%);
+            background-color: darken($primary, 10%);
         }
 
         &:active {
             background-color: #000000;
-            /* Додайте інші стилі, які вам потрібні */
         }
     }
 }
@@ -122,7 +119,7 @@ $modal-fade-transform: translate(0, 20px); // появлення модальн�
 
     .form-check-input[type="checkbox"],
     .form-check-input[type="radio"] {
-        background-color: $secondary; // Замініть це на бажаний колір
+        background-color: $secondary;
 
         &:checked {
             background-color: $primary;
