@@ -57,7 +57,10 @@ class AskQuestionCreateView(LoginRequiredMixin, ProfanityCheckMixin,
         return context
 
     def form_valid(self, form):
-        if not self.check_profanity(form, ['title', 'content']):
+        fields = [field for field in form.fields.keys()] # list of fileds in the form
+        fields.remove('category')
+        # print(fields)
+        if not self.check_profanity(form, fields):
             return self.form_invalid(form)
 
         form.instance.author = self.request.user
@@ -71,11 +74,13 @@ class AnswerView(LoginRequiredMixin, ProfanityCheckMixin, View):
         form = AnswerQuestionForm(request.POST)
         
         if form.is_valid():
-            content = form.cleaned_data['content']
-            
-            if not self.check_profanity(form, ['content']):
+            fields = [field for field in form.fields.keys()]
+
+            if not self.check_profanity(form, fields):
                 return redirect('questionHub:detail', id=id)
-                
+ 
+            content = form.cleaned_data['content']
+
             Answer.objects.create(
                 question=question,
                 author=request.user,

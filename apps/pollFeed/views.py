@@ -1,10 +1,12 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View, TemplateView, FormView
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+from apps.main.mixins import ProfanityCheckMixin
 
 from .models import Poll, Choice, Vote
 from .forms import CreatePollForm
@@ -39,34 +41,43 @@ class PollDetailView(PollSingleObjectMixin, DetailView):
         return context
 
 
-@login_required
-def create_poll(request):
-    if request.method == "POST":
-        poll_form = CreatePollForm(request.POST)
-        
+class CreatePollView(LoginRequiredMixin, ProfanityCheckMixin, View):
+    form_class = CreatePollForm
+    template_name = "pollFeed/create_poll.html"
+
+    def get(self, request, *args, **kwargs):
+        poll_form = self.form_class()
+        return render(request, self.template_name, {"poll_form": poll_form})
+
+    def post(self, request, *args, **kwargs):
+        poll_form = self.form_class(request.POST)
+
         if poll_form.is_valid():
+            fields = [field for field in poll_form.fields.keys()]
+
             poll = poll_form.save(commit=False)
             poll.author = request.user
             poll.save()
-            
-            # Save choices
+
+            # Saving choices
             choice_texts = [poll_form.cleaned_data.get(f'choice{i}') for i in range(1, 5)]
             valid_choices = [text for text in choice_texts if text]
-            
+
             if len(valid_choices) < 2:
                 messages.error(request, "You must type at least two choices!")
                 poll.delete()
                 return redirect('pollFeed:create')
-            
+            elif not self.check_profanity(poll_form, fields):
+                poll.delete()
+                return redirect('pollFeed:create')
+                         
             for text in valid_choices:
                 Choice.objects.create(poll=poll, text=text, author=request.user)
-            
-            messages.success(request, 'Your poll was published successfully!')
-            return redirect('pollFeed:index')
-    else:
-        poll_form = CreatePollForm()
 
-    return render(request, "pollFeed/create_poll.html", {"poll_form": poll_form})
+            messages.success(request, 'Your Poll is created successfully!')
+            return redirect('pollFeed:index')
+        
+        return render(request, self.template_name, {"poll_form": poll_form})    
 
 
 class VotePollView(View):
@@ -112,7 +123,6 @@ class VotePollView(View):
 
     def get(self, request, id):
         return render(request, "pollFeed/detail.html")
-
 
 
 class PollDeleteView(LoginRequiredMixin, View):
