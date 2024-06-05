@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import Poll, Choice, Vote
-from .forms import CreatePollForm, ChoiceForm
+from .forms import CreatePollForm
 from .mixins import PollMultipleObjectMixin, PollSingleObjectMixin
 
 # Create your views here.
@@ -43,32 +43,30 @@ class PollDetailView(PollSingleObjectMixin, DetailView):
 def create_poll(request):
     if request.method == "POST":
         poll_form = CreatePollForm(request.POST)
-        choice_forms = [ChoiceForm(request.POST, request.FILES, prefix=str(i)) for i in range(0, 5)]
-
-        if poll_form.is_valid() and all(answer_form.is_valid() for answer_form in choice_forms):
+        
+        if poll_form.is_valid():
             poll = poll_form.save(commit=False)
             poll.author = request.user
             poll.save()
-
-            valid_answers = [answer_form for answer_form in choice_forms if answer_form.cleaned_data.get('text')]
-
-            if len(valid_answers) < 2:
+            
+            # Save choices
+            choice_texts = [poll_form.cleaned_data.get(f'choice{i}') for i in range(1, 5)]
+            valid_choices = [text for text in choice_texts if text]
+            
+            if len(valid_choices) < 2:
                 messages.error(request, "You must type at least two choices!")
+                poll.delete()
                 return redirect('pollFeed:create')
-
-            for answer_form in choice_forms:
-                if answer_form.cleaned_data.get('text'):
-                    answer = answer_form.save(commit=False)
-                    answer.poll = poll
-                    answer.author = request.user
-                    answer.save()
-
+            
+            for text in valid_choices:
+                Choice.objects.create(poll=poll, text=text, author=request.user)
+            
             messages.success(request, 'Your poll was published successfully!')
             return redirect('pollFeed:index')
     else:
         poll_form = CreatePollForm()
-        answer_forms = [ChoiceForm(prefix=str(i)) for i in range(0, 5)]
-    return render(request, "pollFeed/create_poll.html", {"answer_forms": answer_forms, "poll_form": poll_form})
+
+    return render(request, "pollFeed/create_poll.html", {"poll_form": poll_form})
 
 
 class VotePollView(View):
