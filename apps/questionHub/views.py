@@ -49,6 +49,7 @@ class AskQuestionCreateView(LoginRequiredMixin, ProfanityCheckMixin,
     template_name = 'questionHub/ask_question.html'
 
     def get_success_url(self):
+        messages.success(self.request, "Your Question is published!")
         return reverse_lazy('questionHub:detail', kwargs={'id': self.object.id})
 
     def get_context_data(self, **kwargs):
