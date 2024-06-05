@@ -1,5 +1,5 @@
-<div class="card text-center shadow-none border border-0 mx-5 mt-4">
-    <div class="card-header text-light rounded-top-3 border border-0 fw-semibold">
+<div class="card text-center shadow-none border border-0 rounded-3 mx-5 mt-4">
+    <div class="card-header rounded-top-3 text-light rounded-top-3 border border-0 fw-semibold">
         {% if user == profile.user %}
         Your Profile Card
         {% else %}
@@ -12,12 +12,12 @@
         <div class="btn-group-vertical d-flex p-1">
             <div class="my-1">
                 <a href="{% url 'members:profile-edit' %}">
-                    <div class="btn btn-primary"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div>
+                    <div class="btn btn-primary btn-md"><i class="fa-solid fa-pen-to-square me-3"></i>Edit profile</div>
                 </a>
             </div>
             <div class="my-1">
                 <a href="{% url 'members:logout' %}">
-                    <div class="btn btn-danger"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div>
+                    <div class="btn btn-danger btn-md"><i class="fa-solid fa-right-from-bracket me-3"></i>Logout</div>
                 </a>
             </div>
         </div>

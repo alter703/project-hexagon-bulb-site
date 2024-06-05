@@ -1,22 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.urls import reverse_lazy
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.core.paginator import Paginator
-from django.urls import reverse_lazy
-from .forms import ProfileForm
-from django.contrib import messages
-
 from django.contrib.auth.views import LoginView
 from django.views.generic import DetailView, CreateView, UpdateView
-from django.contrib.auth import logout
 
+from .forms import ProfileForm
 from .models import Profile
+from apps.questionHub.models import Bookmark, Category, Question, Answer
+from apps.pollFeed.models import Poll, Choice, Vote
 
-from apps.questionHub.models import *
-from apps.pollFeed.models import *
 
 # Create your views here.
 class ProfileDetailView(DetailView):

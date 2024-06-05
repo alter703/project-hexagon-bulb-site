@@ -1,16 +1,15 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView, View, TemplateView, FormView
-from django.db.models import Q
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from apps.main.mixins import ProfanityCheckMixin
-
 from .models import Poll, Choice, Vote
 from .forms import CreatePollForm
 from .mixins import PollMultipleObjectMixin, PollSingleObjectMixin
+# from apps.main.mixins import ProfanityCheckMixin
+
 
 # Create your views here.
 class PollListView(PollMultipleObjectMixin, ListView):
@@ -41,7 +40,7 @@ class PollDetailView(PollSingleObjectMixin, DetailView):
         return context
 
 
-class CreatePollView(LoginRequiredMixin, ProfanityCheckMixin, View):
+class CreatePollView(LoginRequiredMixin, View):
     form_class = CreatePollForm
     template_name = "pollFeed/create_poll.html"
 
@@ -53,8 +52,6 @@ class CreatePollView(LoginRequiredMixin, ProfanityCheckMixin, View):
         poll_form = self.form_class(request.POST)
 
         if poll_form.is_valid():
-            fields = [field for field in poll_form.fields.keys()]
-
             poll = poll_form.save(commit=False)
             poll.author = request.user
             poll.save()
@@ -67,16 +64,17 @@ class CreatePollView(LoginRequiredMixin, ProfanityCheckMixin, View):
                 messages.error(request, "You must type at least two choices!")
                 poll.delete()
                 return redirect('pollFeed:create')
-            elif not self.check_profanity(poll_form, fields):
-                poll.delete()
-                return redirect('pollFeed:create')
-                         
+
             for text in valid_choices:
-                Choice.objects.create(poll=poll, text=text, author=request.user)
+                Choice.objects.create(
+                    poll=poll, 
+                    text=text, 
+                    author=request.user
+                )
 
             messages.success(request, 'Your Poll is created successfully!')
             return redirect('pollFeed:index')
-        
+
         return render(request, self.template_name, {"poll_form": poll_form})    
 
 
