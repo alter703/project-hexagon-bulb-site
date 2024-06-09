@@ -1,17 +1,17 @@
 {% load static %}
 
-<div class="card my-3 border-0 rounded-3 bg-light">
-  <div class="card-header d-flex rounded-top-3 fs-6">
-    <span class="badge bg-light text-black align-self-center my-2">{{ question.category.name }}</span>
+<div class="card my-3 border-0 rounded-3 bg-light" style="height: 95%;">
+  <div class="card-header rounded-top-3 fs-6">
+      <span class="badge bg-light text-black align-self-center">{{ question.category.name }}</span>
   </div>
-  <div class="card-body text-dark rounded-bottom-3">
-    <a href="{{ question.get_absolute_url }}" class="text-light link-light link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-      <h5 class="card-title fs-5 fw-semibold">{{ question.title|truncatechars:"30" }}</h5>
-      <p class="card-text">{{ question.content|truncatechars:"80" }}</p>
-    </a>
-    <div class="d-flex justify-content-between mt-3">
-      <p class="mb-0 text-light fw-light">By: {{ question.author }}</p>
-      <p class="mb-0 text-light fw-light">{{ question.created_at|timesince }} ago</p>
-    </div>
+  <div class="card-body text-light rounded-bottom-3 d-flex flex-column">
+      <a href="{{ question.get_absolute_url }}" class="text-light link-light link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+          <h5 class="card-title fs-5 fw-semibold">{{ question.title|truncatechars:"30" }}</h5>
+          <p class="card-text">{{ question.content|truncatechars:"70" }}</p>
+      </a>
+      <div class="mt-auto d-flex justify-content-between text-muted">
+          <p class="mb-0 text-light fw-light">By: {{ question.author }}</p>
+          <p class="mb-0 text-light fw-light">{{ question.created_at|timesince }} ago</p>
+      </div>
   </div>
 </div>
