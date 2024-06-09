@@ -18,6 +18,10 @@ class QuestionsListView(QuestionMultipleObjectMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['latest_questions'] = Question.objects.filter(is_closed=False).select_related('author', 'category')[:3]
         context['categories'] = Category.objects.all()
+
+        recently_viewed_questions = self.request.session.get('recent_questions', [])
+        questions = Question.objects.filter(id__in=recently_viewed_questions).select_related('author', 'category').reverse()
+        context['recently_viewed_questions'] = questions
         return context
 
 
@@ -37,6 +41,24 @@ class QuestionDetailView(QuestionSingleObjectMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['answer_form'] = AnswerQuestionForm
         context['amount_answers'] = Answer.objects.count()
+
+        string_obj_id = str(self.object.id)
+
+        if 'recent_questions' in self.request.session:
+            if string_obj_id in self.request.session['recent_questions']:
+                self.request.session['recent_questions'].remove(string_obj_id)
+
+            recently_viewed_questions = Question.objects.filter(id__in=self.request.session['recent_questions']).select_related('author', 'category').reverse()
+            self.request.session['recent_questions'].insert(0, string_obj_id)
+
+            if len(self.request.session['recent_questions']) > 5:
+                self.request.session['recent_questions'].pop()
+
+            context['recently_viewed_questions'] = recently_viewed_questions
+        else:
+            self.request.session['recent_questions'] = [string_obj_id]
+        
+        self.request.session.modified = True
         return context
 
 
@@ -47,6 +69,7 @@ class AskQuestionView(LoginRequiredMixin, QuestionSingleObjectMixin, CreateView)
 
     def get_success_url(self):
         # print(self.__dict__)
+        # print(self.request.session.items())
         return reverse_lazy('questionHub:detail', kwargs={'id': self.object.id})
 
     def get_context_data(self, **kwargs):
