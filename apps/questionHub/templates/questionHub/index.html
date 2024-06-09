@@ -42,6 +42,14 @@
             <div class="btn btn-primary w-100">Visit PollFeed</div>
           </a>
         </div>
+        <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
+          <h2 class="fw-bolder fs-4 mb-4">Recently Viewed Questions</h2>
+          {% for question in recently_viewed_questions %}
+            {% include 'questionHub/includes/question_card_mini.html' %}
+          {% empty %}
+            <div class="fs-5 fst-italic">That's weird...</div>
+          {% endfor %}
+        </div>
       </div>
       <div class="col-12 col-md-8">
         <div class="container px-4 text-center text-black">

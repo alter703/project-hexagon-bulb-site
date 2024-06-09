@@ -1,8 +1,8 @@
 
-<div class="card h-100">
-    <div class="card-body">
-        <h5 class="card-title">{{ bookmark.question.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">By: {{ bookmark.question.author.username }}</h6>
+<div class="card h-100 border border-0 rounded-3">
+    <div class="card-body rounded-3 text-light">
+        <h5 class="card-title fs-4 fw-semibold text-light">{{ bookmark.question.title }}</h5>
+        <h6 class="card-subtitle mb-2 text-light">By: {{ bookmark.question.author.username }}</h6>
         <p class="card-text">{{ bookmark.question.content|truncatewords:"15" }}</p>
         <a href="{{ bookmark.question.get_absolute_url }}" class="btn btn-primary">Read More</a>
     </div>

@@ -21,7 +21,7 @@
             <div class="col-12 col-md-4 my-2 border-black border-4">
                 <div class="container py-3 text-black border border-2 rounded-3 shadow-sm bg-light">
                   <h2 class="fw-bolder fs-4 mb-3">The latest polls!</h2>
-                    {% for poll in recent_polls %}
+                    {% for poll in latest_polls %}
                         {% include 'pollFeed/includes/poll_card.html' %}
                     {% empty %}
                     <div class="fs-2 fst-italic">That's weird...</div>
@@ -33,6 +33,14 @@
                   <a href="{% url 'questionHub:index' %}">
                     <div class="btn btn-primary w-100">Visit QuestionHub</div>
                   </a>
+                </div>
+                <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
+                  <h2 class="fw-bolder fs-4 mb-4">Recently Viewed Polls</h2>
+                  {% for poll in recently_viewed_polls %}
+                    {% include 'pollFeed/includes/poll_card.html' %}
+                  {% empty %}
+                    <div class="fs-5 fst-italic">That's weird...</div>
+                  {% endfor %}
                 </div>
             </div>
             <div class="col-12 col-md-8">

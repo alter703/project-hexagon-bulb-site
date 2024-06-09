@@ -121,7 +121,22 @@
       {% endfor %}
     </div>
   </div>
+  <div class="container mt-5 pb-3 rounded-3 border border-2">
+    <div class="fw-bolder fs-4 mb-4">Recently Viewed Questions</div>
+    <div class="row row-cols-lg-4 row-cols-md-3">
+        {% for question in recently_viewed_questions %}
+        <div class="col">
+  
+          {% include 'questionHub/includes/question_card_mini.html' %}
+        </div>
+        {% empty %}
+          <div class="fs-5 fst-italic">That's weird...</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
+
 
 
 {% if user.is_authenticated and user == question.author %}
