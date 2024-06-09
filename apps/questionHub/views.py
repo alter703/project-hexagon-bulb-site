@@ -51,7 +51,7 @@ class QuestionDetailView(QuestionSingleObjectMixin, DetailView):
             recently_viewed_questions = Question.objects.filter(id__in=self.request.session['recent_questions']).select_related('author', 'category').reverse()
             self.request.session['recent_questions'].insert(0, string_obj_id)
 
-            if len(self.request.session['recent_questions']) > 5:
+            if len(self.request.session['recent_questions']) > 4:
                 self.request.session['recent_questions'].pop()
 
             context['recently_viewed_questions'] = recently_viewed_questions

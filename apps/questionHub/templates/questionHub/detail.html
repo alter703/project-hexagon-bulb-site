@@ -121,11 +121,11 @@
       {% endfor %}
     </div>
   </div>
-  <div class="container my-5 rounded-3 border border-2">
-    <div class="fw-bolder fs-4 mb-4">Recent Viewed Questions</div>
+  <div class="container mt-5 pb-3 rounded-3 border border-2">
+    <div class="fw-bolder fs-4 mb-4">Recently Viewed Questions</div>
     <div class="row row-cols-lg-4 row-cols-md-3">
         {% for question in recently_viewed_questions %}
-        <div class="col align-items-center">
+        <div class="col">
   
           {% include 'questionHub/includes/question_card_mini.html' %}
         </div>

@@ -2,13 +2,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import Poll, Choice, Vote
 from .forms import CreatePollForm
 from .mixins import PollMultipleObjectMixin, PollSingleObjectMixin
-# from apps.main.mixins import ProfanityCheckMixin
 
 
 # Create your views here.
@@ -17,7 +15,13 @@ class PollListView(PollMultipleObjectMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['recent_polls'] = Poll.objects.select_related('author').prefetch_related('choices')[:3]
+        context['latest_polls'] = Poll.objects.select_related('author').prefetch_related('choices')[:3]
+
+        # Get recently viewed polls from the session
+        recently_viewed_polls = self.request.session.get('recent_polls', [])
+        polls = Poll.objects.filter(id__in=recently_viewed_polls).select_related('author').reverse()
+        context['recently_viewed_polls'] = polls
+
         return context
 
 
@@ -37,6 +41,25 @@ class PollDetailView(PollSingleObjectMixin, DetailView):
 
         context['user_has_voted'] = user_has_voted
         context['user_vote'] = user_vote
+
+        # Add the current poll to the recently viewed list in the session
+        string_obj_id = str(self.object.id)
+
+        if 'recent_polls' in self.request.session:
+            if string_obj_id in self.request.session['recent_polls']:
+                self.request.session['recent_polls'].remove(string_obj_id)
+
+            recently_viewed_polls = Poll.objects.filter(id__in=self.request.session['recent_polls']).reverse()
+            self.request.session['recent_polls'].insert(0, string_obj_id)
+
+            if len(self.request.session['recent_polls']) > 4:
+                self.request.session['recent_polls'].pop()
+
+            context['recently_viewed_polls'] = recently_viewed_polls
+        else:
+            self.request.session['recent_polls'] = [string_obj_id]
+        
+        self.request.session.modified = True
         return context
 
 
