@@ -21,7 +21,6 @@ class PollListView(PollMultipleObjectMixin, ListView):
         recently_viewed_polls = self.request.session.get('recent_polls', [])
         polls = Poll.objects.filter(id__in=recently_viewed_polls).select_related('author').reverse()
         context['recently_viewed_polls'] = polls
-
         return context
 
 

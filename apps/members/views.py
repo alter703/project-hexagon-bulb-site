@@ -84,34 +84,56 @@ def logout_view(request):
     return redirect('main:index')
 
 
+
 def user_questions_view(request, id):
-    profile = get_object_or_404(Profile, id=id)
-    questions = Question.objects.filter(author=profile.user).select_related('author', 'category').prefetch_related('answers')
+    profile = get_object_or_404(Profile.objects.select_related('user'), id=id)
+    questions = Question.objects.filter(author=profile.user)\
+                                .select_related('author', 'category')\
+                                .prefetch_related('answers')
     paginator = Paginator(questions, 10)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'members/user_questions.html', {'profile': profile, 'page_obj': page_obj})
+    context = {
+        'profile': profile,
+        'page_obj': page_obj,
+    }
+
+    return render(request, 'members/user_questions.html', context)
 
 
 def user_polls_view(request, id):
-    profile = get_object_or_404(Profile, id=id)
-    polls = Poll.objects.filter(author=profile.user).select_related('author').prefetch_related('choices')
+    profile = get_object_or_404(Profile.objects.select_related('user'), id=id)
+    polls = Poll.objects.filter(author=profile.user)\
+                        .select_related('author')\
+                        .prefetch_related('choices')
     paginator = Paginator(polls, 10)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'members/user_polls.html', {'profile': profile, 'page_obj': page_obj})
+    context = {
+        'profile': profile,
+        'page_obj': page_obj,
+    }
+
+    return render(request, 'members/user_polls.html', context)
 
 
 def user_bookmarks_view(request, id):
-    profile = get_object_or_404(Profile, id=id)
-    bookmarks = Bookmark.objects.filter(user=profile.user).select_related('user', 'question').prefetch_related('question__author')
+    profile = get_object_or_404(Profile.objects.select_related('user'), id=id)
+    bookmarks = Bookmark.objects.filter(user=profile.user)\
+                                .select_related('user', 'question')\
+                                .prefetch_related('question__author')
     paginator = Paginator(bookmarks, 10)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'members/user_bookmarks.html', {'profile': profile, 'page_obj': page_obj})
+    context = {
+        'profile': profile,
+        'page_obj': page_obj,
+    }
+
+    return render(request, 'members/user_bookmarks.html', context)
