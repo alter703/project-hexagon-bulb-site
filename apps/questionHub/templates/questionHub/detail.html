@@ -87,7 +87,7 @@
         {% if question.is_closed %}
         <div class="fs-3 text-center">This question is closed, so you can't answer it</div>
         {% else %}
-        {% if not user.is_authenticated %}
+        {% if not is_user_authenticated %}
         <a href="{% url 'members:login' %}">
           <div class="btn btn-danger fw-bold btn-lg fs-6">Login to Answer</div>
         </a>

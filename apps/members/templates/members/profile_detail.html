@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{% if user == profile.user %}Your Profile{% else %}Profile{% endif %}{% endblock %}
+{% block title %}{{ profile.user.username }}{% endblock %}
 
 {% block content %}
   {% include 'members/includes/profile_card.html' %}

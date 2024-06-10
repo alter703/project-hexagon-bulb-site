@@ -6,7 +6,7 @@
     {% if question.is_closed %}
       <span class="badge bg-light text-black align-self-center ms-2">Closed</span>
     {% endif %}
-    {% if user.is_authenticated and user == question.author %}
+    {% if is_user_authenticated and user == question.author %}
       <div class="ms-auto d-flex">
         <button class="btn btn-light dropstart py-0 align-self-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="{% static 'svg/three-dots.svg' %}" alt="three dots">
@@ -44,7 +44,7 @@
   </div>
 </div>
 
-{% if user.is_authenticated and user == question.author %}
+{% if is_user_authenticated and user == question.author %}
   {% include 'questionHub/includes/delete_modal.html' %}
 {% endif %}
 
