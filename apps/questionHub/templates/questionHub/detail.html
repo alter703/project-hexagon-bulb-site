@@ -23,7 +23,7 @@
           {% endif %}
           <div class="col text-end">
             <button class="btn btn-ghost" onclick="copyUrl()" data-toggle="tooltip" title="Copy URL" id="copyButton">
-              <img src="{% static 'svg/share-fill.svg' %}" alt="share">
+              <img src="{% static 'svg/share-fill.svg' %}" alt="share" class="non-drag"> <!--draggable="false"-->
             </button>
           </div>
           {% if user == question.author %}

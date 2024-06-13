@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg justify-content-center">
     <div class="container-fluid">
         <a class="navbar-brand fs-5 fw-semibold" rel="icon" href="{% url 'main:index' %}">
-            <img src="{% static 'icons/hexagon_bulb-removebg-svg.svg' %}" alt="Hexagon Bulb Logo" width="60px">Hexagon Bulb
+            <img src="{% static 'icons/hexagon_bulb-removebg-svg.svg' %}" alt="Hexagon Bulb Logo" width="60px" class="non-drag">Hexagon Bulb
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@
             </ul>
             {% if is_user_authenticated %}
             <button type="button" class="btn btn-ghost border-0" data-bs-toggle="modal" data-bs-target="#mailModal">
-                <img src="{{ user.profile.get_avatar_thumbnail }}" alt="User Avatar" class="rounded-circle" width="45px">
+                <img src="{{ user.profile.get_avatar_thumbnail }}" alt="User Avatar" class="rounded-circle non-drag" width="45px">
             </button>
             <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mainModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
