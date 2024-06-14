@@ -1,16 +1,16 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg justify-content-center">
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="{% url 'main:index' %}">
-            <img src="{% static 'icons/hexagon_bulb-removebg-svg.svg' %}" alt="" width="70px">Hexagon Bulb
+        <a class="navbar-brand fs-5 fw-semibold" rel="icon" href="{% url 'main:index' %}">
+            <img src="{% static 'icons/hexagon_bulb-removebg-svg.svg' %}" alt="Hexagon Bulb Logo" width="60px" class="non-drag"> Hexagon Bulb
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse align-items-center" id="navbarNav">
-            <ul class="navbar-nav me-auto">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'questionHub:index' %}">QuestionHub</a>
                 </li>
@@ -18,50 +18,46 @@
                     <a class="nav-link" href="{% url 'pollFeed:index' %}">PollFeed</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:about_us' %}">About us</a>
+                    <a class="nav-link" href="{% url 'main:about-us' %}">About Us</a>
                 </li>
             </ul>
-            {% if user.is_authenticated %}
-            <button type="button" class="btn btn-ghost border border-0" data-bs-toggle="modal" data-bs-target="#mailModal"><img src="{{ user.profile.get_avatar_thumbnail }}" alt="" class="rounded-circle" width="45px"></button>
-            <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mainModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content border border-2 border-secondary">
-                      <div class="modal-header">
-                          <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">{{ user.profile }}</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="row row-cols-2">
-                            <a href="{{ user.profile.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0">
-                                <div class="btn btn-primary d-flex justify-content-start my-2">Profile</div>
-                            </a>
-                            <a href="{% url 'members:logout' %}" class="link-offset-2 link-underline link-underline-opacity-0">
-                                <div class="btn btn-danger d-flex justify-content-start my-2">Logout</div>
-                            </a>
-                            {% if user.is_superuser %}
-                            <a href="/admin" class="link-offset-2 link-underline link-underline-opacity-0">
-                              <div class="btn btn-secondary d-flex justify-content-start my-2">Admin</div>
-                            </a>
-                            {% endif %}
+            {% if is_user_authenticated %}
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-ghost border-0" data-bs-toggle="modal" data-bs-target="#mailModal">
+                    <img src="{{ user.profile.get_avatar_thumbnail }}" alt="User Avatar" class="rounded-circle non-drag" width="45px">
+                </button>
+                <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mailModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold" id="mailModalLabel">{{ user.profile }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="list-group">
+                                    <a href="{{ user.profile.get_absolute_url }}" class="list-group-item bg-primary text-light list-group-item-action rounded-3">
+                                        Profile
+                                    </a>
+                                    <a href="{% url 'members:logout' %}" class="list-group-item bg-danger text-light list-group-item-action rounded-3">
+                                        Logout
+                                    </a>
+                                    {% if user.is_superuser %}
+                                    <a href="/admin" class="list-group-item bg-secondary text-light list-group-item-action rounded-3">
+                                        Admin
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
-
-                      </div>
-                  </div>
-              </div>
-          </div>
-          {% else %}
-              <div class="mx-1">
-                  <a href="{% url 'members:login' %}">
-                      <div type="button" class="btn btn-secondary my-1">Sign in</div>
-                  </a>
-              </div>
-              <div class="mx-1">
-                  <a href="{% url 'members:signup' %}">
-                      <div type="button" class="btn btn-primary my-1">Sign up</div>
-                  </a>
-              </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="d-flex">
+                <a href="{% url 'members:login' %}" class="btn btn-secondary mx-1">Sign In</a>
+                <a href="{% url 'members:signup' %}" class="btn btn-primary mx-1">Sign Up</a>
+            </div>
             {% endif %}
         </div>
     </div>
-  </nav>
-  
+</nav>

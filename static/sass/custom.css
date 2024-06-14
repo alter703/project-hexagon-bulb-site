@@ -1,9 +1,7 @@
 @charset "UTF-8";
 ::selection {
   background-color: #858585;
-  /* Колір фону виділення */
   color: #ffffff;
-  /* Колір тексту виділення */
 }
 
 @media (max-width: 1024px) {
@@ -11,6 +9,10 @@
     align-items: flex-end;
   }
 }
+img.non-drag {
+  pointer-events: none;
+}
+
 .navbar {
   background-color: #ffffff;
 }

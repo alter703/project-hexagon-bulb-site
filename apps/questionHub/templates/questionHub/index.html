@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Question Hub{% endblock %}
+{% block title %}QuestionHub{% endblock %}
 
 {% block content %}
 <div class="container-fluid mx-3">
@@ -20,15 +20,15 @@
     <div class="row gx-5">
       <div class="col-12 col-md-4 my-2">
         <div class="container py-3 text-black border border-2 rounded-3 shadow-sm bg-light">
-          <h2 class="fw-bolder fs-4 mb-3">The latest questions!</h2>
+          <h2 class="fw-bolder fs-4 mb-3">The Latest Questions!</h2>
           {% for question in latest_questions %}
             {% include 'questionHub/includes/question_card_mini.html' %}
           {% empty %}
-            <div class="fs-5 fst-italic">That's weird...</div>
+            <div class="fs-5 fst-italic">No questions available.</div>
           {% endfor %}
         </div>
         <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
-          <h2 class="fw-bolder fs-4 mb-4">Find questions by a category!</h2>
+          <h2 class="fw-bolder fs-4 mb-4">Find Questions by Category!</h2>
           {% for category in categories %}
             <a href="{% url 'questionHub:select-category' category.id %}">
               <div class="btn btn-primary p-2 my-1 w-100 text-start">{{ category.name }}</div>
@@ -37,31 +37,33 @@
         </div>
         <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
           <h2 class="fw-bolder fs-4 mb-4">Visit PollFeed</h2>
-          <p>Do you want to visit PollFeed, the place where you can set poll when you have choices but you don't know what to choose?</p>
+          <p>Do you want to visit PollFeed, the place where you can set up polls when you have choices but don't know what to choose?</p>
           <a href="{% url 'pollFeed:index' %}">
             <div class="btn btn-primary w-100">Visit PollFeed</div>
           </a>
         </div>
+        {% if recently_viewed_questions %}
         <div class="container rounded-3 py-3 my-2 border border-2 shadow-sm bg-light">
           <h2 class="fw-bolder fs-4 mb-4">Recently Viewed Questions</h2>
           {% for question in recently_viewed_questions %}
             {% include 'questionHub/includes/question_card_mini.html' %}
           {% empty %}
-            <div class="fs-5 fst-italic">That's weird...</div>
+            <div class="fs-5 fst-italic">No recently viewed questions.</div>
           {% endfor %}
         </div>
+        {% endif %}
       </div>
       <div class="col-12 col-md-8">
         <div class="container px-4 text-center text-black">
           <div class="row gx-5 align-items-center">
             <div class="col-12 col-md-7">
               <div class="p-3">
-                <h2 class="fs-4 fw-normal">Questions that are waiting for answers!</h2>
+                <h2 class="fs-4 fw-normal">Questions That Are Waiting for Answers!</h2>
               </div>
             </div>
             <div class="col-12 col-md-5">
               <div class="p-3 d-flex justify-content-end">
-                <a href="{% url 'questionHub:ask' %}" class="btn btn-primary fw-bold btn-lg fs-6">Ask Question</a>
+                <a href="{% url 'questionHub:ask' %}" class="btn btn-primary fw-bold btn-lg fs-6">Ask a Question</a>
               </div>
             </div>
           </div>
@@ -73,9 +75,9 @@
             </div>
           {% empty %}
             {% if query %}
-              <div class="fs-5 fst-italic">Questions not found</div>
+              <div class="fs-5 fst-italic">No questions found.</div>
             {% else %}
-              <div class="fs-5 fst-italic">Well, there are no questions...</div>
+              <div class="fs-5 fst-italic">No questions available.</div>
             {% endif %}
           {% endfor %}
         </div>
@@ -91,6 +93,7 @@
     {% endif %}
   </div>
 </div>
+
 
 <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'js/infinite.min.js' %}"></script>

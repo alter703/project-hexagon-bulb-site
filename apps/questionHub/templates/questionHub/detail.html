@@ -14,52 +14,57 @@
             <div class="fs-5">By: <a href="{{ question.author.profile.get_absolute_url }}" class="text-black link-primary link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ question.author }}</a></div>
           </div>
           <div class="col-3 text-center align-self-center">
-            Asked at: {{ question.created_at|date:"M j, Y"}}
+            Asked on: {{ question.created_at|date:"M j, Y"}}
           </div>
           {% if question.created_at != question.updated_at %}
           <div class="col-3 text-center align-self-center">
-            Changed at: {{ question.updated_at|date:"M j, Y"}}
+            Updated on: {{ question.updated_at|date:"M j, Y"}}
           </div>
           {% endif %}
-          <div class="col text-end"><button class="btn btn-ghost" onclick="copyUrl()" data-toggle="tooltip" title="Copy url" id="copyButton">
-            <img src="{% static 'svg/share-fill.svg' %}" alt="share fill"></button>
+          <div class="col text-end">
+            <button class="btn btn-ghost" onclick="copyUrl()" data-toggle="tooltip" title="Copy URL" id="copyButton">
+              <img src="{% static 'svg/share-fill.svg' %}" alt="share" class="non-drag"> <!--draggable="false"-->
+            </button>
           </div>
           {% if user == question.author %}
-          <div class="col-1 text-end dropstart"><div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{% static 'svg/three-dots.svg' %}" alt="three dots">
+          <div class="col-1 text-end dropstart">
+            <div class="btn btn-ghost dropstart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'svg/three-dots.svg' %}" alt="options">
+            </div>
+            <ul class="dropdown-menu">
+              {% if not question.is_closed %}
+              <li><a class="dropdown-item" href="{% url 'questionHub:update' id=question.id %}">Edit</a></li>
+              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
+              {% endif %}
+              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
+            </ul>
           </div>
-          <ul class="dropdown-menu">
-            {% if not question.is_closed %}
-            <li><a class="dropdown-item" href="{% url 'questionHub:update' id=question.id %}">Edit</a></li>
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#closeBackdrop">Close</a></li>
-            {% endif %}
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBackdrop">Delete</a></li>
-          </ul></div>
           {% else %}
-          <div class="col-1"><button id="bookmarkButton" class="btn btn-ghost" type="button" onclick="bookmark('{{ question.id }}')">
-            {% if user in question.bookmarks.all %}
-            <img src="{% static 'svg/bookmark-fill.svg' %}" alt="bookmark">
-            {% else %}
-            <img src="{% static 'svg/bookmark.svg' %}" alt="bookmark">
-            {% endif %}
-        </button>
-          </button></div>
+          <div class="col-1">
+            <button id="bookmarkButton" class="btn btn-ghost" type="button" onclick="bookmark('{{ question.id }}')">
+              {% if user in question.bookmarks.all %}
+              <img src="{% static 'svg/bookmark-fill.svg' %}" alt="bookmark">
+              {% else %}
+              <img src="{% static 'svg/bookmark.svg' %}" alt="bookmark">
+              {% endif %}
+            </button>
+          </div>
           {% endif %}
         </div>
       </div>
       <div class="col d-flex flex-column border border-2 my-3"></div>
       <div class="col">
-          <div class="row g-2 g-lg-3">
-              <div class="col fs-2 fw-bold">{{ question.title }}</div>
-              <div class="col-2 fs-4">
-                  <span class="badge badge-lg text-bg-primary me-2">{{ question.category }}</span>
-              </div>
-              {% if question.is_closed %}
-              <div class="col-1 fs-4">
-                  <span class="badge badge-lg text-bg-secondary">Closed</span>
-              </div>
-              {% endif %}
+        <div class="row g-2 g-lg-3">
+          <div class="col fs-2 fw-bold">{{ question.title }}</div>
+          <div class="col-2 fs-4">
+            <span class="badge badge-lg text-bg-primary me-2">{{ question.category }}</span>
           </div>
+          {% if question.is_closed %}
+          <div class="col-1 fs-4">
+            <span class="badge badge-lg text-bg-secondary">Closed</span>
+          </div>
+          {% endif %}
+        </div>
       </div>
       <div class="col d-flex flex-column border border-2 my-3"></div>
       <div class="col">
@@ -72,7 +77,7 @@
       <form method="post" action="{% url 'questionHub:answer-question' id=question.id %}">
         {% csrf_token %}
         <div class="container">
-        {{ answer_form|crispy }}
+          {{ answer_form|crispy }}
         </div>
         <button type="submit" class="btn btn-primary my-2 btn-lg">Submit</button>
       </form>
@@ -80,12 +85,16 @@
     <div class="row">
       <div class="col">
         {% if question.is_closed %}
-        <div class="fs-3 text-center">This question's closed, so you can't answer to it</div>
+        <div class="fs-3 text-center">This question is closed, so you can't answer it</div>
         {% else %}
-        {% if not user.is_authenticated %}
-        <a href="{% url 'members:login' %}"><div class="btn btn-danger fw-bold btn-lg fs-6">Login to Answer</div></a>
+        {% if not is_user_authenticated %}
+        <a href="{% url 'members:login' %}">
+          <div class="btn btn-danger fw-bold btn-lg fs-6">Login to Answer</div>
+        </a>
         {% else %}
-        <div class="btn btn-primary fw-bold btn-lg fs-5" id="toggleButton" onclick="toggleForm()"><i class="fa-solid fa-plus me-3"></i>Answer</div>
+        <div class="btn btn-primary fw-bold btn-lg fs-5" id="toggleButton" onclick="toggleForm()">
+          <i class="fa-solid fa-plus me-3"></i>Answer
+        </div>
         {% endif %}
         {% endif %}
       </div>
@@ -105,37 +114,40 @@
             <div class="fs-5">By: <a href="{{ question.author.profile.get_absolute_url }}" class="text-black link-danger link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ question.author }}</a></div>
           </div>
           <div class="col-3 text-center">
-            Answered at: {{ question.created_at|date:"M j, Y"}}
+            Answered on: {{ answer.created_at|date:"M j, Y"}}
           </div>
+          {% if answer.created_at != answer.updated_at %}
           <div class="col-3 text-center">
-            Changed at: {{ question.updated_at|date:"M j, Y"}}
+            Updated on: {{ answer.updated_at|date:"M j, Y"}}
           </div>
+          {% endif %}
         </div>
-      <div class="col border border-2 my-3"></div>
-      <div class="col">
-        <div class="fs-5">{{ answer.content|linebreaks }}</div>
-      </div>
+        <div class="col border border-2 my-3"></div>
+        <div class="col">
+          <div class="fs-5">{{ answer.content|linebreaks }}</div>
+        </div>
       </div>
       {% empty %}
-      <div class="fs-2 text-center">No one answered. Be the first!</div>
+      <div class="fs-2 text-center">No answers yet. Be the first!</div>
       {% endfor %}
     </div>
   </div>
+  {% if recently_viewed_questions %}
   <div class="container mt-5 pb-3 rounded-3 border border-2">
     <div class="fw-bolder fs-4 mb-4">Recently Viewed Questions</div>
     <div class="row row-cols-lg-4 row-cols-md-3">
-        {% for question in recently_viewed_questions %}
-        <div class="col">
-  
-          {% include 'questionHub/includes/question_card_mini.html' %}
-        </div>
-        {% empty %}
-          <div class="fs-5 fst-italic">That's weird...</div>
-        {% endfor %}
+      {% for question in recently_viewed_questions %}
+      <div class="col">
+        {% include 'questionHub/includes/question_card_mini.html' %}
       </div>
+      {% empty %}
+      <div class="fs-5 fst-italic">No recently viewed questions.</div>
+      {% endfor %}
     </div>
   </div>
+    {% endif %}
 </div>
+
 
 
 

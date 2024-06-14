@@ -13,14 +13,17 @@ class QuestionMultipleObjectMixin(MultipleObjectMixin):
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
+        queryset = Question.objects.select_related('author', 'category').prefetch_related('answers')
 
         if query:
             if query.startswith('#'):
-                queryset = Question.objects.filter(Q(category__name__icontains=query[1:])).select_related('author', 'category').prefetch_related('answers')
+                category_name = query[1:]
+                queryset = queryset.filter(category__name__icontains=category_name)
             else:
-                queryset = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).select_related('author', 'category').prefetch_related('answers')
+                queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query))
         else:
-            queryset = Question.objects.filter(Q(is_closed=False)).select_related('author', 'category').order_by('?').prefetch_related('answers')
+            queryset = queryset.filter(is_closed=False).order_by('?')
+
         return queryset
 
 

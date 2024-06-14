@@ -13,11 +13,11 @@ class PollMultipleObjectMixin(MultipleObjectMixin):
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
-    
+        queryset = Poll.objects.filter(is_closed=False).select_related('author').prefetch_related('choices')
+        
         if query:
-            queryset = Poll.objects.filter(Q(text__icontains=query) & Q(is_closed=False)).select_related('author').prefetch_related('choices')
-        else:
-            queryset = Poll.objects.filter(Q(is_closed=False)).select_related('author').prefetch_related('choices')
+            queryset = queryset.filter(text__icontains=query)
+        
         return queryset
 
 
