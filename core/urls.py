@@ -29,7 +29,7 @@ router.register(r'groups', views.GroupViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("__debug__/", include("debug_toolbar.urls")),
+    path('__debug__/', include('debug_toolbar.urls')),
     path('', include('apps.main.urls')),
     path('question-hub/', include('apps.questionHub.urls')),
     path('poll-feed/', include('apps.pollFeed.urls')),
@@ -37,7 +37,7 @@ urlpatterns = [
 
     path('api/v1/', include(router.urls)),
     path('api/v2/', include('apps.api.urls')),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 handler404 = 'apps.main.views.error_404_view'

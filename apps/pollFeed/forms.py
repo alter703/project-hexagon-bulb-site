@@ -10,10 +10,9 @@ class CreatePollForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["choice1"].required = False
-        self.fields["choice2"].required = False
-        self.fields["choice3"].required = False
-        self.fields["choice4"].required = False
+
+        for index in range(1, 5):
+            self.fields[f"choice{index}"].required = False
 
     class Meta:
         model = Poll
@@ -21,16 +20,18 @@ class CreatePollForm(forms.ModelForm):
 
     def save(self, commit=True):
         poll = super().save(commit=commit)
+
         choice1 = Choice(poll=poll, text=self.cleaned_data['choice1'])
         choice2 = Choice(poll=poll, text=self.cleaned_data['choice2'])
         choice3 = Choice(poll=poll, text=self.cleaned_data['choice3'])
         choice4 = Choice(poll=poll, text=self.cleaned_data['choice4'])
 
         if commit:
+            list_choices = [choice1, choice2, choice3, choice4]
+
+            for choice in list_choices:
+                choice.save()
+
             poll.save()
-            choice1.save()
-            choice2.save()
-            choice3.save()
-            choice4.save()
 
         return poll

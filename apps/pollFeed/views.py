@@ -97,7 +97,7 @@ class CreatePollView(LoginRequiredMixin, View):
             messages.success(request, 'Your Poll is created successfully!')
             return redirect('pollFeed:index')
 
-        return render(request, self.template_name, {"poll_form": poll_form})    
+        return render(request, self.template_name, {"poll_form": poll_form})
 
 
 class VotePollView(View):
